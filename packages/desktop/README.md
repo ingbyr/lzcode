@@ -1,6 +1,6 @@
-# OpenCode Desktop
+# LzCode Desktop
 
-Native OpenCode desktop app, built with Tauri v2.
+Native LzCode desktop app, built with Tauri v2.
 
 ## Prerequisites
 

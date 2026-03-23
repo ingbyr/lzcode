@@ -1,19 +1,19 @@
 ---
 title: Zen
-description: Lista curata di modelli fornita da OpenCode.
+description: Lista curata di modelli fornita da LzCode.
 ---
 
 import config from "../../../../config.mjs"
 export const console = config.console
 export const email = `mailto:${config.email}`
 
-OpenCode Zen è una lista di modelli testati e verificati dal team di OpenCode.
+LzCode Zen è una lista di modelli testati e verificati dal team di LzCode.
 
 :::note
-OpenCode Zen è attualmente in beta.
+LzCode Zen è attualmente in beta.
 :::
 
-Zen funziona come qualunque altro provider in OpenCode. Accedi a OpenCode Zen e ottieni la tua chiave API. È **completamente opzionale**: non devi usarlo per usare OpenCode.
+Zen funziona come qualunque altro provider in LzCode. Accedi a LzCode Zen e ottieni la tua chiave API. È **completamente opzionale**: non devi usarlo per usare LzCode.
 
 ---
 
@@ -22,7 +22,7 @@ Zen funziona come qualunque altro provider in OpenCode. Accedi a OpenCode Zen e 
 Ci sono moltissimi modelli, ma solo pochi funzionano bene come agenti di coding. Inoltre, la maggior parte dei provider è configurata in modo molto diverso, quindi prestazioni e qualità possono variare parecchio.
 
 :::tip
-Abbiamo testato un gruppo selezionato di modelli e provider che funzionano bene con OpenCode.
+Abbiamo testato un gruppo selezionato di modelli e provider che funzionano bene con LzCode.
 :::
 
 Quindi, se usi un modello tramite qualcosa come OpenRouter, non puoi mai essere sicuro di ottenere la migliore versione del modello che vuoi.
@@ -33,16 +33,16 @@ Per risolvere, abbiamo fatto alcune cose:
 2. Poi abbiamo lavorato con alcuni provider per assicurarci che venissero serviti correttamente.
 3. Infine, abbiamo fatto benchmark delle combinazioni modello/provider e creato una lista che ci sentiamo di raccomandare.
 
-OpenCode Zen e un gateway AI che ti dà accesso a questi modelli.
+LzCode Zen e un gateway AI che ti dà accesso a questi modelli.
 
 ---
 
 ## Come funziona
 
-OpenCode Zen funziona come qualunque altro provider in OpenCode.
+LzCode Zen funziona come qualunque altro provider in LzCode.
 
-1. Accedi a **<a href={console}>OpenCode Zen</a>**, aggiungi i dettagli di fatturazione e copia la chiave API.
-2. Esegui il comando `/connect` nella TUI, seleziona OpenCode Zen e incolla la chiave API.
+1. Accedi a **<a href={console}>LzCode Zen</a>**, aggiungi i dettagli di fatturazione e copia la chiave API.
+2. Esegui il comando `/connect` nella TUI, seleziona LzCode Zen e incolla la chiave API.
 3. Esegui `/models` nella TUI per vedere la lista dei modelli che consigliamo.
 
 Paghi per richiesta e puoi aggiungere credito al tuo account.
@@ -89,7 +89,7 @@ Puoi anche accedere ai nostri modelli tramite i seguenti endpoint API.
 | Qwen3 Coder 480B   | qwen3-coder        | `https://opencode.ai/zen/v1/chat/completions`      | `@ai-sdk/openai-compatible` |
 | Big Pickle         | big-pickle         | `https://opencode.ai/zen/v1/chat/completions`      | `@ai-sdk/openai-compatible` |
 
-Il [model id](/docs/config/#models) nella config di OpenCode usa il formato `opencode/<model-id>`. Per esempio, per GPT 5.2 Codex useresti `opencode/gpt-5.2-codex` nella config.
+Il [model id](/docs/config/#models) nella config di LzCode usa il formato `opencode/<model-id>`. Per esempio, per GPT 5.2 Codex useresti `opencode/gpt-5.2-codex` nella config.
 
 ---
 
@@ -157,8 +157,8 @@ Le commissioni della carta di credito vengono ribaltate al costo (4.4% + $0.30 p
 
 I modelli gratuiti:
 
-- MiniMax M2.5 Free e disponibile su OpenCode per un periodo limitato. Il team usa questo tempo per raccogliere feedback e migliorare il modello.
-- Big Pickle è un modello stealth gratuito su OpenCode per un periodo limitato. Il team usa questo tempo per raccogliere feedback e migliorare il modello.
+- MiniMax M2.5 Free e disponibile su LzCode per un periodo limitato. Il team usa questo tempo per raccogliere feedback e migliorare il modello.
+- Big Pickle è un modello stealth gratuito su LzCode per un periodo limitato. Il team usa questo tempo per raccogliere feedback e migliorare il modello.
 
 <a href={email}>Contattaci</a> se hai domande.
 
@@ -247,9 +247,9 @@ Per esempio, la tua organizzazione potrebbe avere gia una chiave per OpenAI o An
 
 ## Obiettivi
 
-Abbiamo creato OpenCode Zen per:
+Abbiamo creato LzCode Zen per:
 
 1. Fare **benchmark** dei migliori modelli/provider per agenti di coding.
 2. Dare accesso alle opzioni di **massima qualita** senza ridurre le prestazioni o instradare verso provider piu economici.
 3. Trasferire eventuali **riduzioni di prezzo** vendendo al costo; l'unico markup copre le commissioni di elaborazione.
-4. Evitare **lock-in** permettendoti di usarlo con qualunque altro agente di coding e lasciandoti sempre usare anche altri provider con OpenCode.
+4. Evitare **lock-in** permettendoti di usarlo con qualunque altro agente di coding e lasciandoti sempre usare anche altri provider con LzCode.
