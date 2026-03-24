@@ -9,6 +9,7 @@ import PROMPT_GEMINI from "./prompt/gemini.txt"
 
 import PROMPT_CODEX from "./prompt/codex_header.txt"
 import PROMPT_TRINITY from "./prompt/trinity.txt"
+import PROMPT_LANYI from "./prompt/lanyi.txt"
 import type { Provider } from "@/provider/provider"
 import type { Agent } from "@/agent/agent"
 import { PermissionNext } from "@/permission"
@@ -26,6 +27,9 @@ export namespace SystemPrompt {
     if (model.api.id.includes("gemini-")) return [PROMPT_GEMINI]
     if (model.api.id.includes("claude")) return [PROMPT_ANTHROPIC]
     if (model.api.id.toLowerCase().includes("trinity")) return [PROMPT_TRINITY]
+    if (model.api.id.toLowerCase().includes("lanyi-")
+      || model.api.id.toLowerCase().includes("jiaorong-"))
+      return [PROMPT_LANYI]
     return [PROMPT_ANTHROPIC_WITHOUT_TODO]
   }
 
