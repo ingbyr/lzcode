@@ -91,8 +91,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   meta = {
-    description = "LzCode Desktop App";
-    homepage = "https://opencode.ai";
+    description = "蓝舟编码助手桌面应用";
+    homepage = "https://lanzhou-uat.ccccltd.cn";
     license = lib.licenses.mit;
     mainProgram = "opencode-desktop";
     inherit (opencode.meta) platforms;
