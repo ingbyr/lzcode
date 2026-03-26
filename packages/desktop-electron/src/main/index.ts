@@ -11,7 +11,7 @@ import pkg from "electron-updater"
 const APP_NAMES: Record<string, string> = {
   dev: "LzCode Dev",
   beta: "LzCode Beta",
-  prod: "LzCode",
+  prod: "蓝舟编码助手",
 }
 const APP_IDS: Record<string, string> = {
   dev: "ai.opencode.desktop.dev",

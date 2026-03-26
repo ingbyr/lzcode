@@ -1,6 +1,6 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "LzCode",
+  "productName": "蓝舟编码助手",
   "identifier": "ai.opencode.desktop",
   "bundle": {
     "createUpdaterArtifacts": true,
