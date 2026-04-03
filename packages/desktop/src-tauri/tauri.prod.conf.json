@@ -31,8 +31,8 @@
   },
   "plugins": {
     "updater": {
-      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEYwMDM5Nzg5OUMzOUExMDQKUldRRW9UbWNpWmNEOENYT01CV0lhOXR1UFhpaXJsK1Z3aU9lZnNtNzE0TDROWVMwVW9XQnFOelkK",
-      "endpoints": ["https://github.com/anomalyco/opencode/releases/latest/download/latest.json"]
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEFDRUREOUNDRDQ1RjA2RjcKUldUM0JsL1V6Tm50ckgyZmhld2Rja0xOekFuc0pOZ0dOTXRWUVlSL1ZZaXFZd1Y1L0dQQXdtSW0K",
+      "endpoints": ["https://gh-proxy.org/https://github.com/ingbyr/lzcode/releases/latest/download/latest.json"]
     }
   }
 }
