@@ -97,17 +97,14 @@ const add = (key: string, asset: Asset, signature: string) => {
 }
 
 const targets = [
-  { key: "linux-x86_64-deb", asset: "opencode-desktop-linux-amd64.deb" },
-  { key: "linux-x86_64-rpm", asset: "opencode-desktop-linux-x86_64.rpm" },
-  { key: "linux-aarch64-deb", asset: "opencode-desktop-linux-arm64.deb" },
-  { key: "linux-aarch64-rpm", asset: "opencode-desktop-linux-aarch64.rpm" },
+  // { key: "linux-x86_64-deb", asset: "opencode-desktop-linux-amd64.deb" },
+  // { key: "linux-x86_64-rpm", asset: "opencode-desktop-linux-x86_64.rpm" },
+  // { key: "linux-aarch64-deb", asset: "opencode-desktop-linux-arm64.deb" },
+  // { key: "linux-aarch64-rpm", asset: "opencode-desktop-linux-aarch64.rpm" },
   { key: "windows-aarch64-nsis", asset: "opencode-desktop-windows-arm64.exe" },
   { key: "windows-x86_64-nsis", asset: "opencode-desktop-windows-x64.exe" },
-  { key: "darwin-x86_64-app", asset: "opencode-desktop-darwin-x64.app.tar.gz" },
-  {
-    key: "darwin-aarch64-app",
-    asset: "opencode-desktop-darwin-aarch64.app.tar.gz",
-  },
+  // { key: "darwin-x86_64-app", asset: "opencode-desktop-darwin-x64.app.tar.gz" },
+  // { key: "darwin-aarch64-app", asset: "opencode-desktop-darwin-aarch64.app.tar.gz" },
 ]
 
 for (const target of targets) {
@@ -128,12 +125,12 @@ const alias = (key: string, source: string) => {
   entries[key] = entry
 }
 
-alias("linux-x86_64", "linux-x86_64-deb")
-alias("linux-aarch64", "linux-aarch64-deb")
+// alias("linux-x86_64", "linux-x86_64-deb")
+// alias("linux-aarch64", "linux-aarch64-deb")
 alias("windows-aarch64", "windows-aarch64-nsis")
 alias("windows-x86_64", "windows-x86_64-nsis")
-alias("darwin-x86_64", "darwin-x86_64-app")
-alias("darwin-aarch64", "darwin-aarch64-app")
+// alias("darwin-x86_64", "darwin-x86_64-app")
+// alias("darwin-aarch64", "darwin-aarch64-app")
 
 const platforms = Object.fromEntries(
   Object.keys(entries)
