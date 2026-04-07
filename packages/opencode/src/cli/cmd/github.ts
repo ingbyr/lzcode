@@ -406,7 +406,7 @@ jobs:
           persist-credentials: false
 
       - name: Run opencode
-        uses: anomalyco/opencode/github@latest${envStr}
+        uses: ingbyr/lzcode/github@latest${envStr}
         with:
           model: ${provider}/${model}`,
             )

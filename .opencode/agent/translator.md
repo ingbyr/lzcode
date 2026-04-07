@@ -658,7 +658,7 @@ zod
 ```text
 24601/opencode-zellij-namer
 angristan/opencode-wakatime
-anomalyco/opencode
+ingbyr/lzcode
 apps/opencode-agent
 athal7/opencode-devcontainers
 awesome-opencode/awesome-opencode

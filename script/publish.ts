@@ -73,14 +73,14 @@ if (Script.release) {
   await $`gh release edit v${Script.version} --draft=false --repo ${process.env.GH_REPO}`
 }
 
-console.log("\n=== cli ===\n")
-await import(`../packages/opencode/script/publish.ts`)
-
-console.log("\n=== sdk ===\n")
-await import(`../packages/sdk/js/script/publish.ts`)
-
-console.log("\n=== plugin ===\n")
-await import(`../packages/plugin/script/publish.ts`)
+// console.log("\n=== cli ===\n")
+// await import(`../packages/opencode/script/publish.ts`)
+//
+// console.log("\n=== sdk ===\n")
+// await import(`../packages/sdk/js/script/publish.ts`)
+//
+// console.log("\n=== plugin ===\n")
+// await import(`../packages/plugin/script/publish.ts`)
 
 const dir = fileURLToPath(new URL("..", import.meta.url))
 process.chdir(dir)
