@@ -97,14 +97,14 @@ const add = (key: string, asset: Asset, signature: string) => {
 }
 
 const targets = [
-  // { key: "linux-x86_64-deb", asset: "opencode-desktop-linux-amd64.deb" },
-  // { key: "linux-x86_64-rpm", asset: "opencode-desktop-linux-x86_64.rpm" },
-  // { key: "linux-aarch64-deb", asset: "opencode-desktop-linux-arm64.deb" },
-  // { key: "linux-aarch64-rpm", asset: "opencode-desktop-linux-aarch64.rpm" },
-  { key: "windows-aarch64-nsis", asset: "opencode-desktop-windows-arm64.exe" },
-  { key: "windows-x86_64-nsis", asset: "opencode-desktop-windows-x64.exe" },
-  // { key: "darwin-x86_64-app", asset: "opencode-desktop-darwin-x64.app.tar.gz" },
-  // { key: "darwin-aarch64-app", asset: "opencode-desktop-darwin-aarch64.app.tar.gz" },
+  // { key: "linux-x86_64-deb", asset: "lzcode-desktop-linux-amd64.deb" },
+  // { key: "linux-x86_64-rpm", asset: "lzcode-desktop-linux-x86_64.rpm" },
+  // { key: "linux-aarch64-deb", asset: "lzcode-desktop-linux-arm64.deb" },
+  // { key: "linux-aarch64-rpm", asset: "lzcode-desktop-linux-aarch64.rpm" },
+  { key: "windows-aarch64-nsis", asset: "lzcode-desktop-windows-arm64.exe" },
+  { key: "windows-x86_64-nsis", asset: "lzcode-desktop-windows-x64.exe" },
+  // { key: "darwin-x86_64-app", asset: "lzcode-desktop-darwin-x64.app.tar.gz" },
+  // { key: "darwin-aarch64-app", asset: "lzcode-desktop-darwin-aarch64.app.tar.gz" },
 ]
 
 for (const target of targets) {

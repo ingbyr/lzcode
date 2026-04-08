@@ -46,7 +46,7 @@
           in
           {
             inherit opencode;
-            opencode-desktop = desktop;
+            lzcode-desktop = desktop;
           };
       };
 

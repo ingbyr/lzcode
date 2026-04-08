@@ -2,12 +2,12 @@ import type { APIEvent } from "@solidjs/start"
 import type { DownloadPlatform } from "../types"
 
 const assetNames: Record<string, string> = {
-  "darwin-aarch64-dmg": "opencode-desktop-darwin-aarch64.dmg",
-  "darwin-x64-dmg": "opencode-desktop-darwin-x64.dmg",
-  "windows-x64-nsis": "opencode-desktop-windows-x64.exe",
-  "linux-x64-deb": "opencode-desktop-linux-amd64.deb",
-  "linux-x64-appimage": "opencode-desktop-linux-amd64.AppImage",
-  "linux-x64-rpm": "opencode-desktop-linux-x86_64.rpm",
+  "darwin-aarch64-dmg": "lzcode-desktop-darwin-aarch64.dmg",
+  "darwin-x64-dmg": "lzcode-desktop-darwin-x64.dmg",
+  "windows-x64-nsis": "lzcode-desktop-windows-x64.exe",
+  "linux-x64-deb": "lzcode-desktop-linux-amd64.deb",
+  "linux-x64-appimage": "lzcode-desktop-linux-amd64.AppImage",
+  "linux-x64-rpm": "lzcode-desktop-linux-x86_64.rpm",
 } satisfies Record<DownloadPlatform, string>
 
 // Doing this on the server lets us preserve the original name for platforms we don't care to rename for
