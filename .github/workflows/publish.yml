@@ -67,44 +67,44 @@ jobs:
       tag: ${{ steps.version.outputs.tag }}
       repo: ${{ steps.version.outputs.repo }}
 
-  build-cli:
-    needs: version
-    runs-on: ubuntu-24.04
-    if: github.repository == 'ingbyr/lzcode'
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-tags: true
-
-      - uses: ./.github/actions/setup-bun
-
-      - name: Setup git committer
-        id: committer
-        uses: ./.github/actions/setup-git-committer
-        with:
-          opencode-app-id: ${{ vars.OPENCODE_APP_ID }}
-          opencode-app-secret: ${{ secrets.OPENCODE_APP_SECRET }}
-
-      - name: Build
-        id: build
-        run: |
-          ./packages/opencode/script/build.ts
-        env:
-          OPENCODE_VERSION: ${{ needs.version.outputs.version }}
-          OPENCODE_RELEASE: ${{ needs.version.outputs.release }}
-          GH_REPO: ${{ needs.version.outputs.repo }}
-          GH_TOKEN: ${{ steps.committer.outputs.token }}
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: opencode-cli
-          path: packages/opencode/dist
-    outputs:
-      version: ${{ needs.version.outputs.version }}
+#  build-cli:
+#    needs: version
+#    runs-on: ubuntu-24.04
+#    if: github.repository == 'ingbyr/lzcode'
+#    steps:
+#      - uses: actions/checkout@v3
+#        with:
+#          fetch-tags: true
+#
+#      - uses: ./.github/actions/setup-bun
+#
+#      - name: Setup git committer
+#        id: committer
+#        uses: ./.github/actions/setup-git-committer
+#        with:
+#          opencode-app-id: ${{ vars.OPENCODE_APP_ID }}
+#          opencode-app-secret: ${{ secrets.OPENCODE_APP_SECRET }}
+#
+#      - name: Build
+#        id: build
+#        run: |
+#          ./packages/opencode/script/build.ts
+#        env:
+#          OPENCODE_VERSION: ${{ needs.version.outputs.version }}
+#          OPENCODE_RELEASE: ${{ needs.version.outputs.release }}
+#          GH_REPO: ${{ needs.version.outputs.repo }}
+#          GH_TOKEN: ${{ steps.committer.outputs.token }}
+#
+#      - uses: actions/upload-artifact@v4
+#        with:
+#          name: lzcode-cli
+#          path: packages/opencode/dist
+#    outputs:
+#      version: ${{ needs.version.outputs.version }}
 
   build-tauri:
     needs:
-      - build-cli
+#      - build-cli
       - version
     continue-on-error: false
     strategy:
@@ -233,7 +233,7 @@ jobs:
           releaseId: ${{ needs.version.outputs.release }}
           tagName: ${{ needs.version.outputs.tag }}
           releaseDraft: true
-          releaseAssetNamePattern: opencode-desktop-[platform]-[arch][ext]
+          releaseAssetNamePattern: lzcode-desktop-[platform]-[arch][ext]
           repo: ${{ (github.ref_name == 'beta' && 'lzcode-beta') || '' }}
           releaseCommitish: ${{ github.sha }}
         env:
@@ -291,7 +291,7 @@ jobs:
   publish:
     needs:
       - version
-      - build-cli
+#      - build-cli
       - build-tauri
     runs-on: ubuntu-24.04
     steps:
@@ -327,7 +327,7 @@ jobs:
 
       - uses: actions/download-artifact@v4
         with:
-          name: opencode-cli
+          name: lzcode-cli
           path: packages/opencode/dist
 
       # - uses: actions/download-artifact@v4
