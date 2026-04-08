@@ -24,7 +24,7 @@
   opencode,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
-  pname = "opencode-desktop";
+  pname = "lzcode-desktop";
   inherit (opencode)
     version
     src
@@ -72,7 +72,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     patchShebangs packages/desktop/node_modules
 
     mkdir -p packages/desktop/src-tauri/sidecars
-    cp ${opencode}/bin/opencode packages/desktop/src-tauri/sidecars/lzcode-cli-${stdenv.hostPlatform.rust.rustcTarget}
+    cp ${opencode}/bin/lzcode packages/desktop/src-tauri/sidecars/lzcode-cli-${stdenv.hostPlatform.rust.rustcTarget}
   '';
 
   # see publish-tauri job in .github/workflows/publish.yml
@@ -86,15 +86,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # should be removed once binary is renamed or decided otherwise
   # darwin output is a .app bundle so no conflict
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
-    mv $out/bin/LzCode $out/bin/opencode-desktop
-    sed -i 's|^Exec=LzCode$|Exec=opencode-desktop|' $out/share/applications/LzCode.desktop
+    mv $out/bin/LzCode $out/bin/lzcode-desktop
+    sed -i 's|^Exec=LzCode$|Exec=lzcode-desktop|' $out/share/applications/LzCode.desktop
   '';
 
   meta = {
     description = "蓝舟编码助手桌面应用";
-    homepage = "https://lanzhou-uat.ccccltd.cn";
+    homepage = "https://github.com/ingbyr/lzcode";
     license = lib.licenses.mit;
-    mainProgram = "opencode-desktop";
+    mainProgram = "lzcode-desktop";
     inherit (opencode.meta) platforms;
   };
 })
