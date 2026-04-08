@@ -11,9 +11,9 @@ console.log(`Updated package.json version to ${Script.version}`)
 
 const sidecarConfig = getCurrentSidecar()
 
-const dir = "src-tauri/target/opencode-binaries"
+const dir = "src-tauri/target/lzcode-binaries"
 
 await $`mkdir -p ${dir}`
-await $`gh run download ${Bun.env.GITHUB_RUN_ID} -n opencode-cli`.cwd(dir)
+await $`gh run download ${Bun.env.GITHUB_RUN_ID} -n lzcode-cli`.cwd(dir)
 
 await copyBinaryToSidecarFolder(windowsify(`${dir}/${sidecarConfig.ocBinary}/bin/lzcode`))

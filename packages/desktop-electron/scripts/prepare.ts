@@ -14,11 +14,11 @@ console.log(`Updated package.json version to ${Script.version}`)
 
 const sidecarConfig = getCurrentSidecar()
 
-const dir = "resources/opencode-binaries"
+const dir = "resources/lzcode-binaries"
 
 await $`mkdir -p ${dir}`
-await $`gh run download ${Bun.env.GITHUB_RUN_ID} -n opencode-cli`.cwd(dir)
+await $`gh run download ${Bun.env.GITHUB_RUN_ID} -n lzcode-cli`.cwd(dir)
 
-await copyBinaryToSidecarFolder(windowsify(`${dir}/${sidecarConfig.ocBinary}/bin/opencode`))
+await copyBinaryToSidecarFolder(windowsify(`${dir}/${sidecarConfig.ocBinary}/bin/lzcode`))
 
 await $`rm -rf ${dir}`
