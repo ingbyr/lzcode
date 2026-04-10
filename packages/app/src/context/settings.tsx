@@ -52,7 +52,7 @@ const defaultSettings: Settings = {
     editToolPartsExpanded: false,
   },
   updates: {
-    startup: false,
+    startup: true,
   },
   appearance: {
     fontSize: 14,
