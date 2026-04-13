@@ -432,6 +432,7 @@ async fn initialize(app: AppHandle) {
     tracing::info!("Spawning sidecar on {url}");
     let (child, health_check) =
         server::spawn_local_server(app.clone(), hostname.to_string(), port, password.clone());
+    tracing::info!("Sidecar process spawned successfully");
 
     // Make sidecar credentials available immediately (before health check completes)
     let (ready_tx, ready_rx) = oneshot::channel();
@@ -440,6 +441,7 @@ async fn initialize(app: AppHandle) {
         username: Some("opencode".to_string()),
         password: Some(password),
     });
+    tracing::info!("Sidecar credentials ready, available before health check");
     app.manage(SidecarReady(ready_rx.shared()));
     app.manage(ServerState {
         child: Arc::new(Mutex::new(Some(child))),
@@ -451,10 +453,15 @@ async fn initialize(app: AppHandle) {
     // We only do this if the sqlite db doesn't exist, and we're expecting the sidecar to create it.
     // A separate loading window is shown for long migrations.
     let needs_migration = !sqlite_file_exists();
+    tracing::info!(
+        needs_migration = needs_migration,
+        db_path = ?opencode_db_path(),
+        "Checking if SQLite migration is needed"
+    );
     let sqlite_done = needs_migration.then(|| {
         tracing::info!(
             path = %opencode_db_path().expect("failed to get db path").display(),
-            "Sqlite file not found, waiting for it to be generated"
+            "SQLite migration started, listening for progress events"
         );
 
         let (done_tx, done_rx) = oneshot::channel::<()>();
@@ -462,11 +469,13 @@ async fn initialize(app: AppHandle) {
 
         let init_tx = init_tx.clone();
         let id = SqliteMigrationProgress::listen(&app, move |e| {
+            tracing::info!("State changed to SqliteWaiting, migration in progress");
             let _ = init_tx.send(InitStep::SqliteWaiting);
 
             if matches!(e.payload, SqliteMigrationProgress::Done)
                 && let Some(done_tx) = done_tx.lock().unwrap().take()
             {
+                tracing::info!("SQLite migration completed");
                 let _ = done_tx.send(());
             }
         });
@@ -520,6 +529,7 @@ async fn initialize(app: AppHandle) {
     let _ = loading_task.await;
 
     tracing::info!("Loading done, completing initialisation");
+    tracing::info!("State changed to Done, initialization complete");
     let _ = init_tx.send(InitStep::Done);
 
     if loading_window.is_some() {

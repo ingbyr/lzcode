@@ -91,18 +91,24 @@ pub fn spawn_local_server(
     password: String,
 ) -> (CommandChild, HealthCheck) {
     let (child, exit) = cli::serve(&app, &hostname, port, &password);
+    tracing::info!("CLI serve command spawned, starting health check");
 
     let health_check = HealthCheck(tokio::spawn(async move {
         let url = format!("http://{hostname}:{port}");
         let timestamp = Instant::now();
+        tracing::info!("Starting health check polling for {}", url);
 
         let ready = async {
+            let mut attempt = 0u32;
             loop {
+                attempt += 1;
                 tokio::time::sleep(Duration::from_millis(100)).await;
 
                 if check_health(&url, Some(&password)).await {
-                    tracing::info!(elapsed = ?timestamp.elapsed(), "Server ready");
+                    tracing::info!(elapsed = ?timestamp.elapsed(), attempts = attempt, "Server ready");
                     return Ok(());
+                } else if attempt % 10 == 0 {
+                    tracing::debug!(attempt = attempt, elapsed = ?timestamp.elapsed(), "Health check not ready yet, retrying...");
                 }
             }
         };
