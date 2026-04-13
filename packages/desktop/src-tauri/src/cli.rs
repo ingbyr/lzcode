@@ -368,10 +368,14 @@ pub fn spawn_command(
     args: &str,
     extra_env: &[(&str, String)],
 ) -> Result<(impl Stream<Item = CommandEvent> + 'static, CommandChild), std::io::Error> {
+    tracing::info!("spawn_command called with args: {}", args);
+
     let state_dir = app
         .path()
         .resolve("", BaseDirectory::AppLocalData)
         .expect("Failed to resolve app local data dir");
+
+    tracing::debug!("State directory resolved: {:?}", state_dir);
 
     let mut envs = vec![
         (
@@ -394,10 +398,11 @@ pub fn spawn_command(
             .map(|(key, value)| (key.to_string(), value.clone())),
     );
 
-    let mut cmd = if cfg!(windows) {
+let mut cmd = if cfg!(windows) {
         if is_wsl_enabled(app) {
             tracing::info!("WSL is enabled, spawning CLI server in WSL");
             let version = app.package_info().version.to_string();
+            tracing::info!("Target version for WSL: {}", version);
             let mut script = vec![
                 "set -e".to_string(),
                 "BIN=\"$HOME/.opencode/bin/opencode\"".to_string(),
@@ -426,11 +431,16 @@ pub fn spawn_command(
 
             script.push(format!("{} exec \"$BIN\" {}", env_prefix.join(" "), args));
 
+            tracing::info!("WSL script prepared, executing via wsl -e bash -lc");
             let mut cmd = Command::new("wsl");
             cmd.args(["-e", "bash", "-lc", &script.join("\n")]);
             cmd
         } else {
             let sidecar = get_sidecar_path(app);
+            tracing::info!("Windows native mode, sidecar path: {:?}", sidecar);
+            if !sidecar.exists() {
+                tracing::error!("Sidecar binary not found at {:?}", sidecar);
+            }
             let mut cmd = Command::new(sidecar);
             cmd.args(args.split_whitespace());
 
@@ -442,7 +452,9 @@ pub fn spawn_command(
         }
     } else {
         let sidecar = get_sidecar_path(app);
+        tracing::info!("Unix mode, sidecar path: {:?}", sidecar);
         let shell = get_user_shell();
+        tracing::info!("Using shell: {}", shell);
         let envs = merge_shell_env(load_shell_env(&shell), envs);
 
         let line = if shell.ends_with("/nu") {
@@ -465,19 +477,25 @@ pub fn spawn_command(
     cmd.stderr(Stdio::piped());
     cmd.stdin(Stdio::null());
 
+    tracing::info!("Preparing process wrap with job object and creation flags");
+
     let mut wrap = CommandWrap::from(cmd);
 
     #[cfg(unix)]
     {
+        tracing::debug!("Unix: wrapping with ProcessGroup::leader()");
         wrap.wrap(ProcessGroup::leader());
     }
 
     #[cfg(windows)]
     {
+        tracing::debug!("Windows: wrapping with JobObject, WinCreationFlags, KillOnDrop");
         wrap.wrap(JobObject).wrap(WinCreationFlags).wrap(KillOnDrop);
     }
 
+    tracing::info!("Spawning wrapped process");
     let mut child = wrap.spawn()?;
+    tracing::info!("Process spawned successfully, PID: {:?}", child.id());
     let guard = Arc::new(tokio::sync::RwLock::new(()));
     let (tx, rx) = mpsc::channel(256);
     let (kill_tx, mut kill_rx) = mpsc::channel(1);
@@ -557,19 +575,21 @@ pub fn serve(
 ) -> (CommandChild, oneshot::Receiver<TerminatedPayload>) {
     let (exit_tx, exit_rx) = oneshot::channel::<TerminatedPayload>();
 
-    tracing::info!(port, "Spawning sidecar");
+    tracing::info!(port, hostname, "Spawning sidecar serve process");
 
     let envs = [
         ("OPENCODE_SERVER_USERNAME", "opencode".to_string()),
         ("OPENCODE_SERVER_PASSWORD", password.to_string()),
     ];
 
+    tracing::info!("Executing sidecar command with serve arguments");
     let (events, child) = spawn_command(
         app,
         format!("--print-logs --log-level WARN serve --hostname {hostname} --port {port}").as_str(),
         &envs,
     )
     .expect("Failed to spawn opencode");
+    tracing::info!("Sidecar process started, listening for events");
 
     let mut exit_tx = Some(exit_tx);
     tokio::spawn(
@@ -625,6 +645,8 @@ pub mod sqlite_migration {
         let app = app.clone();
         let mut done = false;
 
+        tracing::info!("SQLite migration logs middleware initialized");
+
         stream.filter_map(move |event| {
             if done {
                 return future::ready(Some(event));
@@ -634,8 +656,10 @@ pub mod sqlite_migration {
                 CommandEvent::Stdout(s) | CommandEvent::Stderr(s) => {
                     if let Some(s) = s.strip_prefix("sqlite-migration:").map(|s| s.trim()) {
                         if let Ok(progress) = s.parse::<u8>() {
+                            tracing::info!("SQLite migration progress: {}%", progress);
                             let _ = SqliteMigrationProgress::InProgress(progress).emit(&app);
                         } else if s == "done" {
+                            tracing::info!("SQLite migration completed (done signal received)");
                             done = true;
                             let _ = SqliteMigrationProgress::Done.emit(&app);
                         }
