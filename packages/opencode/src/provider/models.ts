@@ -168,7 +168,6 @@ export namespace ModelsDev {
         modalities: { input: ["text", "image"], output: ["text"] },
         cost: { input: 0, output: 0 },
         limit: { context: 128000, output: 16384 },
-        options: {},
       },
       "jiaorong-deepseek-v3.2": {
         id: "jiaorong-deepseek-v3.2",
@@ -181,7 +180,6 @@ export namespace ModelsDev {
         modalities: { input: ["text", "image"], output: ["text"] },
         cost: { input: 0, output: 0 },
         limit: { context: 160000, output: 16384 },
-        options: {},
       },
       "jiaorong-kimi-k2.5": {
         id: "jiaorong-kimi-k2.5",
@@ -194,7 +192,6 @@ export namespace ModelsDev {
         modalities: { input: ["text", "image"], output: ["text"] },
         cost: { input: 0, output: 0 },
         limit: { context: 256000, output: 16384 },
-        options: {},
       },
       "jiaorong-glm-5": {
         id: "jiaorong-glm-5",
@@ -207,7 +204,6 @@ export namespace ModelsDev {
         modalities: { input: ["text", "image"], output: ["text"] },
         cost: { input: 0, output: 0 },
         limit: { context: 198000, output: 16384 },
-        options: {},
       },
       "jiaorong-minimax-m2.5": {
         id: "jiaorong-minimax-m2.5",
@@ -220,7 +216,6 @@ export namespace ModelsDev {
         modalities: { input: ["text", "image"], output: ["text"] },
         cost: { input: 0, output: 0 },
         limit: { context: 192000, output: 16384 },
-        options: {},
       },
       "jiaorong-qwen3.5-397b-a17b": {
         id: "jiaorong-qwen3.5-397b-a17b",
@@ -233,7 +228,6 @@ export namespace ModelsDev {
         modalities: { input: ["text", "image"], output: ["text"] },
         cost: { input: 0, output: 0 },
         limit: { context: 256000, output: 16384 },
-        options: {},
       },
       "jiaorong-qwen3.5-122b-a10b": {
         id: "jiaorong-qwen3.5-122b-a10b",
@@ -246,7 +240,6 @@ export namespace ModelsDev {
         modalities: { input: ["text", "image"], output: ["text"] },
         cost: { input: 0, output: 0 },
         limit: { context: 256000, output: 16384 },
-        options: {},
       },
       "jiaorong-qwen3.5-35b-a3b": {
         id: "jiaorong-qwen3.5-35b-a3b",
@@ -259,7 +252,6 @@ export namespace ModelsDev {
         modalities: { input: ["text", "image"], output: ["text"] },
         cost: { input: 0, output: 0 },
         limit: { context: 256000, output: 16384 },
-        options: {},
       },
     },
   }
