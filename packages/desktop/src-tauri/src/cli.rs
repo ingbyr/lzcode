@@ -40,8 +40,8 @@ impl CommandWrapper for WinCreationFlags {
     }
 }
 
-const CLI_INSTALL_DIR: &str = ".opencode/bin";
-const CLI_BINARY_NAME: &str = "opencode";
+const CLI_INSTALL_DIR: &str = ".lzcode/bin";
+const CLI_BINARY_NAME: &str = "lzcode";
 const SHELL_ENV_TIMEOUT: Duration = Duration::from_secs(5);
 
 #[derive(serde::Deserialize, Debug)]
@@ -138,7 +138,7 @@ pub fn install_cli(app: tauri::AppHandle) -> Result<String, String> {
         return Err("Sidecar binary not found".to_string());
     }
 
-    let temp_script = std::env::temp_dir().join("opencode-install.sh");
+    let temp_script = std::env::temp_dir().join("lzcode-install.sh");
     std::fs::write(&temp_script, INSTALL_SCRIPT)
         .map_err(|e| format!("Failed to write install script: {}", e))?;
 
@@ -405,7 +405,7 @@ let mut cmd = if cfg!(windows) {
             tracing::info!("Target version for WSL: {}", version);
             let mut script = vec![
                 "set -e".to_string(),
-                "BIN=\"$HOME/.opencode/bin/opencode\"".to_string(),
+                "BIN=\"$HOME/.lzcode/bin/lzcode\"".to_string(),
                 "if [ ! -x \"$BIN\" ]; then".to_string(),
                 format!(
                     "  curl -fsSL https://opencode.ai/install | bash -s -- --version {} --no-modify-path",
@@ -578,7 +578,7 @@ pub fn serve(
     tracing::info!(port, hostname, "Spawning sidecar serve process");
 
     let envs = [
-        ("OPENCODE_SERVER_USERNAME", "opencode".to_string()),
+        ("OPENCODE_SERVER_USERNAME", "lzcode".to_string()),
         ("OPENCODE_SERVER_PASSWORD", password.to_string()),
     ];
 
@@ -588,7 +588,7 @@ pub fn serve(
         format!("--print-logs --log-level WARN serve --hostname {hostname} --port {port}").as_str(),
         &envs,
     )
-    .expect("Failed to spawn opencode");
+    .expect("Failed to spawn lzcode");
     tracing::info!("Sidecar process started, listening for events");
 
     let mut exit_tx = Some(exit_tx);
