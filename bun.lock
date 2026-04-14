@@ -314,7 +314,7 @@
       "name": "opencode",
       "version": "1.4.3",
       "bin": {
-        "opencode": "./bin/opencode",
+        "lzcode": "./bin/lzcode",
       },
       "dependencies": {
         "@actions/core": "1.11.1",
