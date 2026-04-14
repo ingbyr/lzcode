@@ -59,7 +59,7 @@ await import(`../packages/sdk/js/script/build.ts`)
 
 if (Script.release) {
   if (!Script.preview) {
-    await $`git commit -am "release: v${Script.version}"`
+    await $`git commit --allow-empty -am "release: v${Script.version}"`
     await $`git tag v${Script.version}`
     await $`git fetch origin`
     await $`git cherry-pick HEAD..origin/lzdev`.nothrow()
