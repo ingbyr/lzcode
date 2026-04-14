@@ -115,7 +115,7 @@ pub fn get_sidecar_path(app: &tauri::AppHandle) -> std::path::PathBuf {
         .expect("Failed to get current binary")
         .parent()
         .expect("Failed to get parent dir")
-        .join("lzcode-cli")
+        .join("lzcode-cli.exe")
 }
 
 fn is_cli_installed() -> bool {
