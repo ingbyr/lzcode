@@ -5,6 +5,7 @@ const fs = require("fs")
 const path = require("path")
 const os = require("os")
 
+// @ts-ignore
 function run(target) {
   const result = childProcess.spawnSync(target, process.argv.slice(2), {
     stdio: "inherit",
@@ -42,10 +43,12 @@ const archMap = {
   arm: "arm",
 }
 
+// @ts-ignore
 let platform = platformMap[os.platform()]
 if (!platform) {
   platform = os.platform()
 }
+// @ts-ignore
 let arch = archMap[os.arch()]
 if (!arch) {
   arch = os.arch()
@@ -148,6 +151,7 @@ const names = (() => {
   return [base]
 })()
 
+// @ts-ignore
 function findBinary(startDir) {
   let current = startDir
   for (;;) {
