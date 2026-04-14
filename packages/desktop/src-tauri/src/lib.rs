@@ -591,7 +591,7 @@ fn lzcode_db_path() -> Result<PathBuf, &'static str> {
         }
     };
 
-    Ok(data_home.join("lzcode").join("lzcode.db"))
+    Ok(data_home.join("lzcode").join("opencode.db"))
 }
 
 // Creates a `once` listener for the specified event and returns a future that resolves

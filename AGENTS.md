@@ -117,6 +117,16 @@ const table = sqliteTable("session", {
 })
 ```
 
+## Database Paths
+
+The database directory and naming must be consistent between desktop (Rust) and sidecar (TypeScript):
+
+- **Parent directory**: `{XDG_DATA_HOME}/lzcode` (or `~/.local/share/lzcode` on Linux, `%LOCALAPPDATA%\lzcode` on Windows)
+- **Database file**: `opencode.db`
+- **Full path**: `{XDG_DATA_HOME}/lzcode/opencode.db`
+
+When checking if migration is needed, always check for `opencode.db`, not `lzcode.db`.
+
 ## Testing
 
 - Avoid mocks as much as possible
