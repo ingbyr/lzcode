@@ -1,21 +1,21 @@
 ---
 title: Zen
-description: Curated list of models provided by LzCode.
+description: Curated list of models provided by OpenCode.
 ---
 
 import config from "../../../config.mjs"
 export const console = config.console
 export const email = `mailto:${config.email}`
 
-LzCode Zen is a list of tested and verified models provided by the LzCode team.
+OpenCode Zen is a list of tested and verified models provided by the OpenCode team.
 
 :::note
-LzCode Zen is currently in beta.
+OpenCode Zen is currently in beta.
 :::
 
-Zen works like any other provider in LzCode. You login to LzCode Zen and get
+Zen works like any other provider in OpenCode. You login to OpenCode Zen and get
 your API key. It's **completely optional** and you don't need to use it to use
-LzCode.
+OpenCode.
 
 ---
 
@@ -26,7 +26,7 @@ these models work well as coding agents. Additionally, most providers are
 configured very differently; so you get very different performance and quality.
 
 :::tip
-We tested a select group of models and providers that work well with LzCode.
+We tested a select group of models and providers that work well with OpenCode.
 :::
 
 So if you are using a model through something like OpenRouter, you can never be
@@ -41,17 +41,17 @@ To fix this, we did a couple of things:
 3. Finally, we benchmarked the combination of the model/provider and came up
    with a list that we feel good recommending.
 
-LzCode Zen is an AI gateway that gives you access to these models.
+OpenCode Zen is an AI gateway that gives you access to these models.
 
 ---
 
 ## How it works
 
-LzCode Zen works like any other provider in LzCode.
+OpenCode Zen works like any other provider in OpenCode.
 
-1. You sign in to **<a href={console}>LzCode Zen</a>**, add your billing
+1. You sign in to **<a href={console}>OpenCode Zen</a>**, add your billing
    details, and copy your API key.
-2. You run the `/connect` command in the TUI, select LzCode Zen, and paste your API key.
+2. You run the `/connect` command in the TUI, select OpenCode Zen, and paste your API key.
 3. Run `/models` in the TUI to see the list of models we recommend.
 
 You are charged per request and you can add credits to your account.
@@ -64,8 +64,10 @@ You can also access our models through the following API endpoints.
 
 | Model                 | Model ID              | Endpoint                                           | AI SDK Package              |
 | --------------------- | --------------------- | -------------------------------------------------- | --------------------------- |
-| GPT 5.4 Pro           | gpt-5.4-pro           | `https://opencode.ai/zen/v1/responses`             | `@ai-sdk/openai`            |
 | GPT 5.4               | gpt-5.4               | `https://opencode.ai/zen/v1/responses`             | `@ai-sdk/openai`            |
+| GPT 5.4 Pro           | gpt-5.4-pro           | `https://opencode.ai/zen/v1/responses`             | `@ai-sdk/openai`            |
+| GPT 5.4 Mini          | gpt-5.4-mini          | `https://opencode.ai/zen/v1/responses`             | `@ai-sdk/openai`            |
+| GPT 5.4 Nano          | gpt-5.4-nano          | `https://opencode.ai/zen/v1/responses`             | `@ai-sdk/openai`            |
 | GPT 5.3 Codex         | gpt-5.3-codex         | `https://opencode.ai/zen/v1/responses`             | `@ai-sdk/openai`            |
 | GPT 5.3 Codex Spark   | gpt-5.3-codex-spark   | `https://opencode.ai/zen/v1/responses`             | `@ai-sdk/openai`            |
 | GPT 5.2               | gpt-5.2               | `https://opencode.ai/zen/v1/responses`             | `@ai-sdk/openai`            |
@@ -89,17 +91,14 @@ You can also access our models through the following API endpoints.
 | Gemini 3 Flash        | gemini-3-flash        | `https://opencode.ai/zen/v1/models/gemini-3-flash` | `@ai-sdk/google`            |
 | MiniMax M2.5          | minimax-m2.5          | `https://opencode.ai/zen/v1/chat/completions`      | `@ai-sdk/openai-compatible` |
 | MiniMax M2.5 Free     | minimax-m2.5-free     | `https://opencode.ai/zen/v1/chat/completions`      | `@ai-sdk/openai-compatible` |
-| MiniMax M2.1          | minimax-m2.1          | `https://opencode.ai/zen/v1/chat/completions`      | `@ai-sdk/openai-compatible` |
+| GLM 5.1               | glm-5.1               | `https://opencode.ai/zen/v1/chat/completions`      | `@ai-sdk/openai-compatible` |
 | GLM 5                 | glm-5                 | `https://opencode.ai/zen/v1/chat/completions`      | `@ai-sdk/openai-compatible` |
-| GLM 4.7               | glm-4.7               | `https://opencode.ai/zen/v1/chat/completions`      | `@ai-sdk/openai-compatible` |
-| GLM 4.6               | glm-4.6               | `https://opencode.ai/zen/v1/chat/completions`      | `@ai-sdk/openai-compatible` |
 | Kimi K2.5             | kimi-k2.5             | `https://opencode.ai/zen/v1/chat/completions`      | `@ai-sdk/openai-compatible` |
-| Qwen3 Coder 480B      | qwen3-coder           | `https://opencode.ai/zen/v1/chat/completions`      | `@ai-sdk/openai-compatible` |
 | Big Pickle            | big-pickle            | `https://opencode.ai/zen/v1/chat/completions`      | `@ai-sdk/openai-compatible` |
-| MiMo V2 Flash Free    | mimo-v2-flash-free    | `https://opencode.ai/zen/v1/chat/completions`      | `@ai-sdk/openai-compatible` |
+| Qwen3.6 Plus Free     | qwen3.6-plus-free     | `https://opencode.ai/zen/v1/chat/completions`      | `@ai-sdk/openai-compatible` |
 | Nemotron 3 Super Free | nemotron-3-super-free | `https://opencode.ai/zen/v1/chat/completions`      | `@ai-sdk/openai-compatible` |
 
-The [model id](/docs/config/#models) in your LzCode config
+The [model id](/docs/config/#models) in your OpenCode config
 uses the format `opencode/<model-id>`. For example, for GPT 5.3 Codex, you would
 use `opencode/gpt-5.3-codex` in your config.
 
@@ -122,14 +121,12 @@ We support a pay-as-you-go model. Below are the prices **per 1M tokens**.
 | Model                             | Input  | Output  | Cached Read | Cached Write |
 | --------------------------------- | ------ | ------- | ----------- | ------------ |
 | Big Pickle                        | Free   | Free    | Free        | -            |
-| MiMo V2 Flash Free                | Free   | Free    | Free        | -            |
+| Qwen3.6 Plus Free                 | Free   | Free    | Free        | -            |
 | Nemotron 3 Super Free             | Free   | Free    | Free        | -            |
 | MiniMax M2.5 Free                 | Free   | Free    | Free        | -            |
 | MiniMax M2.5                      | $0.30  | $1.20   | $0.06       | $0.375       |
-| MiniMax M2.1                      | $0.30  | $1.20   | $0.10       | -            |
+| GLM 5.1                           | $1.40  | $4.40   | $0.26       | -            |
 | GLM 5                             | $1.00  | $3.20   | $0.20       | -            |
-| GLM 4.7                           | $0.60  | $2.20   | $0.10       | -            |
-| GLM 4.6                           | $0.60  | $2.20   | $0.10       | -            |
 | Kimi K2.5                         | $0.60  | $3.00   | $0.10       | -            |
 | Qwen3 Coder 480B                  | $0.45  | $1.50   | -           | -            |
 | Claude Opus 4.6                   | $5.00  | $25.00  | $0.50       | $6.25        |
@@ -145,8 +142,10 @@ We support a pay-as-you-go model. Below are the prices **per 1M tokens**.
 | Gemini 3.1 Pro (≤ 200K tokens)    | $2.00  | $12.00  | $0.20       | -            |
 | Gemini 3.1 Pro (> 200K tokens)    | $4.00  | $18.00  | $0.40       | -            |
 | Gemini 3 Flash                    | $0.50  | $3.00   | $0.05       | -            |
-| GPT 5.4 Pro                       | $30.00 | $180.00 | $30.00      | -            |
 | GPT 5.4                           | $2.50  | $15.00  | $0.25       | -            |
+| GPT 5.4 Pro                       | $30.00 | $180.00 | $30.00      | -            |
+| GPT 5.4 Mini                      | $0.75  | $4.50   | $0.075      | -            |
+| GPT 5.4 Nano                      | $0.20  | $1.25   | $0.02       | -            |
 | GPT 5.3 Codex Spark               | $1.75  | $14.00  | $0.175      | -            |
 | GPT 5.3 Codex                     | $1.75  | $14.00  | $0.175      | -            |
 | GPT 5.2                           | $1.75  | $14.00  | $0.175      | -            |
@@ -167,10 +166,10 @@ Credit card fees are passed along at cost (4.4% + $0.30 per transaction); we don
 
 The free models:
 
-- MiniMax M2.5 Free is available on LzCode for a limited time. The team is using this time to collect feedback and improve the model.
-- MiMo V2 Flash Free is available on LzCode for a limited time. The team is using this time to collect feedback and improve the model.
-- Nemotron 3 Super Free is available on LzCode for a limited time. The team is using this time to collect feedback and improve the model.
-- Big Pickle is a stealth model that's free on LzCode for a limited time. The team is using this time to collect feedback and improve the model.
+- MiniMax M2.5 Free is available on OpenCode for a limited time. The team is using this time to collect feedback and improve the model.
+- Qwen3.6 Plus Free is available on OpenCode for a limited time. The team is using this time to collect feedback and improve the model.
+- Nemotron 3 Super Free is available on OpenCode for a limited time. The team is using this time to collect feedback and improve the model.
+- Big Pickle is a stealth model that's free on OpenCode for a limited time. The team is using this time to collect feedback and improve the model.
 
 <a href={email}>Contact us</a> if you have any questions.
 
@@ -215,7 +214,7 @@ All our models are hosted in the US. Our providers follow a zero-retention polic
 
 - Big Pickle: During its free period, collected data may be used to improve the model.
 - MiniMax M2.5 Free: During its free period, collected data may be used to improve the model.
-- MiniMax M2.5 Free: During its free period, collected data may be used to improve the model.
+- Qwen3.6 Plus Free: During its free period, collected data may be used to improve the model.
 - Nemotron 3 Super Free: During its free period, collected data may be used to improve the model.
 - OpenAI APIs: Requests are retained for 30 days in accordance with [OpenAI's Data Policies](https://platform.openai.com/docs/guides/your-data).
 - Anthropic APIs: Requests are retained for 30 days in accordance with [Anthropic's Data Policies](https://docs.anthropic.com/en/docs/claude-code/data-usage).
@@ -269,9 +268,9 @@ and you want to use that instead of the one that Zen provides.
 
 ## Goals
 
-We created LzCode Zen to:
+We created OpenCode Zen to:
 
 1. **Benchmark** the best models/providers for coding agents.
 2. Have access to the **highest quality** options and not downgrade performance or route to cheaper providers.
 3. Pass along any **price drops** by selling at cost; so the only markup is to cover our processing fees.
-4. Have **no lock-in** by allowing you to use it with any other coding agent. And always let you use any other provider with LzCode as well.
+4. Have **no lock-in** by allowing you to use it with any other coding agent. And always let you use any other provider with OpenCode as well.
