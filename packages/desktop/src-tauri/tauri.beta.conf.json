@@ -1,6 +1,6 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "LzCode Beta",
+  "productName": "蓝舟编码助手Beta",
   "identifier": "ai.lzcode.desktop.beta",
   "bundle": {
     "createUpdaterArtifacts": true,
