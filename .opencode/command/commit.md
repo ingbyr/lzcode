@@ -4,7 +4,7 @@ model: jiaorong/jiaorong-kimi-k2.5
 subtask: true
 ---
 
-commit and push
+commit and push to remote origin "gh", branch "lzdev"
 
 make sure it includes a prefix like
 docs:
