@@ -1129,9 +1129,7 @@ export namespace Config {
   export class Service extends ServiceMap.Service<Service, Interface>()("@opencode/Config") {}
 
   function globalConfigFile() {
-    const candidates = ["lzcode.jsonc", "lzcode.json", "config.json"].map((file) =>
-      path.join(Global.Path.config, file),
-    )
+    const candidates = ["lzcode.jsonc", "lzcode.json", "config.json"].map((file) => path.join(Global.Path.config, file))
     for (const file of candidates) {
       if (existsSync(file)) return file
     }
@@ -1283,25 +1281,9 @@ export namespace Config {
           let result: Info = pipe(
             {},
             mergeDeep(yield* loadFile(path.join(Global.Path.config, "config.json"))),
-            mergeDeep(yield* loadFile(path.join(Global.Path.config, "opencode.json"))),
-            mergeDeep(yield* loadFile(path.join(Global.Path.config, "opencode.jsonc"))),
+            mergeDeep(yield* loadFile(path.join(Global.Path.config, "lzcode.json"))),
+            mergeDeep(yield* loadFile(path.join(Global.Path.config, "lzcode.jsonc"))),
           )
-
-          const legacy = path.join(Global.Path.config, "config")
-          if (existsSync(legacy)) {
-            yield* Effect.promise(() =>
-              import(pathToFileURL(legacy).href, { with: { type: "toml" } })
-                .then(async (mod) => {
-                  const { provider, model, ...rest } = mod.default
-                  if (provider && model) result.model = `${provider}/${model}`
-                  result["$schema"] = "https://opencode.ai/config.json"
-                  result = mergeDeep(result, rest)
-                  await fsNode.writeFile(path.join(Global.Path.config, "config.json"), JSON.stringify(result, null, 2))
-                  await fsNode.unlink(legacy)
-                })
-                .catch(() => {}),
-            )
-          }
 
           return result
         })
