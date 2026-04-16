@@ -10,6 +10,7 @@ import { Skill } from "../skill"
 import { Log } from "../util/log"
 import PROMPT_INITIALIZE from "./template/initialize.txt"
 import PROMPT_REVIEW from "./template/review.txt"
+import PROMPT_COMMIT from "./template/commit.txt"
 
 export namespace Command {
   const log = Log.create({ service: "command" })
@@ -63,6 +64,7 @@ export namespace Command {
   export const Default = {
     INIT: "init",
     REVIEW: "review",
+    COMMIT: "commit",
   } as const
 
   export interface Interface {
@@ -101,6 +103,16 @@ export namespace Command {
           },
           subtask: true,
           hints: hints(PROMPT_REVIEW),
+        }
+        commands[Default.COMMIT] = {
+          name: Default.COMMIT,
+          description: "git commit",
+          source: "command",
+          get template() {
+            return PROMPT_COMMIT
+          },
+          subtask: true,
+          hints: hints(PROMPT_COMMIT),
         }
 
         for (const [name, command] of Object.entries(cfg.command ?? {})) {
