@@ -17,7 +17,10 @@
             },
             // task for the `beforeDevCommand` if used, must be configured in `.vscode/tasks.json`
             "preLaunchTask": "ui:dev",
-            "cwd": "${workspaceFolder}/packages/desktop"
+            "cwd": "${workspaceFolder}/packages/desktop",
+            "env": {
+                "OPENCODE_MODELS_URL": "https://gh-proxy.org/https://github.com/ingbyr/lzmodels/releases/latest/download"
+            }
         },
         {
             "type": "lldb",
@@ -32,7 +35,7 @@
             },
             // task for the `beforeBuildCommand` if used, must be configured in `.vscode/tasks.json`
             "preLaunchTask": "ui:build",
-            "cwd": "${workspaceFolder}/packages/desktop"
+            "cwd": "${workspaceFolder}/packages/desktop",
         },
         {
             "type": "node",
@@ -43,7 +46,7 @@
                 "run",
                 "dev"
             ],
-            "cwd": "${workspaceFolder}", 
+            "cwd": "${workspaceFolder}",
             "console": "integratedTerminal",
             "internalConsoleOptions": "neverOpen",
             "autoAttachChildProcesses": true
