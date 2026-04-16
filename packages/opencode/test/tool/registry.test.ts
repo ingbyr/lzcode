@@ -10,10 +10,10 @@ afterEach(async () => {
 })
 
 describe("tool.registry", () => {
-  test("loads tools from .lzcode/tool (singular)", async () => {
+  test("loads tools from .opencode/tool (singular)", async () => {
     await using tmp = await tmpdir({
       init: async (dir) => {
-        const opencodeDir = path.join(dir, ".lzcode")
+        const opencodeDir = path.join(dir, ".opencode")
         await fs.mkdir(opencodeDir, { recursive: true })
 
         const toolDir = path.join(opencodeDir, "tool")
@@ -44,10 +44,10 @@ describe("tool.registry", () => {
     })
   })
 
-  test("loads tools from .lzcode/tools (plural)", async () => {
+  test("loads tools from .opencode/tools (plural)", async () => {
     await using tmp = await tmpdir({
       init: async (dir) => {
-        const opencodeDir = path.join(dir, ".lzcode")
+        const opencodeDir = path.join(dir, ".opencode")
         await fs.mkdir(opencodeDir, { recursive: true })
 
         const toolsDir = path.join(opencodeDir, "tools")
@@ -81,7 +81,7 @@ describe("tool.registry", () => {
   test("loads tools with external dependencies without crashing", async () => {
     await using tmp = await tmpdir({
       init: async (dir) => {
-        const opencodeDir = path.join(dir, ".lzcode")
+        const opencodeDir = path.join(dir, ".opencode")
         await fs.mkdir(opencodeDir, { recursive: true })
 
         const toolsDir = path.join(opencodeDir, "tools")

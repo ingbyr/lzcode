@@ -63,11 +63,11 @@ export namespace Config {
   function systemManagedConfigDir(): string {
     switch (process.platform) {
       case "darwin":
-        return "/Library/Application Support/lzcode"
+        return "/Library/Application Support/opencode"
       case "win32":
-        return path.join(process.env.ProgramData || "C:\\ProgramData", "lzcode")
+        return path.join(process.env.ProgramData || "C:\\ProgramData", "opencode")
       default:
-        return "/etc/lzcode"
+        return "/etc/opencode"
     }
   }
 
@@ -222,7 +222,7 @@ export namespace Config {
       })
       if (!md) continue
 
-      const patterns = ["/.lzcode/command/", "/.lzcode/commands/", "/command/", "/commands/"]
+      const patterns = ["/.opencode/command/", "/.opencode/commands/", "/command/", "/commands/"]
       const file = rel(item, patterns) ?? path.basename(item)
       const name = trim(file)
 
@@ -261,7 +261,7 @@ export namespace Config {
       })
       if (!md) continue
 
-      const patterns = ["/.lzcode/agent/", "/.lzcode/agents/", "/agent/", "/agents/"]
+      const patterns = ["/.opencode/agent/", "/.opencode/agents/", "/agent/", "/agents/"]
       const file = rel(item, patterns) ?? path.basename(item)
       const agentName = trim(file)
 
@@ -1129,7 +1129,9 @@ export namespace Config {
   export class Service extends ServiceMap.Service<Service, Interface>()("@opencode/Config") {}
 
   function globalConfigFile() {
-    const candidates = ["lzcode.jsonc", "lzcode.json", "config.json"].map((file) => path.join(Global.Path.config, file))
+    const candidates = ["opencode.jsonc", "opencode.json", "config.json"].map((file) =>
+      path.join(Global.Path.config, file),
+    )
     for (const file of candidates) {
       if (existsSync(file)) return file
     }
@@ -1281,8 +1283,8 @@ export namespace Config {
           let result: Info = pipe(
             {},
             mergeDeep(yield* loadFile(path.join(Global.Path.config, "config.json"))),
-            mergeDeep(yield* loadFile(path.join(Global.Path.config, "lzcode.json"))),
-            mergeDeep(yield* loadFile(path.join(Global.Path.config, "lzcode.jsonc"))),
+            mergeDeep(yield* loadFile(path.join(Global.Path.config, "opencode.json"))),
+            mergeDeep(yield* loadFile(path.join(Global.Path.config, "opencode.jsonc"))),
           )
 
           return result
@@ -1364,7 +1366,7 @@ export namespace Config {
 
           if (!Flag.OPENCODE_DISABLE_PROJECT_CONFIG) {
             for (const file of yield* Effect.promise(() =>
-              ConfigPaths.projectFiles("lzcode", ctx.directory, ctx.worktree),
+              ConfigPaths.projectFiles("opencode", ctx.directory, ctx.worktree),
             )) {
               merge(file, yield* loadFile(file), "local")
             }
@@ -1383,8 +1385,8 @@ export namespace Config {
           const deps: Promise<void>[] = []
 
           for (const dir of unique(directories)) {
-            if (dir.endsWith(".lzcode") || dir === Flag.OPENCODE_CONFIG_DIR) {
-              for (const file of ["lzcode.json", "lzcode.jsonc"]) {
+            if (dir.endsWith(".opencode") || dir === Flag.OPENCODE_CONFIG_DIR) {
+              for (const file of ["opencode.json", "opencode.jsonc"]) {
                 const source = path.join(dir, file)
                 log.debug(`loading config from ${source}`)
                 merge(source, yield* loadFile(source))
@@ -1457,7 +1459,7 @@ export namespace Config {
           }
 
           if (existsSync(managedDir)) {
-            for (const file of ["lzcode.json", "lzcode.jsonc"]) {
+            for (const file of ["opencode.json", "opencode.jsonc"]) {
               const source = path.join(managedDir, file)
               merge(source, yield* loadFile(source), "global")
             }

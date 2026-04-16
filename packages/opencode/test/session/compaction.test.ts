@@ -403,7 +403,7 @@ describe("session.compaction.isOverflow", () => {
     await using tmp = await tmpdir({
       init: async (dir) => {
         await Bun.write(
-          path.join(dir, "lzcode.json"),
+          path.join(dir, "opencode.json"),
           JSON.stringify({
             compaction: { auto: false },
           }),

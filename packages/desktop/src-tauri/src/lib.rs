@@ -438,7 +438,7 @@ async fn initialize(app: AppHandle) {
     let (ready_tx, ready_rx) = oneshot::channel();
     let _ = ready_tx.send(ServerReadyData {
         url: url.clone(),
-        username: Some("lzcode".to_string()),
+        username: Some("opencode".to_string()),
         password: Some(password),
     });
     tracing::info!("Sidecar credentials ready, available before health check");
@@ -455,12 +455,12 @@ async fn initialize(app: AppHandle) {
     let needs_migration = !sqlite_file_exists();
     tracing::info!(
         needs_migration = needs_migration,
-        db_path = ?lzcode_db_path(),
+        db_path = ?opencode_db_path(),
         "Checking if SQLite migration is needed"
     );
     let sqlite_done = needs_migration.then(|| {
         tracing::info!(
-            path = %lzcode_db_path().expect("failed to get db path").display(),
+            path = %opencode_db_path().expect("failed to get db path").display(),
             "SQLite migration started, listening for progress events"
         );
 
@@ -573,14 +573,14 @@ fn get_sidecar_port() -> u32 {
 }
 
 fn sqlite_file_exists() -> bool {
-    let Ok(path) = lzcode_db_path() else {
+    let Ok(path) = opencode_db_path() else {
         return true;
     };
 
     path.exists()
 }
 
-fn lzcode_db_path() -> Result<PathBuf, &'static str> {
+fn opencode_db_path() -> Result<PathBuf, &'static str> {
     let xdg_data_home = env::var_os("XDG_DATA_HOME").filter(|v| !v.is_empty());
 
     let data_home = match xdg_data_home {
@@ -591,7 +591,7 @@ fn lzcode_db_path() -> Result<PathBuf, &'static str> {
         }
     };
 
-    Ok(data_home.join("lzcode").join("opencode.db"))
+    Ok(data_home.join("opencode").join("opencode.db"))
 }
 
 // Creates a `once` listener for the specified event and returns a future that resolves
