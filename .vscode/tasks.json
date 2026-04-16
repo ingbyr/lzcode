@@ -14,7 +14,10 @@
       "command": "bun",
       "args": ["dev"],
       "options": {
-        "cwd": "${workspaceFolder}/packages/desktop"
+        "cwd": "${workspaceFolder}/packages/desktop",
+        "env": {
+          "OPENCODE_MODELS_URL": "https://gh-proxy.org/https://github.com/ingbyr/lzmodels/releases/latest/download"
+        }
       }
     },
     {

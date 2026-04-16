@@ -1,6 +1,5 @@
 ---
 description: git commit and push
-model: jiaorong/jiaorong-kimi-k2.5
 subtask: true
 ---
 
