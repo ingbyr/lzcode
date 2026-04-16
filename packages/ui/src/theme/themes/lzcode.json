@@ -1,10 +1,10 @@
 {
   "$schema": "https://opencode.ai/desktop-theme.json",
-  "name": "OpenCode",
-  "id": "opencode",
+  "name": "LzCode",
+  "id": "lzcode",
   "light": {
     "palette": {
-      "neutral": "#ffffff",
+      "neutral": "#EFF6FE",
       "ink": "#1a1a1a",
       "primary": "#3b7dd8",
       "accent": "#d68c27",
@@ -46,7 +46,7 @@
   },
   "dark": {
     "palette": {
-      "neutral": "#0a0a0a",
+      "neutral": "#1D273C",
       "ink": "#eeeeee",
       "primary": "#fab283",
       "accent": "#9d7cd8",
