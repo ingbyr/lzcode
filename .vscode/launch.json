@@ -1,7 +1,4 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
         {
@@ -15,13 +12,8 @@
                     "--no-default-features"
                 ]
             },
-            // task for the `beforeDevCommand` if used, must be configured in `.vscode/tasks.json`
             "preLaunchTask": "ui:dev",
-            "cwd": "${workspaceFolder}/packages/desktop",
-            "env": {
-                "OPENCODE_MODELS_URL": "https://gh-proxy.org/https://github.com/ingbyr/lzmodels/releases/latest/download",
-                "LZ_OPENCODE_VERSION":"1.4.3"
-            }
+            "cwd": "${workspaceFolder}/packages/desktop"
         },
         {
             "type": "lldb",
@@ -34,13 +26,8 @@
                     "--manifest-path=${workspaceFolder}/packages/desktop/src-tauri/Cargo.toml"
                 ]
             },
-            // task for the `beforeBuildCommand` if used, must be configured in `.vscode/tasks.json`
             "preLaunchTask": "ui:build",
             "cwd": "${workspaceFolder}/packages/desktop",
-            "env": {
-                "OPENCODE_MODELS_URL": "https://gh-proxy.org/https://github.com/ingbyr/lzmodels/releases/latest/download",
-                "LZ_OPENCODE_VERSION":"1.4.3"
-            }
         },
         {
             "type": "node",
@@ -54,11 +41,7 @@
             "cwd": "${workspaceFolder}",
             "console": "integratedTerminal",
             "internalConsoleOptions": "neverOpen",
-            "autoAttachChildProcesses": true,
-            "env": {
-                "OPENCODE_MODELS_URL": "https://gh-proxy.org/https://github.com/ingbyr/lzmodels/releases/latest/download",
-                "LZ_OPENCODE_VERSION":"1.4.3"
-            }
+            "autoAttachChildProcesses": true
         }
     ]
 }

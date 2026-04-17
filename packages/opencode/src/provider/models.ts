@@ -18,7 +18,7 @@ export namespace ModelsDev {
   const source = url()
   const filepath = path.join(
     Global.Path.cache,
-    source === "https://models.dev" ? "models.json" : `models-${Hash.fast(source)}.json`,
+    source === "https://gh-proxy.org/https://github.com/ingbyr/lzmodels/releases/latest/download" ? "models.json" : `models-${Hash.fast(source)}.json`,
   )
   const ttl = 5 * 60 * 1000
 
@@ -109,7 +109,7 @@ export namespace ModelsDev {
   export type Provider = z.infer<typeof Provider>
 
   function url() {
-    return Flag.OPENCODE_MODELS_URL || "https://models.dev"
+    return Flag.OPENCODE_MODELS_URL || "https://gh-proxy.org/https://github.com/ingbyr/lzmodels/releases/latest/download"
   }
 
   function fresh() {
