@@ -29,7 +29,7 @@ afterEach(async () => {
 test("keeps server and tui plugin merge semantics aligned", async () => {
   await using tmp = await tmpdir({
     init: async (dir) => {
-      const local = path.join(dir, ".lzcode")
+      const local = path.join(dir, ".opencode")
       await fs.mkdir(local, { recursive: true })
 
       await Bun.write(
@@ -102,9 +102,9 @@ test("loads tui config with the same precedence order as server config paths", a
     init: async (dir) => {
       await Bun.write(path.join(Global.Path.config, "tui.json"), JSON.stringify({ theme: "global" }, null, 2))
       await Bun.write(path.join(dir, "tui.json"), JSON.stringify({ theme: "project" }, null, 2))
-      await fs.mkdir(path.join(dir, ".lzcode"), { recursive: true })
+      await fs.mkdir(path.join(dir, ".opencode"), { recursive: true })
       await Bun.write(
-        path.join(dir, ".lzcode", "tui.json"),
+        path.join(dir, ".opencode", "tui.json"),
         JSON.stringify({ theme: "local", diff_style: "stacked" }, null, 2),
       )
     },
@@ -614,11 +614,11 @@ test("loads managed tui config and gives it highest precedence", async () => {
   })
 })
 
-test("loads .lzcode/tui.json", async () => {
+test("loads .opencode/tui.json", async () => {
   await using tmp = await tmpdir({
     init: async (dir) => {
-      await fs.mkdir(path.join(dir, ".lzcode"), { recursive: true })
-      await Bun.write(path.join(dir, ".lzcode", "tui.json"), JSON.stringify({ diff_style: "stacked" }, null, 2))
+      await fs.mkdir(path.join(dir, ".opencode"), { recursive: true })
+      await Bun.write(path.join(dir, ".opencode", "tui.json"), JSON.stringify({ diff_style: "stacked" }, null, 2))
     },
   })
 
