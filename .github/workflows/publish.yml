@@ -22,9 +22,9 @@ on:
         description: "Override version (optional)"
         required: false
         type: string
-      opencode_version:
-        description: "Override @opencode-ai/plugin version for local config plugins (optional)"
-        required: false
+      lz_opencode_version:
+        description: "Override LZ_OPENCODE version for plugin dependency"
+        required: true
         type: string
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}-${{ inputs.version || inputs.bump }}
@@ -96,7 +96,7 @@ jobs:
         env:
           OPENCODE_VERSION: ${{ needs.version.outputs.version }}
           OPENCODE_RELEASE: ${{ needs.version.outputs.release }}
-          LZ_OPENCODE_VERSION: ${{ inputs.opencode_version }}
+          LZ_OPENCODE_VERSION: ${{ inputs.lz_opencode_version}}
           GH_REPO: ${{ needs.version.outputs.repo }}
           GH_TOKEN: ${{ steps.committer.outputs.token }}
 
@@ -237,7 +237,6 @@ jobs:
         env:
           OPENCODE_VERSION: ${{ needs.version.outputs.version }}
           OPENCODE_RELEASE: ${{ needs.version.outputs.release }}
-          LZ_OPENCODE_VERSION: ${{ inputs.opencode_version }}
           GITHUB_TOKEN: ${{ steps.committer.outputs.token }}
           GH_REPO: ${{ needs.version.outputs.repo }}
           NPM_CONFIG_PROVENANCE: false
