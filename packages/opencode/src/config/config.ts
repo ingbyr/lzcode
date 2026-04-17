@@ -159,7 +159,7 @@ export namespace Config {
     input?.signal?.throwIfAborted()
 
     const pkg = path.join(dir, "package.json")
-    const target = Installation.isLocal() ? "*" : Installation.VERSION
+    const target = Installation.isLocal() ? "*" : Installation.LZ_OPENCODE_VERSION
     const json = await Filesystem.readJson<{ dependencies?: Record<string, string> }>(pkg).catch(() => ({
       dependencies: {},
     }))
