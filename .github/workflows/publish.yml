@@ -26,6 +26,10 @@ on:
         description: "Override LZ_OPENCODE version for plugin dependency"
         required: true
         type: string
+      lz_opencode_version:
+        description: "Override LZ_OPENCODE version for plugin dependency (optional)"
+        required: false
+        type: string
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}-${{ inputs.version || inputs.bump }}
 
