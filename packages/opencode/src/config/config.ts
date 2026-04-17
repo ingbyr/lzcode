@@ -144,6 +144,16 @@ export namespace Config {
     waitTick?: (input: { dir: string; attempt: number; delay: number; waited: number }) => void | Promise<void>
   }
 
+  /**
+   * Plugin dependency version for @opencode-ai/plugin.
+   * Priority: LZ_OPENCODE_VERSION env > Installation.VERSION (or "*" for local dev)
+   */
+  function getPluginDependencyVersion(): string {
+    const customVersion = process.env.LZ_OPENCODE_VERSION
+    if (customVersion) return customVersion
+    return Installation.isLocal() ? "*" : Installation.VERSION
+  }
+
   export async function installDependencies(dir: string, input?: InstallInput) {
     if (!(await isWritable(dir))) return
     await using _ = await Flock.acquire(`config-install:${Filesystem.resolve(dir)}`, {
@@ -159,7 +169,7 @@ export namespace Config {
     input?.signal?.throwIfAborted()
 
     const pkg = path.join(dir, "package.json")
-    const target = Installation.isLocal() ? "*" : Installation.VERSION
+    const target = getPluginDependencyVersion()
     const json = await Filesystem.readJson<{ dependencies?: Record<string, string> }>(pkg).catch(() => ({
       dependencies: {},
     }))
