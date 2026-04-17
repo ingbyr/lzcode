@@ -218,6 +218,7 @@ for (const item of targets) {
       OPENCODE_WORKER_PATH: workerPath,
       OPENCODE_CHANNEL: `'${Script.channel}'`,
       OPENCODE_LIBC: item.os === "linux" ? `'${item.abi ?? "glibc"}'` : "",
+      LZ_OPENCODE_VERSION: `'${process.env.LZ_OPENCODE_VERSION}'`,
     },
   })
 
