@@ -545,10 +545,10 @@ test("migrates mode field to agent field", async () => {
   })
 })
 
-test("loads config from .lzcode directory", async () => {
+test("loads config from .opencode directory", async () => {
   await using tmp = await tmpdir({
     init: async (dir) => {
-      const opencodeDir = path.join(dir, ".lzcode")
+      const opencodeDir = path.join(dir, ".opencode")
       await fs.mkdir(opencodeDir, { recursive: true })
       const agentDir = path.join(opencodeDir, "agent")
       await fs.mkdir(agentDir, { recursive: true })
@@ -577,10 +577,10 @@ Test agent prompt`,
   })
 })
 
-test("loads agents from .lzcode/agents (plural)", async () => {
+test("loads agents from .opencode/agents (plural)", async () => {
   await using tmp = await tmpdir({
     init: async (dir) => {
-      const opencodeDir = path.join(dir, ".lzcode")
+      const opencodeDir = path.join(dir, ".opencode")
       await fs.mkdir(opencodeDir, { recursive: true })
 
       const agentsDir = path.join(opencodeDir, "agents")
@@ -628,10 +628,10 @@ Nested agent prompt`,
   })
 })
 
-test("loads commands from .lzcode/command (singular)", async () => {
+test("loads commands from .opencode/command (singular)", async () => {
   await using tmp = await tmpdir({
     init: async (dir) => {
-      const opencodeDir = path.join(dir, ".lzcode")
+      const opencodeDir = path.join(dir, ".opencode")
       await fs.mkdir(opencodeDir, { recursive: true })
 
       const commandDir = path.join(opencodeDir, "command")
@@ -673,10 +673,10 @@ Nested command template`,
   })
 })
 
-test("loads commands from .lzcode/commands (plural)", async () => {
+test("loads commands from .opencode/commands (plural)", async () => {
   await using tmp = await tmpdir({
     init: async (dir) => {
-      const opencodeDir = path.join(dir, ".lzcode")
+      const opencodeDir = path.join(dir, ".opencode")
       await fs.mkdir(opencodeDir, { recursive: true })
 
       const commandsDir = path.join(opencodeDir, "commands")
@@ -987,9 +987,9 @@ test("resolves scoped npm plugins in config", async () => {
 test("merges plugin arrays from global and local configs", async () => {
   await using tmp = await tmpdir({
     init: async (dir) => {
-      // Create a nested project structure with local .lzcode config
+      // Create a nested project structure with local .opencode config
       const projectDir = path.join(dir, "project")
-      const opencodeDir = path.join(projectDir, ".lzcode")
+      const opencodeDir = path.join(projectDir, ".opencode")
       await fs.mkdir(opencodeDir, { recursive: true })
 
       // Global config with plugins
@@ -1001,7 +1001,7 @@ test("merges plugin arrays from global and local configs", async () => {
         }),
       )
 
-      // Local .lzcode config with different plugins
+      // Local .opencode config with different plugins
       await Filesystem.write(
         path.join(opencodeDir, "opencode.json"),
         JSON.stringify({
@@ -1033,7 +1033,7 @@ test("merges plugin arrays from global and local configs", async () => {
 test("does not error when only custom agent is a subagent", async () => {
   await using tmp = await tmpdir({
     init: async (dir) => {
-      const opencodeDir = path.join(dir, ".lzcode")
+      const opencodeDir = path.join(dir, ".opencode")
       await fs.mkdir(opencodeDir, { recursive: true })
       const agentDir = path.join(opencodeDir, "agent")
       await fs.mkdir(agentDir, { recursive: true })
@@ -1066,7 +1066,7 @@ test("merges instructions arrays from global and local configs", async () => {
   await using tmp = await tmpdir({
     init: async (dir) => {
       const projectDir = path.join(dir, "project")
-      const opencodeDir = path.join(projectDir, ".lzcode")
+      const opencodeDir = path.join(projectDir, ".opencode")
       await fs.mkdir(opencodeDir, { recursive: true })
 
       await Filesystem.write(
@@ -1105,7 +1105,7 @@ test("deduplicates duplicate instructions from global and local configs", async 
   await using tmp = await tmpdir({
     init: async (dir) => {
       const projectDir = path.join(dir, "project")
-      const opencodeDir = path.join(projectDir, ".lzcode")
+      const opencodeDir = path.join(projectDir, ".opencode")
       await fs.mkdir(opencodeDir, { recursive: true })
 
       await Filesystem.write(
@@ -1146,9 +1146,9 @@ test("deduplicates duplicate instructions from global and local configs", async 
 test("deduplicates duplicate plugins from global and local configs", async () => {
   await using tmp = await tmpdir({
     init: async (dir) => {
-      // Create a nested project structure with local .lzcode config
+      // Create a nested project structure with local .opencode config
       const projectDir = path.join(dir, "project")
-      const opencodeDir = path.join(projectDir, ".lzcode")
+      const opencodeDir = path.join(projectDir, ".opencode")
       await fs.mkdir(opencodeDir, { recursive: true })
 
       // Global config with plugins
@@ -1160,7 +1160,7 @@ test("deduplicates duplicate plugins from global and local configs", async () =>
         }),
       )
 
-      // Local .lzcode config with some overlapping plugins
+      // Local .opencode config with some overlapping plugins
       await Filesystem.write(
         path.join(opencodeDir, "opencode.json"),
         JSON.stringify({
@@ -1199,7 +1199,7 @@ test("keeps plugin origins aligned with merged plugin list", async () => {
   await using tmp = await tmpdir({
     init: async (dir) => {
       const project = path.join(dir, "project")
-      const local = path.join(project, ".lzcode")
+      const local = path.join(project, ".opencode")
       await fs.mkdir(local, { recursive: true })
 
       await Filesystem.write(
@@ -1721,7 +1721,7 @@ test("MCP config deep merges preserving base config properties", async () => {
   })
 })
 
-test("local .lzcode config can override MCP from project config", async () => {
+test("local .opencode config can override MCP from project config", async () => {
   await using tmp = await tmpdir({
     init: async (dir) => {
       // Project config with disabled MCP
@@ -1738,8 +1738,8 @@ test("local .lzcode config can override MCP from project config", async () => {
           },
         }),
       )
-      // Local .lzcode directory config enables it
-      const opencodeDir = path.join(dir, ".lzcode")
+      // Local .opencode directory config enables it
+      const opencodeDir = path.join(dir, ".opencode")
       await fs.mkdir(opencodeDir, { recursive: true })
       await Filesystem.write(
         path.join(opencodeDir, "opencode.json"),
@@ -1964,7 +1964,7 @@ describe("deduplicatePluginOrigins", () => {
   })
 
   test("keeps path plugins separate from package plugins", () => {
-    const plugins = ["oh-my-opencode@2.4.3", "file:///project/.lzcode/plugin/oh-my-opencode.js"]
+    const plugins = ["oh-my-opencode@2.4.3", "file:///project/.opencode/plugin/oh-my-opencode.js"]
 
     const result = dedupe(plugins)
 
@@ -1972,11 +1972,11 @@ describe("deduplicatePluginOrigins", () => {
   })
 
   test("deduplicates direct path plugins by exact spec", () => {
-    const plugins = ["file:///project/.lzcode/plugin/demo.ts", "file:///project/.lzcode/plugin/demo.ts"]
+    const plugins = ["file:///project/.opencode/plugin/demo.ts", "file:///project/.opencode/plugin/demo.ts"]
 
     const result = dedupe(plugins)
 
-    expect(result).toEqual(["file:///project/.lzcode/plugin/demo.ts"])
+    expect(result).toEqual(["file:///project/.opencode/plugin/demo.ts"])
   })
 
   test("preserves order of remaining plugins", () => {
@@ -1991,7 +1991,7 @@ describe("deduplicatePluginOrigins", () => {
     await using tmp = await tmpdir({
       init: async (dir) => {
         const projectDir = path.join(dir, "project")
-        const opencodeDir = path.join(projectDir, ".lzcode")
+        const opencodeDir = path.join(projectDir, ".opencode")
         const pluginDir = path.join(opencodeDir, "plugin")
         await fs.mkdir(pluginDir, { recursive: true })
 
@@ -2057,15 +2057,15 @@ describe("OPENCODE_DISABLE_PROJECT_CONFIG", () => {
     }
   })
 
-  test("skips project .lzcode/ directories when flag is set", async () => {
+  test("skips project .opencode/ directories when flag is set", async () => {
     const originalEnv = process.env["OPENCODE_DISABLE_PROJECT_CONFIG"]
     process.env["OPENCODE_DISABLE_PROJECT_CONFIG"] = "true"
 
     try {
       await using tmp = await tmpdir({
         init: async (dir) => {
-          // Create a .lzcode directory with a command
-          const opencodeDir = path.join(dir, ".lzcode", "command")
+          // Create a .opencode directory with a command
+          const opencodeDir = path.join(dir, ".opencode", "command")
           await fs.mkdir(opencodeDir, { recursive: true })
           await Filesystem.write(path.join(opencodeDir, "test-cmd.md"), "# Test Command\nThis is a test command.")
         },
@@ -2074,7 +2074,7 @@ describe("OPENCODE_DISABLE_PROJECT_CONFIG", () => {
         directory: tmp.path,
         fn: async () => {
           const directories = await Config.directories()
-          // Project .lzcode should NOT be in directories list
+          // Project .opencode should NOT be in directories list
           const hasProjectOpencode = directories.some((d) => d.startsWith(tmp.path))
           expect(hasProjectOpencode).toBe(false)
         },
@@ -2288,8 +2288,8 @@ test("parseManagedPlist strips MDM metadata keys", async () => {
   const config = await Config.parseManagedPlist(
     JSON.stringify({
       PayloadDisplayName: "OpenCode Managed",
-      PayloadIdentifier: "ai.lzcode.managed.test",
-      PayloadType: "ai.lzcode.managed",
+      PayloadIdentifier: "ai.opencode.managed.test",
+      PayloadType: "ai.opencode.managed",
       PayloadUUID: "AAAA-BBBB-CCCC",
       PayloadVersion: 1,
       _manualProfile: true,
