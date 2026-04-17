@@ -12,14 +12,11 @@
       "isBackground": true,
       // change this to your `beforeDevCommand`:
       "command": "bun",
-      "args": [
-        "dev"
-      ],
+      "args": ["dev"],
       "options": {
         "cwd": "${workspaceFolder}/packages/desktop",
         "env": {
-          "OPENCODE_MODELS_URL": "https://gh-proxy.org/https://github.com/ingbyr/lzmodels/releases/latest/download",
-          "LZ_OPENCODE_VERSION": "1.4.3"
+          "OPENCODE_MODELS_URL": "https://gh-proxy.org/https://github.com/ingbyr/lzmodels/releases/latest/download"
         }
       }
     },
@@ -28,15 +25,9 @@
       "type": "shell",
       // change this to your `beforeBuildCommand`:
       "command": "bun",
-      "args": [
-        "build"
-      ],
+      "args": ["build"],
       "options": {
-        "cwd": "${workspaceFolder}/packages/desktop",
-        "env": {
-          "OPENCODE_MODELS_URL": "https://gh-proxy.org/https://github.com/ingbyr/lzmodels/releases/latest/download",
-          "LZ_OPENCODE_VERSION": "1.4.3"
-        }
+        "cwd": "${workspaceFolder}/packages/desktop"
       }
     }
   ]

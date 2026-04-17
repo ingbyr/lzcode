@@ -102,7 +102,7 @@ export default function Home() {
             </li>
             <li>
               <strong>{i18n.t("home.what.anyModel.title")}</strong> {i18n.t("temp.feature.models.beforeLink")}{" "}
-              <a href="https://models.dev">Models.dev</a>
+              <a href="https://gh-proxy.org/https://github.com/ingbyr/lzmodels/releases/latest/download">Models.dev</a>
               {i18n.t("temp.feature.models.afterLink")}
             </li>
           </ul>
