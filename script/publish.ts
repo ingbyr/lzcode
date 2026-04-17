@@ -54,14 +54,6 @@ toml = toml.replaceAll(/releases\/download\/v[^/]+\//g, `releases/download/v${Sc
 console.log("updated:", extensionToml)
 await Bun.file(extensionToml).write(toml)
 
-// Update meta.ts with LZ_OPENCODE version
-const metaTs = fileURLToPath(new URL("../packages/opencode/src/installation/meta.ts", import.meta.url))
-let meta = await Bun.file(metaTs).text()
-const lzOpencodeVersion = process.env.LZ_OPENCODE || Script.version
-meta = meta.replace(/const DEFAULT_LZ_OPENCODE = "[^"]+"/, `const DEFAULT_LZ_OPENCODE = "${lzOpencodeVersion}"`)
-console.log("updated:", metaTs)
-await Bun.file(metaTs).write(meta)
-
 await $`bun install`
 await import(`../packages/sdk/js/script/build.ts`)
 
