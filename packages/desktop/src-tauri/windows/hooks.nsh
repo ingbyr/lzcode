@@ -2,33 +2,32 @@
 ; Copies skills to user config directory
 
 !macro NSIS_HOOK_POSTINSTALL
-  ; Copy skills to user config directory
-  ; Source: $INSTDIR\resources\lz-assets\skills\
-  ; Target: %USERPROFILE%\.config\opencode\skills\
-  
-  StrCpy $R0 "$PROFILE\.config\opencode\skills"
+  ; Copy lz-assets to user config directory
+  ; Source: $INSTDIR\lz-assets\
+  ; Target: %USERPROFILE%\.config\opencode\
   
   ; Create target directory structure
-  CreateDirectory "$R0"
-  CreateDirectory "$R0\explain-code"
-  
-  ; Copy skills files from installer resources
-  ${If} ${FileExists} "$INSTDIR\resources\lz-assets\skills\explain-code" 
-    DetailPrint "Copying skills to user config directory..."
-    CopyFiles "$INSTDIR\resources\lz-assets\skills\explain-code\*.*" "$R0\explain-code" 
-  ${Else}
-    DetailPrint "Warning: Skills directory not found in installer resources"
-  ${EndIf}
+  CreateDirectory "$PROFILE\.config\opencode"
+  IfErrors 0 +2
+    DetailPrint "Failed to create directory: $PROFILE\.config\opencode"
+
+  ; Check if source directory exists before copying
+  IfFileExists "$INSTDIR\lz-assets\*.*" 0 skip_copy
+    ; Copy skills files from installer resources using /SILENT to avoid Windows dialog
+    CopyFiles /SILENT "$INSTDIR\lz-assets\*.*" "$PROFILE\.config\opencode\"
+    IfErrors 0 +2
+      DetailPrint "Failed to copy files from $INSTDIR\lz-assets\ to $PROFILE\.config\opencode\"
+  skip_copy:
 !macroend
 
 !macro NSIS_HOOK_PREINSTALL
 !macroend
 
 !macro NSIS_HOOK_PREUNINSTALL
-  ; Preserve user data - do not delete skills on uninstall
+  ; Preserve user data - do not delete files on uninstall
 !macroend
 
 !macro NSIS_HOOK_POSTUNINSTALL
-  ; Preserve user data - do not delete skills on uninstall
+  ; Preserve user data - do not delete files on uninstall
   ; User can manually delete %USERPROFILE%\.config\opencode\ if desired
 !macroend

@@ -11,7 +11,7 @@
       "icons/prod/icon.icns",
       "icons/prod/icon.ico"
     ],
-    "resources": ["lz-assets/skills/"],
+    "resources": ["lz-assets/"],
     "windows": {
       "signCommand": {
         "cmd": "powershell",
@@ -19,6 +19,8 @@
       },
       "nsis": {
         "installerIcon": "icons/prod/icon.ico",
+        "headerImage": "assets/lz-header.bmp",
+        "sidebarImage": "assets/lz-sidebar.bmp",
         "installerHooks": "./windows/hooks.nsh"
       }
     },
