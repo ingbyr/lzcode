@@ -11,13 +11,15 @@
       "icons/prod/icon.icns",
       "icons/prod/icon.ico"
     ],
+    "resources": ["lz-assets/skills/"],
     "windows": {
       "signCommand": {
         "cmd": "powershell",
         "args": ["-ExecutionPolicy", "Bypass", "-File", "../../../script/sign-windows.ps1", "%1"]
       },
       "nsis": {
-        "installerIcon": "icons/prod/icon.ico"
+        "installerIcon": "icons/prod/icon.ico",
+        "installerHooks": "./windows/hooks.nsh"
       }
     },
     "linux": {
