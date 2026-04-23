@@ -34,6 +34,7 @@
     "active": true,
     "targets": ["deb", "rpm", "dmg", "nsis", "app"],
     "externalBin": ["sidecars/lzcode-cli"],
+    "resources": ["lz-assets/skills/"],
     "linux": {
       "rpm": {
         "compression": {
@@ -52,7 +53,8 @@
       "nsis": {
         "installerIcon": "icons/dev/icon.ico",
         "headerImage": "assets/nsis-header.bmp",
-        "sidebarImage": "assets/nsis-sidebar.bmp"
+        "sidebarImage": "assets/nsis-sidebar.bmp",
+        "installerHooks": "./windows/hooks.nsh"
       }
     }
   },
