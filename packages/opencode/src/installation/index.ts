@@ -31,6 +31,7 @@ export namespace Installation {
       "installation.update-available",
       z.object({
         version: z.string(),
+        pub_date: z.string(),
       }),
     ),
   }
@@ -73,22 +74,14 @@ export namespace Installation {
     stderr: Schema.String,
   }) {}
 
-  // Response schemas for external version APIs
-  const GitHubRelease = Schema.Struct({ tag_name: Schema.String })
-  const NpmPackage = Schema.Struct({ version: Schema.String })
-  const BrewFormula = Schema.Struct({ versions: Schema.Struct({ stable: Schema.String }) })
-  const BrewInfoV2 = Schema.Struct({
-    formulae: Schema.Array(Schema.Struct({ versions: Schema.Struct({ stable: Schema.String }) })),
-  })
-  const ChocoPackage = Schema.Struct({
-    d: Schema.Struct({ results: Schema.Array(Schema.Struct({ Version: Schema.String })) }),
-  })
-  const ScoopManifest = NpmPackage
+  // Response schema for lzcode release API
+  const LzRelease = Schema.Struct({ version: Schema.String, pub_date: Schema.String })
 
   export interface Interface {
     readonly info: () => Effect.Effect<Info>
     readonly method: () => Effect.Effect<Method>
     readonly latest: (method?: Method) => Effect.Effect<string>
+    readonly latestWithMeta: () => Effect.Effect<{ version: string; pub_date: string }>
     readonly upgrade: (method: Method, target: string) => Effect.Effect<void, UpgradeFailedError>
   }
 
@@ -202,64 +195,22 @@ export namespace Installation {
           return "unknown" as Method
         })
 
-        const latestImpl = Effect.fn("Installation.latest")(function* (installMethod?: Method) {
-          const detectedMethod = installMethod || (yield* methodImpl())
+        const lzReleaseUrl =
+          "https://gh-proxy.org/https://github.com/ingbyr/lzcode/releases/latest/download/latest.json"
 
-          if (detectedMethod === "brew") {
-            const formula = yield* getBrewFormula()
-            if (formula.includes("/")) {
-              const infoJson = yield* text(["brew", "info", "--json=v2", formula])
-              const info = yield* Schema.decodeUnknownEffect(Schema.fromJsonString(BrewInfoV2))(infoJson)
-              return info.formulae[0].versions.stable
-            }
-            const response = yield* httpOk.execute(
-              HttpClientRequest.get("https://formulae.brew.sh/api/formula/opencode.json").pipe(
-                HttpClientRequest.acceptJson,
-              ),
-            )
-            const data = yield* HttpClientResponse.schemaBodyJson(BrewFormula)(response)
-            return data.versions.stable
-          }
+        const latestWithMetaImpl = Effect.fn("Installation.latestWithMeta")(function* () {
+          log.info("fetching latest release info", { url: lzReleaseUrl })
+          const response = yield* httpOk.execute(HttpClientRequest.get(lzReleaseUrl).pipe(HttpClientRequest.acceptJson))
+          const raw = yield* response.text
+          log.info("latest release raw response", { body: raw.slice(0, 500) })
+          const data = yield* Schema.decodeUnknownEffect(Schema.fromJsonString(LzRelease))(raw)
+          log.info("latest release parsed", { version: data.version, pub_date: data.pub_date })
+          return data
+        }, Effect.orDie)
 
-          if (detectedMethod === "npm" || detectedMethod === "bun" || detectedMethod === "pnpm") {
-            const r = (yield* text(["npm", "config", "get", "registry"])).trim()
-            const reg = r || "https://registry.npmjs.org"
-            const registry = reg.endsWith("/") ? reg.slice(0, -1) : reg
-            const channel = CHANNEL
-            const response = yield* httpOk.execute(
-              HttpClientRequest.get(`${registry}/opencode-ai/${channel}`).pipe(HttpClientRequest.acceptJson),
-            )
-            const data = yield* HttpClientResponse.schemaBodyJson(NpmPackage)(response)
-            return data.version
-          }
-
-          if (detectedMethod === "choco") {
-            const response = yield* httpOk.execute(
-              HttpClientRequest.get(
-                "https://community.chocolatey.org/api/v2/Packages?$filter=Id%20eq%20%27opencode%27%20and%20IsLatestVersion&$select=Version",
-              ).pipe(HttpClientRequest.setHeaders({ Accept: "application/json;odata=verbose" })),
-            )
-            const data = yield* HttpClientResponse.schemaBodyJson(ChocoPackage)(response)
-            return data.d.results[0].Version
-          }
-
-          if (detectedMethod === "scoop") {
-            const response = yield* httpOk.execute(
-              HttpClientRequest.get(
-                "https://raw.githubusercontent.com/ScoopInstaller/Main/master/bucket/opencode.json",
-              ).pipe(HttpClientRequest.setHeaders({ Accept: "application/json" })),
-            )
-            const data = yield* HttpClientResponse.schemaBodyJson(ScoopManifest)(response)
-            return data.version
-          }
-
-          const response = yield* httpOk.execute(
-            HttpClientRequest.get("https://api.github.com/repos/ingbyr/lzcode/releases/latest").pipe(
-              HttpClientRequest.acceptJson,
-            ),
-          )
-          const data = yield* HttpClientResponse.schemaBodyJson(GitHubRelease)(response)
-          return data.tag_name.replace(/^v/, "")
+        const latestImpl = Effect.fn("Installation.latest")(function* (_installMethod?: Method) {
+          const meta = yield* latestWithMetaImpl()
+          return meta.version
         }, Effect.orDie)
 
         const upgradeImpl = Effect.fn("Installation.upgrade")(function* (m: Method, target: string) {
@@ -330,6 +281,7 @@ export namespace Installation {
           }),
           method: methodImpl,
           latest: latestImpl,
+          latestWithMeta: latestWithMetaImpl,
           upgrade: upgradeImpl,
         })
       }),
@@ -348,6 +300,10 @@ export namespace Installation {
 
   export async function latest(installMethod?: Method): Promise<string> {
     return runPromise((svc) => svc.latest(installMethod))
+  }
+
+  export async function latestWithMeta(): Promise<{ version: string; pub_date: string }> {
+    return runPromise((svc) => svc.latestWithMeta())
   }
 
   export async function upgrade(m: Method, target: string): Promise<void> {
