@@ -9,7 +9,7 @@ export async function upgrade() {
   const config = await AppRuntime.runPromise(Config.Service.use((cfg) => cfg.getGlobal()))
   if (config.autoupdate === false || Flag.OPENCODE_DISABLE_AUTOUPDATE) return
   const method = await Installation.method()
-  const latest = await Installation.latest(method).catch(() => {})
+  const latest = await Installation.latest().catch(() => {})
   if (!latest) return
 
   if (Flag.OPENCODE_ALWAYS_NOTIFY_UPDATE) {
@@ -19,21 +19,20 @@ export async function upgrade() {
 
   if (InstallationVersion === latest) return
   await Bus.publish(Installation.Event.UpdateAvailable, {
-    version: meta.version,
-    pub_date: meta.pub_date,
+    version: latest,
   })
 
   // [BLOCKED] auto-upgrade disabled — user must update manually
   // const config = await Config.getGlobal()
   // const method = await Installation.method()
   // if (Flag.OPENCODE_ALWAYS_NOTIFY_UPDATE) {
-  //   await Bus.publish(Installation.Event.UpdateAvailable, { version: meta.version, pub_date: meta.pub_date })
+  //   await Bus.publish(Installation.Event.UpdateAvailable, { version: meta.version})
   //   return
   // }
   // if (config.autoupdate === false || Flag.OPENCODE_DISABLE_AUTOUPDATE) return
   // const kind = Installation.getReleaseType(InstallationVersion, meta.version)
   // if (config.autoupdate === "notify" || kind !== "patch") {
-  //   await Bus.publish(Installation.Event.UpdateAvailable, { version: meta.version, pub_date: meta.pub_date })
+  //   await Bus.publish(Installation.Event.UpdateAvailable, { version: meta.version})
   //   return
   // }
   // if (method === "unknown") return
