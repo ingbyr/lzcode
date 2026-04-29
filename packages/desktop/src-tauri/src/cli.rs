@@ -468,6 +468,7 @@ let mut cmd = if cfg!(windows) {
         };
 
         let mut cmd = Command::new(shell);
+        cmd.current_dir(app.path().home_dir().unwrap());
         cmd.args(["-l", "-c", &line]);
 
         for (key, value) in envs {
