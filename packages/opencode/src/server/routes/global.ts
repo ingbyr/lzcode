@@ -288,25 +288,28 @@ export const GlobalRoutes = lazy(() =>
         }),
       ),
       async (c) => {
-        const method = await Installation.method()
-        if (method === "unknown") {
-          return c.json({ success: false, error: "Unknown installation method" }, 400)
-        }
-        const target = c.req.valid("json").target || (await Installation.latest(method))
-        const result = await Installation.upgrade(method, target)
-          .then(() => ({ success: true as const, version: target }))
-          .catch((e) => ({ success: false as const, error: e instanceof Error ? e.message : String(e) }))
-        if (result.success) {
-          GlobalBus.emit("event", {
-            directory: "global",
-            payload: {
-              type: Installation.Event.Updated.type,
-              properties: { version: target },
-            },
-          })
-          return c.json(result)
-        }
-        return c.json(result, 500)
+        // [BLOCKED] auto-upgrade disabled — user must update manually
+        return c.json({ success: false, error: "Auto-upgrade is disabled. Please update manually." }, 403)
+
+        // const method = await Installation.method()
+        // if (method === "unknown") {
+        //   return c.json({ success: false, error: "Unknown installation method" }, 400)
+        // }
+        // const target = c.req.valid("json").target || (await Installation.latest(method))
+        // const result = await Installation.upgrade(method, target)
+        //   .then(() => ({ success: true as const, version: target }))
+        //   .catch((e) => ({ success: false as const, error: e instanceof Error ? e.message : String(e) }))
+        // if (result.success) {
+        //   GlobalBus.emit("event", {
+        //     directory: "global",
+        //     payload: {
+        //       type: Installation.Event.Updated.type,
+        //       properties: { version: target },
+        //     },
+        //   })
+        //   return c.json(result)
+        // }
+        // return c.json(result, 500)
       },
     ),
 )
