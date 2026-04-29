@@ -1,10 +1,7 @@
-import { Effect, Layer, Schema, ServiceMap, Stream } from "effect"
-import { FetchHttpClient, HttpClient, HttpClientRequest, HttpClientResponse } from "effect/unstable/http"
-import * as CrossSpawnSpawner from "@/effect/cross-spawn-spawner"
+import { Effect, Layer, Schema, ServiceMap } from "effect"
+import { FetchHttpClient, HttpClient, HttpClientRequest } from "effect/unstable/http"
 import { makeRuntime } from "@/effect/run-service"
 import { withTransientReadRetry } from "@/util/effect-http-client"
-import { ChildProcess, ChildProcessSpawner } from "effect/unstable/process"
-import path from "path"
 import z from "zod"
 import { BusEvent } from "@/bus/bus-event"
 import { Flag } from "../flag/flag"
@@ -16,7 +13,7 @@ import semver from "semver"
 export namespace Installation {
   const log = Log.create({ service: "installation" })
 
-  export type Method = "curl" | "npm" | "yarn" | "pnpm" | "bun" | "brew" | "scoop" | "choco" | "unknown"
+  export type Method = "curl" | "unknown"
 
   export type ReleaseType = "patch" | "minor" | "major"
 
@@ -77,220 +74,63 @@ export namespace Installation {
   // Response schema for lzcode release API
   const LzRelease = Schema.Struct({ version: Schema.String, pub_date: Schema.String })
 
+  const lzReleaseUrl = "https://gh-proxy.org/https://github.com/ingbyr/lzcode/releases/latest/download/latest.json"
+
   export interface Interface {
     readonly info: () => Effect.Effect<Info>
     readonly method: () => Effect.Effect<Method>
-    readonly latest: (method?: Method) => Effect.Effect<string>
+    readonly latest: () => Effect.Effect<string>
     readonly latestWithMeta: () => Effect.Effect<{ version: string; pub_date: string }>
     readonly upgrade: (method: Method, target: string) => Effect.Effect<void, UpgradeFailedError>
   }
 
   export class Service extends ServiceMap.Service<Service, Interface>()("@opencode/Installation") {}
 
-  export const layer: Layer.Layer<Service, never, HttpClient.HttpClient | ChildProcessSpawner.ChildProcessSpawner> =
-    Layer.effect(
-      Service,
-      Effect.gen(function* () {
-        const http = yield* HttpClient.HttpClient
-        const httpOk = HttpClient.filterStatusOk(withTransientReadRetry(http))
-        const spawner = yield* ChildProcessSpawner.ChildProcessSpawner
+  export const layer: Layer.Layer<Service, never, HttpClient.HttpClient> = Layer.effect(
+    Service,
+    Effect.gen(function* () {
+      const http = yield* HttpClient.HttpClient
+      const httpOk = HttpClient.filterStatusOk(withTransientReadRetry(http))
 
-        const text = Effect.fnUntraced(
-          function* (cmd: string[], opts?: { cwd?: string; env?: Record<string, string> }) {
-            const proc = ChildProcess.make(cmd[0], cmd.slice(1), {
-              cwd: opts?.cwd,
-              env: opts?.env,
-              extendEnv: true,
-            })
-            const handle = yield* spawner.spawn(proc)
-            const out = yield* Stream.mkString(Stream.decodeText(handle.stdout))
-            yield* handle.exitCode
-            return out
-          },
-          Effect.scoped,
-          Effect.catch(() => Effect.succeed("")),
-        )
+      const methodImpl = Effect.fn("Installation.method")(function* () {
+        return "curl" as Method
+      })
 
-        const run = Effect.fnUntraced(
-          function* (cmd: string[], opts?: { cwd?: string; env?: Record<string, string> }) {
-            const proc = ChildProcess.make(cmd[0], cmd.slice(1), {
-              cwd: opts?.cwd,
-              env: opts?.env,
-              extendEnv: true,
-            })
-            const handle = yield* spawner.spawn(proc)
-            const [stdout, stderr] = yield* Effect.all(
-              [Stream.mkString(Stream.decodeText(handle.stdout)), Stream.mkString(Stream.decodeText(handle.stderr))],
-              { concurrency: 2 },
-            )
-            const code = yield* handle.exitCode
-            return { code, stdout, stderr }
-          },
-          Effect.scoped,
-          Effect.catch(() => Effect.succeed({ code: ChildProcessSpawner.ExitCode(1), stdout: "", stderr: "" })),
-        )
+      const latestWithMetaImpl = Effect.fn("Installation.latestWithMeta")(function* () {
+        log.info("fetching latest release info", { url: lzReleaseUrl })
+        const response = yield* httpOk.execute(HttpClientRequest.get(lzReleaseUrl).pipe(HttpClientRequest.acceptJson))
+        const raw = yield* response.text
+        log.info("latest release raw response", { body: raw.slice(0, 500) })
+        const data = yield* Schema.decodeUnknownEffect(Schema.fromJsonString(LzRelease))(raw)
+        log.info("latest release parsed", { version: data.version, pub_date: data.pub_date })
+        return data
+      }, Effect.orDie)
 
-        const getBrewFormula = Effect.fnUntraced(function* () {
-          const tapFormula = yield* text(["brew", "list", "--formula", "anomalyco/tap/opencode"])
-          if (tapFormula.includes("opencode")) return "anomalyco/tap/opencode"
-          const coreFormula = yield* text(["brew", "list", "--formula", "opencode"])
-          if (coreFormula.includes("opencode")) return "opencode"
-          return "opencode"
-        })
+      const latestImpl = Effect.fn("Installation.latest")(function* () {
+        const meta = yield* latestWithMetaImpl()
+        return meta.version
+      }, Effect.orDie)
 
-        const upgradeCurl = Effect.fnUntraced(
-          function* (target: string) {
-            const response = yield* httpOk.execute(HttpClientRequest.get("https://opencode.ai/install"))
-            const body = yield* response.text
-            const bodyBytes = new TextEncoder().encode(body)
-            const proc = ChildProcess.make("bash", [], {
-              stdin: Stream.make(bodyBytes),
-              env: { VERSION: target },
-              extendEnv: true,
-            })
-            const handle = yield* spawner.spawn(proc)
-            const [stdout, stderr] = yield* Effect.all(
-              [Stream.mkString(Stream.decodeText(handle.stdout)), Stream.mkString(Stream.decodeText(handle.stderr))],
-              { concurrency: 2 },
-            )
-            const code = yield* handle.exitCode
-            return { code, stdout, stderr }
-          },
-          Effect.scoped,
-          Effect.orDie,
-        )
+      const upgradeImpl = Effect.fn("Installation.upgrade")(function* (_m: Method, _target: string) {
+        return yield* new UpgradeFailedError({ stderr: "Auto-upgrade is disabled. Please update manually." })
+      })
 
-        const methodImpl = Effect.fn("Installation.method")(function* () {
-          if (process.execPath.includes(path.join(".opencode", "bin"))) return "curl" as Method
-          if (process.execPath.includes(path.join(".local", "bin"))) return "curl" as Method
-          const exec = process.execPath.toLowerCase()
-
-          const checks: Array<{ name: Method; command: () => Effect.Effect<string> }> = [
-            { name: "npm", command: () => text(["npm", "list", "-g", "--depth=0"]) },
-            { name: "yarn", command: () => text(["yarn", "global", "list"]) },
-            { name: "pnpm", command: () => text(["pnpm", "list", "-g", "--depth=0"]) },
-            { name: "bun", command: () => text(["bun", "pm", "ls", "-g"]) },
-            { name: "brew", command: () => text(["brew", "list", "--formula", "opencode"]) },
-            { name: "scoop", command: () => text(["scoop", "list", "opencode"]) },
-            { name: "choco", command: () => text(["choco", "list", "--limit-output", "opencode"]) },
-          ]
-
-          checks.sort((a, b) => {
-            const aMatches = exec.includes(a.name)
-            const bMatches = exec.includes(b.name)
-            if (aMatches && !bMatches) return -1
-            if (!aMatches && bMatches) return 1
-            return 0
-          })
-
-          for (const check of checks) {
-            const output = yield* check.command()
-            const installedName =
-              check.name === "brew" || check.name === "choco" || check.name === "scoop" ? "opencode" : "opencode-ai"
-            if (output.includes(installedName)) {
-              return check.name
-            }
+      return Service.of({
+        info: Effect.fn("Installation.info")(function* () {
+          return {
+            version: VERSION,
+            latest: yield* latestImpl(),
           }
-
-          return "unknown" as Method
-        })
-
-        const lzReleaseUrl =
-          "https://gh-proxy.org/https://github.com/ingbyr/lzcode/releases/latest/download/latest.json"
-
-        const latestWithMetaImpl = Effect.fn("Installation.latestWithMeta")(function* () {
-          log.info("fetching latest release info", { url: lzReleaseUrl })
-          const response = yield* httpOk.execute(HttpClientRequest.get(lzReleaseUrl).pipe(HttpClientRequest.acceptJson))
-          const raw = yield* response.text
-          log.info("latest release raw response", { body: raw.slice(0, 500) })
-          const data = yield* Schema.decodeUnknownEffect(Schema.fromJsonString(LzRelease))(raw)
-          log.info("latest release parsed", { version: data.version, pub_date: data.pub_date })
-          return data
-        }, Effect.orDie)
-
-        const latestImpl = Effect.fn("Installation.latest")(function* (_installMethod?: Method) {
-          const meta = yield* latestWithMetaImpl()
-          return meta.version
-        }, Effect.orDie)
-
-        const upgradeImpl = Effect.fn("Installation.upgrade")(function* (m: Method, target: string) {
-          let result: { code: ChildProcessSpawner.ExitCode; stdout: string; stderr: string } | undefined
-          switch (m) {
-            case "curl":
-              result = yield* upgradeCurl(target)
-              break
-            case "npm":
-              result = yield* run(["npm", "install", "-g", `opencode-ai@${target}`])
-              break
-            case "pnpm":
-              result = yield* run(["pnpm", "install", "-g", `opencode-ai@${target}`])
-              break
-            case "bun":
-              result = yield* run(["bun", "install", "-g", `opencode-ai@${target}`])
-              break
-            case "brew": {
-              const formula = yield* getBrewFormula()
-              const env = { HOMEBREW_NO_AUTO_UPDATE: "1" }
-              if (formula.includes("/")) {
-                const tap = yield* run(["brew", "tap", "anomalyco/tap"], { env })
-                if (tap.code !== 0) {
-                  result = tap
-                  break
-                }
-                const repo = yield* text(["brew", "--repo", "anomalyco/tap"])
-                const dir = repo.trim()
-                if (dir) {
-                  const pull = yield* run(["git", "pull", "--ff-only"], { cwd: dir, env })
-                  if (pull.code !== 0) {
-                    result = pull
-                    break
-                  }
-                }
-              }
-              result = yield* run(["brew", "upgrade", formula], { env })
-              break
-            }
-            case "choco":
-              result = yield* run(["choco", "upgrade", "opencode", `--version=${target}`, "-y"])
-              break
-            case "scoop":
-              result = yield* run(["scoop", "install", `opencode@${target}`])
-              break
-            default:
-              return yield* new UpgradeFailedError({ stderr: `Unknown method: ${m}` })
-          }
-          if (!result || result.code !== 0) {
-            const stderr = m === "choco" ? "not running from an elevated command shell" : result?.stderr || ""
-            return yield* new UpgradeFailedError({ stderr })
-          }
-          log.info("upgraded", {
-            method: m,
-            target,
-            stdout: result.stdout,
-            stderr: result.stderr,
-          })
-          yield* text([process.execPath, "--version"])
-        })
-
-        return Service.of({
-          info: Effect.fn("Installation.info")(function* () {
-            return {
-              version: VERSION,
-              latest: yield* latestImpl(),
-            }
-          }),
-          method: methodImpl,
-          latest: latestImpl,
-          latestWithMeta: latestWithMetaImpl,
-          upgrade: upgradeImpl,
-        })
-      }),
-    )
-
-  export const defaultLayer = layer.pipe(
-    Layer.provide(FetchHttpClient.layer),
-    Layer.provide(CrossSpawnSpawner.defaultLayer),
+        }),
+        method: methodImpl,
+        latest: latestImpl,
+        latestWithMeta: latestWithMetaImpl,
+        upgrade: upgradeImpl,
+      })
+    }),
   )
+
+  export const defaultLayer = layer.pipe(Layer.provide(FetchHttpClient.layer))
 
   const { runPromise } = makeRuntime(Service, defaultLayer)
 
@@ -298,8 +138,8 @@ export namespace Installation {
     return runPromise((svc) => svc.method())
   }
 
-  export async function latest(installMethod?: Method): Promise<string> {
-    return runPromise((svc) => svc.latest(installMethod))
+  export async function latest(): Promise<string> {
+    return runPromise((svc) => svc.latest())
   }
 
   export async function latestWithMeta(): Promise<{ version: string; pub_date: string }> {
