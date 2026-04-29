@@ -1,6 +1,5 @@
 ---
 description: "find issue(s) on github"
-model: opencode/big-pickle
 ---
 
 Search through existing issues in ingbyr/lzcode using the gh cli to find issues matching this query:
