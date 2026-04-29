@@ -37,7 +37,6 @@ function update(version: string): Event {
     type: "installation.update-available",
     properties: {
       version,
-      "2025-01-01"
     },
   }
 }

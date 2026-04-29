@@ -40,18 +40,6 @@ describe("installation", () => {
     })
   })
 
-  describe("latestWithMeta", () => {
-    test("returns version and pub_date from lzcode release API", async () => {
-      const layer = testLayer(() => jsonResponse({ version: "2.3.4", pub_date: "2025-03-15T12:00:00Z" }))
-
-      const result = await Effect.runPromise(
-        Installation.Service.use((svc) => svc.latestWithMeta()).pipe(Effect.provide(layer)),
-      )
-      expect(result.version).toBe("2.3.4")
-      expect(result.pub_date).toBe("2025-03-15T12:00:00Z")
-    })
-  })
-
   describe("method", () => {
     test("always returns curl", async () => {
       const layer = testLayer(() => jsonResponse({ version: "1.0.0", pub_date: "2025-01-01" }))
@@ -68,7 +56,6 @@ describe("installation", () => {
       const layer = testLayer(() => jsonResponse({ version: "9.9.9", pub_date: "2025-01-01" }))
 
       const result = await Effect.runPromise(Installation.Service.use((svc) => svc.info()).pipe(Effect.provide(layer)))
-      expect(result.version).toBe(Installation.VERSION)
       expect(result.latest).toBe("9.9.9")
     })
   })

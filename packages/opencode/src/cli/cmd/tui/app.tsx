@@ -792,7 +792,6 @@ function App(props: { onSnapshot?: () => Promise<string[]> }) {
 
   event.on("installation.update-available", async (evt) => {
     const version = evt.properties.version
-    const pubDate = evt.properties.pub_date
 
     const skipped = kv.get("skipped_version")
     if (skipped && !semver.gt(version, skipped)) return
@@ -800,7 +799,7 @@ function App(props: { onSnapshot?: () => Promise<string[]> }) {
     await DialogAlert.show(
       dialog,
       "Update Available",
-      `A new version v${version} (published ${pubDate}) is available. Please update manually.`,
+      `A new version v${version} is available. Please update manually.`,
     )
     kv.set("skipped_version", version)
   })

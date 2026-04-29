@@ -30,7 +30,6 @@ export const Event = {
     "installation.update-available",
     Schema.Struct({
       version: Schema.String,
-      pub_date: Schema.String
     })
   )
 }
@@ -81,7 +80,6 @@ export interface Interface {
   readonly info: () => Effect.Effect<Info>
   readonly method: () => Effect.Effect<Method>
   readonly latest: () => Effect.Effect<string>
-  readonly latestWithMeta: () => Effect.Effect<{ version: string; pub_date: string }>
   readonly upgrade: (method: Method, target: string) => Effect.Effect<void, UpgradeFailedError>
 }
 
@@ -126,7 +124,6 @@ export const layer: Layer.Layer<Service, never, HttpClient.HttpClient> = Layer.e
       }),
       method: methodImpl,
       latest: latestImpl,
-      latestWithMeta: latestWithMetaImpl,
       upgrade: upgradeImpl
     })
   })
@@ -138,11 +135,6 @@ const { runPromise } = makeRuntime(Service, defaultLayer)
 
 export const latest = (...args: Parameters<Interface["latest"]>) => runPromise((s) => s.latest(...args))
 export const method = () => runPromise((s) => s.method())
-
-export async function latestWithMeta(): Promise<{ version: string; pub_date: string }> {
-  return runPromise((svc) => svc.latestWithMeta())
-}
-
 export const upgrade = (...args: Parameters<Interface["upgrade"]>) => runPromise((s) => s.upgrade(...args))
 
 export * as Installation from "."
