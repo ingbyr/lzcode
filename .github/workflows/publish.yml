@@ -118,7 +118,6 @@ jobs:
     needs:
       - build-cli
       - version
-    if: github.ref_name != 'beta'
     continue-on-error: false
     env:
       AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}

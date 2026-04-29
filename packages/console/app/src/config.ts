@@ -9,8 +9,8 @@ export const config = {
   github: {
     repoUrl: "https://github.com/ingbyr/lzcode",
     starsFormatted: {
-      compact: "140K",
-      full: "140,000",
+      compact: "150K",
+      full: "150,000",
     },
   },
 

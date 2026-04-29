@@ -1,33 +1,38 @@
 import { Bus } from "@/bus"
+import { Config } from "@/config/config"
+import { AppRuntime } from "@/effect/app-runtime"
+import { Flag } from "@opencode-ai/core/flag/flag"
 import { Installation } from "@/installation"
-import { Log } from "../util/log"
+import { InstallationVersion } from "@opencode-ai/core/installation/version"
 
 export async function upgrade() {
-  const log = Log.create({ service: "installation" })
-  const meta = await Installation.latestWithMeta().catch((e) => {
-    log.error("[upgrade] latestWithMeta failed:", e)
-    return undefined
-  })
-  log.info("[upgrade] meta:" + meta + ", current:" + Installation.VERSION)
-  if (!meta) return
-  if (Installation.VERSION === meta.version) return
+  const config = await AppRuntime.runPromise(Config.Service.use((cfg) => cfg.getGlobal()))
+  if (config.autoupdate === false || Flag.OPENCODE_DISABLE_AUTOUPDATE) return
+  const method = await Installation.method()
+  const latest = await Installation.latest().catch(() => {})
+  if (!latest) return
 
+  if (Flag.OPENCODE_ALWAYS_NOTIFY_UPDATE) {
+    await Bus.publish(Installation.Event.UpdateAvailable, { version: latest })
+    return
+  }
+
+  if (InstallationVersion === latest) return
   await Bus.publish(Installation.Event.UpdateAvailable, {
-    version: meta.version,
-    pub_date: meta.pub_date,
+    version: latest,
   })
 
   // [BLOCKED] auto-upgrade disabled — user must update manually
   // const config = await Config.getGlobal()
   // const method = await Installation.method()
   // if (Flag.OPENCODE_ALWAYS_NOTIFY_UPDATE) {
-  //   await Bus.publish(Installation.Event.UpdateAvailable, { version: meta.version, pub_date: meta.pub_date })
+  //   await Bus.publish(Installation.Event.UpdateAvailable, { version: meta.version})
   //   return
   // }
   // if (config.autoupdate === false || Flag.OPENCODE_DISABLE_AUTOUPDATE) return
-  // const kind = Installation.getReleaseType(Installation.VERSION, meta.version)
+  // const kind = Installation.getReleaseType(InstallationVersion, meta.version)
   // if (config.autoupdate === "notify" || kind !== "patch") {
-  //   await Bus.publish(Installation.Event.UpdateAvailable, { version: meta.version, pub_date: meta.pub_date })
+  //   await Bus.publish(Installation.Event.UpdateAvailable, { version: meta.version})
   //   return
   // }
   // if (method === "unknown") return
