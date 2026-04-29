@@ -12,7 +12,7 @@
 
 ---
 
-*Legacy content preserved for reference:*
+_Legacy content preserved for reference:_
 
 This guide provides best practices for creating visually appealing and professional diagrams in Draw.io, with a focus on network architectures and flowcharts.
 
@@ -75,7 +75,7 @@ Organize complex diagrams into layers:
 
 ## 3. Workflow Integration
 
-- **Git Integration**: Save files as `.drawio.png` or `.drawio.svg`. These are valid image files that *also* contain the editable XML data.
+- **Git Integration**: Save files as `.drawio.png` or `.drawio.svg`. These are valid image files that _also_ contain the editable XML data.
 - **Embed**: Embed these images in Markdown/READMEs. They render as images but can be opened in Draw.io to edit.
 
 ## 4. Checklist for Professional Diagrams

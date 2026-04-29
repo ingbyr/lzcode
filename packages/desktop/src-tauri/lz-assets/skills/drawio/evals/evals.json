@@ -88,9 +88,7 @@
       "id": "academic-replicate-editable-bundle",
       "prompt": "Replicate the uploaded paper figure into an editable academic bundle. Preserve the grayscale structure and its single accent highlight, and return the offline bundle plus SVG.",
       "expected_output": "A replicated academic figure that stays paper-safe while remaining editable through the offline bundle.",
-      "files": [
-        "skills/drawio/evals/fixtures/replicate-academic-highlight.svg"
-      ],
+      "files": ["skills/drawio/evals/fixtures/replicate-academic-highlight.svg"],
       "assertions": [
         "meta.source is set to replicated",
         "meta.figureType is set for the extracted academic figure",
@@ -212,9 +210,7 @@
       "id": "replicate-warm-approval-palette",
       "prompt": "Replicate the uploaded approval-flow image. Keep the warm orange fills, brown connectors, and cream background instead of remapping everything to tech-blue.",
       "expected_output": "A replicated spec that preserves the warm source palette with explicit node, edge, and module color overrides.",
-      "files": [
-        "skills/drawio/evals/fixtures/replicate-warm-approval.svg"
-      ],
+      "files": ["skills/drawio/evals/fixtures/replicate-warm-approval.svg"],
       "assertions": [
         "meta.source is set to replicated",
         "meta.replication.colorMode is preserve-original",
@@ -227,9 +223,7 @@
       "id": "replicate-brand-architecture-palette",
       "prompt": "Recreate the uploaded architecture image and preserve its blue-green brand palette. Keep semantic shapes, but do not normalize colors to the default theme.",
       "expected_output": "A replicated architecture diagram whose dominant colors stay close to the source brand palette.",
-      "files": [
-        "skills/drawio/evals/fixtures/replicate-brand-architecture.svg"
-      ],
+      "files": ["skills/drawio/evals/fixtures/replicate-brand-architecture.svg"],
       "assertions": [
         "meta.source is set to replicated",
         "meta.replication.palette captures multiple extracted colors with confidence",
@@ -242,9 +236,7 @@
       "id": "replicate-academic-highlight-palette",
       "prompt": "Replicate the uploaded paper figure. Keep the grayscale structure and its single accent highlight while remaining publication-safe.",
       "expected_output": "A replicated academic figure with grayscale-safe structure and one preserved emphasis color.",
-      "files": [
-        "skills/drawio/evals/fixtures/replicate-academic-highlight.svg"
-      ],
+      "files": ["skills/drawio/evals/fixtures/replicate-academic-highlight.svg"],
       "assertions": [
         "meta.source is set to replicated",
         "meta.figureType is set for the extracted academic figure",
@@ -258,9 +250,7 @@
       "id": "import-drawio-to-spec-uncompressed",
       "prompt": "Import the uploaded .drawio file into YAML spec and write sidecars.",
       "expected_output": "A YAML spec bundle (.spec.yaml + .arch.json) that preserves the module, node labels, and basic connector semantics from the .drawio input.",
-      "files": [
-        "skills/drawio/evals/fixtures/import-simple.drawio"
-      ],
+      "files": ["skills/drawio/evals/fixtures/import-simple.drawio"],
       "assertions": [
         "Output spec contains meta.source: edited",
         "Output spec contains module label Backend",
@@ -273,9 +263,7 @@
       "id": "import-drawio-to-spec-compressed",
       "prompt": "Import the uploaded compressed .drawio file into YAML spec and write sidecars.",
       "expected_output": "A YAML spec bundle imported from a compressed <diagram> payload that preserves modules, nodes, and connectors.",
-      "files": [
-        "skills/drawio/evals/fixtures/import-simple-compressed.drawio"
-      ],
+      "files": ["skills/drawio/evals/fixtures/import-simple-compressed.drawio"],
       "assertions": [
         "Importer decodes compressed diagram content into mxGraphModel XML",
         "Output spec contains nodes labeled API and DB",
@@ -287,9 +275,7 @@
       "id": "edit-after-import",
       "prompt": "Import the uploaded .drawio file into YAML spec, rename API to Auth, and export as SVG.",
       "expected_output": "A regenerated SVG (and sidecars) reflecting the edited label with a validated structure.",
-      "files": [
-        "skills/drawio/evals/fixtures/import-simple.drawio"
-      ],
+      "files": ["skills/drawio/evals/fixtures/import-simple.drawio"],
       "assertions": [
         "The resulting spec and export rename API -> Auth",
         "Output SVG is generated and is readable",
@@ -301,9 +287,7 @@
       "id": "offline-edit-fallback-no-live-session",
       "prompt": "Edit the uploaded .drawio file offline: import it into YAML sidecars, rename API to Auth Service, and regenerate the bundle and SVG without assuming any live browser session.",
       "expected_output": "An offline-imported spec bundle and regenerated export that prove the edit path does not depend on live incremental editing.",
-      "files": [
-        "skills/drawio/evals/fixtures/import-simple.drawio"
-      ],
+      "files": ["skills/drawio/evals/fixtures/import-simple.drawio"],
       "assertions": [
         "The `.drawio` input is imported into `.spec.yaml` and `.arch.json` before regeneration",
         "The edited bundle renames API -> Auth Service",

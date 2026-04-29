@@ -17,7 +17,9 @@ const log = Log.create({ service: "models.dev" })
 const source = url()
 const filepath = path.join(
   Global.Path.cache,
-  source === "https://gh-proxy.org/https://github.com/ingbyr/lzmodels/releases/latest/download" ? "models.json" : `models-${Hash.fast(source)}.json`
+  source === "https://gh-proxy.org/https://github.com/ingbyr/lzmodels/releases/latest/download"
+    ? "models.json"
+    : `models-${Hash.fast(source)}.json`,
 )
 const ttl = 5 * 60 * 1000
 
@@ -31,9 +33,9 @@ const Cost = Schema.Struct({
       input: Schema.Number,
       output: Schema.Number,
       cache_read: Schema.optional(Schema.Number),
-      cache_write: Schema.optional(Schema.Number)
-    })
-  )
+      cache_write: Schema.optional(Schema.Number),
+    }),
+  ),
 })
 
 export const Model = Schema.Struct({
@@ -49,21 +51,21 @@ export const Model = Schema.Struct({
     Schema.Union([
       Schema.Literal(true),
       Schema.Struct({
-        field: Schema.Literals(["reasoning_content", "reasoning_details"])
-      })
-    ])
+        field: Schema.Literals(["reasoning_content", "reasoning_details"]),
+      }),
+    ]),
   ),
   cost: Schema.optional(Cost),
   limit: Schema.Struct({
     context: Schema.Number,
     input: Schema.optional(Schema.Number),
-    output: Schema.Number
+    output: Schema.Number,
   }),
   modalities: Schema.optional(
     Schema.Struct({
       input: Schema.Array(Schema.Literals(["text", "audio", "image", "video", "pdf"])),
-      output: Schema.Array(Schema.Literals(["text", "audio", "image", "video", "pdf"]))
-    })
+      output: Schema.Array(Schema.Literals(["text", "audio", "image", "video", "pdf"])),
+    }),
   ),
   experimental: Schema.optional(
     Schema.Struct({
@@ -75,18 +77,18 @@ export const Model = Schema.Struct({
             provider: Schema.optional(
               Schema.Struct({
                 body: Schema.optional(Schema.Record(Schema.String, Schema.MutableJson)),
-                headers: Schema.optional(Schema.Record(Schema.String, Schema.String))
-              })
-            )
-          })
-        )
-      )
-    })
+                headers: Schema.optional(Schema.Record(Schema.String, Schema.String)),
+              }),
+            ),
+          }),
+        ),
+      ),
+    }),
   ),
   status: Schema.optional(Schema.Literals(["alpha", "beta", "deprecated"])),
   provider: Schema.optional(
-    Schema.Struct({ npm: Schema.optional(Schema.String), api: Schema.optional(Schema.String) })
-  )
+    Schema.Struct({ npm: Schema.optional(Schema.String), api: Schema.optional(Schema.String) }),
+  ),
 })
 export type Model = Schema.Schema.Type<typeof Model>
 
@@ -96,7 +98,7 @@ export const Provider = Schema.Struct({
   env: Schema.Array(Schema.String),
   id: Schema.String,
   npm: Schema.optional(Schema.String),
-  models: Schema.Record(Schema.String, Model)
+  models: Schema.Record(Schema.String, Model),
 })
 
 export type Provider = Schema.Schema.Type<typeof Provider>
@@ -116,14 +118,13 @@ function skip(force: boolean) {
 const fetchApi = async () => {
   const result = await fetch(`${url()}/api.json`, {
     headers: { "User-Agent": Installation.USER_AGENT },
-    signal: AbortSignal.timeout(10000)
+    signal: AbortSignal.timeout(10000),
   })
   return { ok: result.ok, text: await result.text() }
 }
 
 export const Data = lazy(async () => {
-  const result = await Filesystem.readJson(Flag.OPENCODE_MODELS_PATH ?? filepath).catch(() => {
-  })
+  const result = await Filesystem.readJson(Flag.OPENCODE_MODELS_PATH ?? filepath).catch(() => {})
   if (result) return result
   // @ts-ignore
   const snapshot = await import("./models-snapshot.js")
@@ -132,8 +133,7 @@ export const Data = lazy(async () => {
   if (snapshot) return snapshot
   if (Flag.OPENCODE_DISABLE_MODELS_FETCH) return {}
   return Flock.withLock(`models-dev:${filepath}`, async () => {
-    const result = await Filesystem.readJson(Flag.OPENCODE_MODELS_PATH ?? filepath).catch(() => {
-    })
+    const result = await Filesystem.readJson(Flag.OPENCODE_MODELS_PATH ?? filepath).catch(() => {})
     if (result) return result
     const result2 = await fetchApi()
     if (result2.ok) {
@@ -160,7 +160,7 @@ export async function refresh(force = false) {
     Data.reset()
   }).catch((e) => {
     log.error("Failed to fetch models.dev", {
-      error: e
+      error: e,
     })
   })
 }
@@ -171,7 +171,7 @@ if (!Flag.OPENCODE_DISABLE_MODELS_FETCH && !process.argv.includes("--get-yargs-c
     async () => {
       await refresh()
     },
-    60 * 1000 * 60
+    60 * 1000 * 60,
   ).unref()
 }
 

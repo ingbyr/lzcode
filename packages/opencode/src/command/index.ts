@@ -56,11 +56,11 @@ export function hints(template: string) {
   return result
 }
 
-  export const Default = {
-    INIT: "init",
-    REVIEW: "review",
-    COMMIT: "commit",
-  } as const
+export const Default = {
+  INIT: "init",
+  REVIEW: "review",
+  COMMIT: "commit",
+} as const
 
 export interface Interface {
   readonly get: (name: string) => Effect.Effect<Info | undefined>

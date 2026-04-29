@@ -71,13 +71,13 @@ edges:
 
 Formula nodes prioritize readability over visual decoration.
 
-| Property | Value | Reason |
-|----------|-------|--------|
-| Fill | White by default | Keep formulas easy to scan |
-| Stroke | Theme primary or grayscale academic stroke | Preserve semantic grouping |
-| Stroke Width | 1px | Keep border subtle |
-| Padding | 8-16px | Avoid clipping and crowding |
-| Alignment | Center by default | Works best for standalone equations |
+| Property     | Value                                      | Reason                              |
+| ------------ | ------------------------------------------ | ----------------------------------- |
+| Fill         | White by default                           | Keep formulas easy to scan          |
+| Stroke       | Theme primary or grayscale academic stroke | Preserve semantic grouping          |
+| Stroke Width | 1px                                        | Keep border subtle                  |
+| Padding      | 8-16px                                     | Avoid clipping and crowding         |
+| Alignment    | Center by default                          | Works best for standalone equations |
 
 ### Theme Examples
 
@@ -117,12 +117,12 @@ For dark themes, verify rendered math contrast manually. MathJax output often be
 
 Choose node size based on rendered complexity, not only source length.
 
-| Complexity | Suggested Size | Typical Content |
-|------------|----------------|-----------------|
-| Simple | 100x50 | `x^2 + y^2` |
-| Medium | 140x60 | `\sum_{i=1}^{n} x_i` |
-| Complex | 180x80 | long fractions, long summations |
-| Very Complex | 220x100 | matrices, multi-part expressions |
+| Complexity   | Suggested Size | Typical Content                  |
+| ------------ | -------------- | -------------------------------- |
+| Simple       | 100x50         | `x^2 + y^2`                      |
+| Medium       | 140x60         | `\sum_{i=1}^{n} x_i`             |
+| Complex      | 180x80         | long fractions, long summations  |
+| Very Complex | 220x100        | matrices, multi-part expressions |
 
 ### Auto-sizing Heuristic
 

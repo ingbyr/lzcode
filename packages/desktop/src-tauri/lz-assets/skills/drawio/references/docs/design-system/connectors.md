@@ -10,11 +10,11 @@ The Design System defines a semantic connector system with clear visual hierarch
 
 **Purpose**: Main process flow, critical paths
 
-| Property | Value |
-|----------|-------|
-| Line | Solid, 2px |
-| Arrow | Filled block |
-| Color | Text color (`#1E293B` in Tech Blue) |
+| Property | Value                               |
+| -------- | ----------------------------------- |
+| Line     | Solid, 2px                          |
+| Arrow    | Filled block                        |
+| Color    | Text color (`#1E293B` in Tech Blue) |
 
 ```yaml
 edges:
@@ -34,11 +34,11 @@ edges:
 
 **Purpose**: Data transmission, async communication, API calls
 
-| Property | Value |
-|----------|-------|
-| Line | Dashed (6 4), 2px |
-| Arrow | Filled block |
-| Color | Text color |
+| Property | Value             |
+| -------- | ----------------- |
+| Line     | Dashed (6 4), 2px |
+| Arrow    | Filled block      |
+| Color    | Text color        |
 
 ```yaml
 edges:
@@ -59,11 +59,11 @@ edges:
 
 **Purpose**: Weak relationships, optional paths, fallbacks
 
-| Property | Value |
-|----------|-------|
-| Line | Dotted (2 2), 1px |
-| Arrow | Open block |
-| Color | Muted text (`#64748B`) |
+| Property | Value                  |
+| -------- | ---------------------- |
+| Line     | Dotted (2 2), 1px      |
+| Arrow    | Open block             |
+| Color    | Muted text (`#64748B`) |
 
 ```yaml
 edges:
@@ -83,11 +83,11 @@ edges:
 
 **Purpose**: Dependencies, constraints, composition
 
-| Property | Value |
-|----------|-------|
-| Line | Solid, 1px |
-| Arrow | Filled diamond |
-| Color | Text color |
+| Property | Value          |
+| -------- | -------------- |
+| Line     | Solid, 1px     |
+| Arrow    | Filled diamond |
+| Color    | Text color     |
 
 ```yaml
 edges:
@@ -107,11 +107,11 @@ edges:
 
 **Purpose**: Associations, mutual relationships, two-way communication
 
-| Property | Value |
-|----------|-------|
-| Line | Solid, 1.5px |
-| Arrow | None (both ends) |
-| Color | Muted text |
+| Property | Value            |
+| -------- | ---------------- |
+| Line     | Solid, 1.5px     |
+| Arrow    | None (both ends) |
+| Color    | Muted text       |
 
 ```yaml
 edges:
@@ -129,14 +129,14 @@ edges:
 
 ## Arrow Types
 
-| Type | Style | mxCell Value | Usage |
-|------|-------|--------------|-------|
-| Filled Block | ▶ | `endArrow=block;endFill=1` | Primary, data flow |
-| Open Block | ▷ | `endArrow=open;endFill=0` | Optional flow |
-| Filled Diamond | ◆ | `endArrow=diamond;endFill=1` | Composition |
-| Open Diamond | ◇ | `endArrow=diamondThin;endFill=0` | Aggregation |
-| Classic | → | `endArrow=classic` | Simple arrow |
-| None | — | `endArrow=none` | Bidirectional |
+| Type           | Style | mxCell Value                     | Usage              |
+| -------------- | ----- | -------------------------------- | ------------------ |
+| Filled Block   | ▶    | `endArrow=block;endFill=1`       | Primary, data flow |
+| Open Block     | ▷     | `endArrow=open;endFill=0`        | Optional flow      |
+| Filled Diamond | ◆     | `endArrow=diamond;endFill=1`     | Composition        |
+| Open Diamond   | ◇     | `endArrow=diamondThin;endFill=0` | Aggregation        |
+| Classic        | →     | `endArrow=classic`               | Simple arrow       |
+| None           | —     | `endArrow=none`                  | Bidirectional      |
 
 > **Format note**: In draw.io XML style strings, boolean-like values use `1`/`0` (e.g., `endFill=1`), while theme JSON definitions use `true`/`false` (e.g., `"endFill": true`). The converter handles this translation automatically.
 
@@ -223,12 +223,12 @@ When connectors cross, jumps prevent ambiguity:
 <mxCell style="jumpStyle=arc;jumpSize=8;" />
 ```
 
-| Style | Appearance |
-|-------|------------|
-| `arc` | Small arc over crossing |
-| `gap` | Gap in line |
-| `sharp` | Sharp angle |
-| `none` | No jump (lines cross) |
+| Style   | Appearance              |
+| ------- | ----------------------- |
+| `arc`   | Small arc over crossing |
+| `gap`   | Gap in line             |
+| `sharp` | Sharp angle             |
+| `none`  | No jump (lines cross)   |
 
 ---
 
@@ -241,7 +241,7 @@ edges:
   - from: a
     to: b
     label: "Request"
-    labelPosition: center  # center, start, end
+    labelPosition: center # center, start, end
 ```
 
 ### Styling
@@ -263,13 +263,13 @@ Labels use the theme's edge label settings:
 
 ### Tech Blue
 
-| Type | Stroke Color |
-|------|--------------|
-| primary | `#1E293B` |
-| data | `#1E293B` |
-| optional | `#64748B` |
-| dependency | `#1E293B` |
-| bidirectional | `#64748B` |
+| Type          | Stroke Color |
+| ------------- | ------------ |
+| primary       | `#1E293B`    |
+| data          | `#1E293B`    |
+| optional      | `#64748B`    |
+| dependency    | `#1E293B`    |
+| bidirectional | `#64748B`    |
 
 ### Academic
 
@@ -277,13 +277,13 @@ All connectors use black (`#1E1E1E`) for print compatibility.
 
 ### Dark Mode
 
-| Type | Stroke Color |
-|------|--------------|
-| primary | `#F1F5F9` |
-| data | `#94A3B8` |
-| optional | `#64748B` |
-| dependency | `#94A3B8` |
-| bidirectional | `#64748B` |
+| Type          | Stroke Color |
+| ------------- | ------------ |
+| primary       | `#F1F5F9`    |
+| data          | `#94A3B8`    |
+| optional      | `#64748B`    |
+| dependency    | `#94A3B8`    |
+| bidirectional | `#64748B`    |
 
 ---
 

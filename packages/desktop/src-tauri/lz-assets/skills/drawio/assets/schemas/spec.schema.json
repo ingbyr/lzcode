@@ -124,13 +124,39 @@
           "type": {
             "type": "string",
             "enum": [
-              "service", "database", "decision", "terminal", "queue",
-              "user", "document", "formula", "cloud", "process",
-              "input", "output", "loss", "feature",
-              "conv", "pool", "embed", "temporal", "attention",
-              "gate", "norm", "graph", "matrix", "operator", "tensor3d",
-              "router", "switch", "firewall", "server", "load_balancer",
-              "subnet", "internet", "ap"
+              "service",
+              "database",
+              "decision",
+              "terminal",
+              "queue",
+              "user",
+              "document",
+              "formula",
+              "cloud",
+              "process",
+              "input",
+              "output",
+              "loss",
+              "feature",
+              "conv",
+              "pool",
+              "embed",
+              "temporal",
+              "attention",
+              "gate",
+              "norm",
+              "graph",
+              "matrix",
+              "operator",
+              "tensor3d",
+              "router",
+              "switch",
+              "firewall",
+              "server",
+              "load_balancer",
+              "subnet",
+              "internet",
+              "ap"
             ],
             "description": "Semantic type for automatic shape selection"
           },
@@ -238,10 +264,7 @@
             "description": "IP address or subnet label for the link"
           },
           "vlan": {
-            "oneOf": [
-              { "type": "string" },
-              { "type": "integer" }
-            ],
+            "oneOf": [{ "type": "string" }, { "type": "integer" }],
             "description": "VLAN identifier for the link"
           },
           "bandwidth": {

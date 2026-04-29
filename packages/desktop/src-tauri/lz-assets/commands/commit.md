@@ -26,7 +26,7 @@ about what user facing changes were made
 
 if there are conflicts DO NOT FIX THEM. notify me and I will fix them
 
-After generating the Git commit message, wait for user confirmation. 
+After generating the Git commit message, wait for user confirmation.
 Display the generated Git commit message in the confirmation prompt, and execute the git commit command once confirmed by the user.
 
 ## GIT DIFF

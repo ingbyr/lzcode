@@ -8,23 +8,23 @@
 
 ## 模块一览
 
-| 模块 | 描述 |
-|------|------|
-| `lz-base-core` | 核心工具类：JSON、加密、安全过滤、线程池、校验 |
-| `lz-base-common` | 基础通用组件 |
-| `lz-base-web` | Web层：会话管理、Token、验证器、QueryPanel |
-| `lz-base-cache` | 缓存组件（Redis） |
-| `lz-base-bus` | 消息队列（RocketMQ） |
-| `lz-base-msg` | 短信发送（支持多渠道） |
-| `lz-base-file` | 文件存储（MinIO、阿里云、华为OBS、天翼云ZOS） |
-| `lz-base-persistence` | 持久化增强 |
-| `lz-base-elastic-search` | Elasticsearch/OpenSearch 客户端 |
-| `lz-base-discovery` | 服务发现（Nacos负载均衡） |
-| `lz-base-config` | 配置中心 |
-| `lz-base-distributed-transaction` | 分布式事务（Seata） |
-| `lz-base-language` | 国际化 |
-| `lz-base-open-telemetry` | 链路追踪 |
-| `lz-base-opt-log` | 操作日志 |
+| 模块                              | 描述                                           |
+| --------------------------------- | ---------------------------------------------- |
+| `lz-base-core`                    | 核心工具类：JSON、加密、安全过滤、线程池、校验 |
+| `lz-base-common`                  | 基础通用组件                                   |
+| `lz-base-web`                     | Web层：会话管理、Token、验证器、QueryPanel     |
+| `lz-base-cache`                   | 缓存组件（Redis）                              |
+| `lz-base-bus`                     | 消息队列（RocketMQ）                           |
+| `lz-base-msg`                     | 短信发送（支持多渠道）                         |
+| `lz-base-file`                    | 文件存储（MinIO、阿里云、华为OBS、天翼云ZOS）  |
+| `lz-base-persistence`             | 持久化增强                                     |
+| `lz-base-elastic-search`          | Elasticsearch/OpenSearch 客户端                |
+| `lz-base-discovery`               | 服务发现（Nacos负载均衡）                      |
+| `lz-base-config`                  | 配置中心                                       |
+| `lz-base-distributed-transaction` | 分布式事务（Seata）                            |
+| `lz-base-language`                | 国际化                                         |
+| `lz-base-open-telemetry`          | 链路追踪                                       |
+| `lz-base-opt-log`                 | 操作日志                                       |
 
 ---
 
@@ -209,20 +209,20 @@ QueryWrapper<?> wrapper = result.getWrapper();
 
 支持的运算符：
 
-| 运算符 | 说明 |
-|--------|------|
-| `eq` | 等于 |
-| `ne` | 不等于 |
-| `gt` | 大于 |
-| `ge` | 大于等于 |
-| `lt` | 小于 |
-| `le` | 小于等于 |
-| `like` | 模糊匹配 |
-| `leftLike` | 左匹配 |
-| `rightLike` | 右匹配 |
-| `in` | IN查询 |
-| `notIn` | NOT IN查询 |
-| `between` | 范围查询 |
+| 运算符      | 说明       |
+| ----------- | ---------- |
+| `eq`        | 等于       |
+| `ne`        | 不等于     |
+| `gt`        | 大于       |
+| `ge`        | 大于等于   |
+| `lt`        | 小于       |
+| `le`        | 小于等于   |
+| `like`      | 模糊匹配   |
+| `leftLike`  | 左匹配     |
+| `rightLike` | 右匹配     |
+| `in`        | IN查询     |
+| `notIn`     | NOT IN查询 |
+| `between`   | 范围查询   |
 
 ---
 
@@ -283,7 +283,7 @@ lzMQTemplate.sendMessage("TOPIC", "TAG", "message body");
 ```yaml
 common-msg:
   backend:
-    sys: emay              # emay / c4 / aliyun
+    sys: emay # emay / c4 / aliyun
     endpoint: http://www.btom.cn:8080
     user: username
     password: password
@@ -325,12 +325,12 @@ Response resp = commonSender.getAccountBalance(ComReqParam.builder().build());
 
 #### 6.1 模块结构
 
-| 子模块 | 存储类型 |
-|--------|----------|
-| `lz-base-file-minio` | MinIO |
+| 子模块                | 存储类型  |
+| --------------------- | --------- |
+| `lz-base-file-minio`  | MinIO     |
 | `lz-base-file-aliyun` | 阿里云OSS |
-| `lz-base-file-obs` | 华为云OBS |
-| `lz-base-file-zos` | 天翼云ZOS |
+| `lz-base-file-obs`    | 华为云OBS |
+| `lz-base-file-zos`    | 天翼云ZOS |
 
 #### 6.2 通用接口
 
@@ -456,7 +456,7 @@ public void doTransaction() {
 management:
   tracing:
     sampling:
-      probability: '1.0'
+      probability: "1.0"
   otlp:
     tracing:
       endpoint: http://localhost:4318/v1/traces
@@ -508,6 +508,7 @@ public ApiResult<Long> addDemo(@RequestBody @LzLogTargetId(expression = "id") De
 #### 11.3 日志格式配置
 
 全局配置：
+
 ```yaml
 lanzhou:
   optlog:
@@ -515,8 +516,9 @@ lanzhou:
 ```
 
 注解配置：
+
 ```java
-@LzLogRecord(action = "新增", targetTypeName = "订单", targetType = "order", 
+@LzLogRecord(action = "新增", targetTypeName = "订单", targetType = "order",
     format = "userName + '在 ' + createTime + action + '[' + targetTypeName + ']'")
 ```
 
@@ -540,12 +542,12 @@ String msg = LzWebI18nUtils.getMessage("key");
 
 ## 验证注解一览
 
-| 注解 | 说明 | 示例 |
-|------|------|------|
-| `@AddValidationGroup` | 新增分组 | 用于 `groups` 属性 |
-| `@EditValidationGroup` | 编辑分组 | 用于 `groups` 属性 |
-| `@SpecialChar` | 特殊字符校验 | 防止XSS注入 |
-| `@EnumValue` | 枚举值校验 | 限制允许的值 |
+| 注解                   | 说明         | 示例               |
+| ---------------------- | ------------ | ------------------ |
+| `@AddValidationGroup`  | 新增分组     | 用于 `groups` 属性 |
+| `@EditValidationGroup` | 编辑分组     | 用于 `groups` 属性 |
+| `@SpecialChar`         | 特殊字符校验 | 防止XSS注入        |
+| `@EnumValue`           | 枚举值校验   | 限制允许的值       |
 
 ---
 

@@ -4,7 +4,18 @@
   "title": "Draw.io Design System Theme",
   "description": "Schema for Draw.io diagram theme definition files",
   "type": "object",
-  "required": ["name", "displayName", "colors", "spacing", "typography", "borderRadius", "node", "connector", "module", "canvas"],
+  "required": [
+    "name",
+    "displayName",
+    "colors",
+    "spacing",
+    "typography",
+    "borderRadius",
+    "node",
+    "connector",
+    "module",
+    "canvas"
+  ],
   "properties": {
     "$schema": {
       "type": "string",
@@ -26,7 +37,19 @@
     "colors": {
       "type": "object",
       "description": "Color token definitions",
-      "required": ["primary", "secondary", "accent", "background", "surface", "text", "textMuted", "border", "success", "warning", "error"],
+      "required": [
+        "primary",
+        "secondary",
+        "accent",
+        "background",
+        "surface",
+        "text",
+        "textMuted",
+        "border",
+        "success",
+        "warning",
+        "error"
+      ],
       "properties": {
         "primary": { "$ref": "#/definitions/color" },
         "primaryLight": { "$ref": "#/definitions/color" },
@@ -232,7 +255,7 @@
         "strokeWidth": { "type": "number", "minimum": 0.5, "maximum": 5 },
         "dashed": { "type": "boolean" },
         "dashPattern": { "type": ["string", "null"] },
-        "endArrow": { 
+        "endArrow": {
           "type": "string",
           "enum": ["none", "block", "open", "diamond", "oval", "classic"]
         },

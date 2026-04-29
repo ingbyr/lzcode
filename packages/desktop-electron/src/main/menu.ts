@@ -121,8 +121,7 @@ export function createMenu(deps: Deps) {
         { type: "separator" },
         {
           label: "Share Feedback",
-          click: () =>
-            shell.openExternal("https://github.com/ingbyr/lzcode/issues/new?template=feature_request.yml"),
+          click: () => shell.openExternal("https://github.com/ingbyr/lzcode/issues/new?template=feature_request.yml"),
         },
         {
           label: "Report a Bug",

@@ -7,9 +7,9 @@
  * - Common compressed diagrams where <diagram> contains base64(deflateRaw(encodeURIComponent(mxGraphModelXml)))
  */
 
-import { inflateRawSync, inflateSync } from 'node:zlib'
+import { inflateRawSync, inflateSync } from "node:zlib"
 
-import { detectSemanticType, snapToGrid } from './spec-to-drawio.js'
+import { detectSemanticType, snapToGrid } from "./spec-to-drawio.js"
 import {
   attr,
   buildCell,
@@ -18,21 +18,21 @@ import {
   labelFromCellValue,
   parsePoints,
   parseStyle,
-  stripHtml
-} from '../shared/xml-utils.js'
+  stripHtml,
+} from "../shared/xml-utils.js"
 
 const SIZE_PRESETS = {
   tiny: { width: 32, height: 32 },
   small: { width: 80, height: 40 },
   medium: { width: 120, height: 60 },
   large: { width: 160, height: 80 },
-  xl: { width: 200, height: 100 }
+  xl: { width: 200, height: 100 },
 }
 
 function parseMxGraphModelXml(xml) {
   const match = /<mxGraphModel\b[^>]*>[\s\S]*?<\/mxGraphModel>/i.exec(xml)
   if (!match) {
-    throw new Error('Could not find <mxGraphModel> in the decoded diagram')
+    throw new Error("Could not find <mxGraphModel> in the decoded diagram")
   }
   const mxGraphModelXml = match[0]
   const cells = extractCells(mxGraphModelXml)
@@ -40,21 +40,21 @@ function parseMxGraphModelXml(xml) {
 }
 
 function normalizeBase64(input) {
-  const trimmed = String(input || '').trim()
+  const trimmed = String(input || "").trim()
   const normalized = trimmed
-    .replace(/[\r\n\s]+/g, '')
-    .replace(/-/g, '+')
-    .replace(/_/g, '/')
+    .replace(/[\r\n\s]+/g, "")
+    .replace(/-/g, "+")
+    .replace(/_/g, "/")
 
   const pad = normalized.length % 4
   if (pad === 0) return normalized
-  if (pad === 2) return normalized + '=='
-  if (pad === 3) return normalized + '='
+  if (pad === 2) return normalized + "=="
+  if (pad === 3) return normalized + "="
   return normalized
 }
 
 function tryDecodeURIComponent(text) {
-  if (!text || typeof text !== 'string') return text
+  if (!text || typeof text !== "string") return text
   if (!/%[0-9A-Fa-f]{2}/.test(text)) return text
   try {
     return decodeURIComponent(text)
@@ -64,21 +64,21 @@ function tryDecodeURIComponent(text) {
 }
 
 function decodeDiagramContent(content) {
-  const trimmed = String(content || '').trim()
-  if (trimmed.includes('<mxGraphModel')) return trimmed
+  const trimmed = String(content || "").trim()
+  if (trimmed.includes("<mxGraphModel")) return trimmed
 
   const b64 = normalizeBase64(trimmed)
   let buf
   try {
-    buf = Buffer.from(b64, 'base64')
+    buf = Buffer.from(b64, "base64")
   } catch (err) {
     throw new Error(`Diagram content is not valid base64: ${err.message}`)
   }
 
   const attempts = [
-    () => inflateRawSync(buf).toString('utf-8'),
-    () => inflateSync(buf).toString('utf-8'),
-    () => buf.toString('utf-8')
+    () => inflateRawSync(buf).toString("utf-8"),
+    () => inflateSync(buf).toString("utf-8"),
+    () => buf.toString("utf-8"),
   ]
 
   const errors = []
@@ -86,15 +86,13 @@ function decodeDiagramContent(content) {
     try {
       const text = attempt()
       const maybeDecoded = tryDecodeURIComponent(text)
-      if (maybeDecoded.includes('<mxGraphModel')) return maybeDecoded
+      if (maybeDecoded.includes("<mxGraphModel")) return maybeDecoded
     } catch (err) {
       errors.push(err)
     }
   }
 
-  const message = errors.length > 0
-    ? errors.map(e => e.message).join(' | ')
-    : 'Unknown decode failure'
+  const message = errors.length > 0 ? errors.map((e) => e.message).join(" | ") : "Unknown decode failure"
   throw new Error(`Could not decode <diagram> content into mxGraphModel XML. ${message}`)
 }
 
@@ -103,21 +101,21 @@ function extractDiagrams(drawioFileText) {
   const diagramRe = /<diagram\b([^>]*)>([\s\S]*?)<\/diagram>/gi
   let match
   while ((match = diagramRe.exec(drawioFileText)) !== null) {
-    const attrs = match[1] || ''
-    const name = attr(attrs, 'name')
+    const attrs = match[1] || ""
+    const name = attr(attrs, "name")
     diagrams.push({
       name,
-      content: match[2] || ''
+      content: match[2] || "",
     })
   }
   if (diagrams.length === 0) {
-    throw new Error('No <diagram> elements found in the .drawio file')
+    throw new Error("No <diagram> elements found in the .drawio file")
   }
   return diagrams
 }
 
 function pickDiagram(diagrams, selector) {
-  if (selector == null || selector === '') return diagrams[0]
+  if (selector == null || selector === "") return diagrams[0]
   const raw = String(selector)
   if (/^\d+$/.test(raw)) {
     const index = Number(raw)
@@ -127,16 +125,16 @@ function pickDiagram(diagrams, selector) {
     return diagrams[index]
   }
 
-  const exact = diagrams.find(d => d.name === raw)
+  const exact = diagrams.find((d) => d.name === raw)
   if (exact) return exact
-  const ci = diagrams.find(d => (d.name || '').toLowerCase() === raw.toLowerCase())
+  const ci = diagrams.find((d) => (d.name || "").toLowerCase() === raw.toLowerCase())
   if (ci) return ci
-  const names = diagrams.map(d => d.name || '(unnamed)').join(', ')
+  const names = diagrams.map((d) => d.name || "(unnamed)").join(", ")
   throw new Error(`--page "${raw}" not found. Available page names: ${names}`)
 }
 
 function hexOrNull(value) {
-  if (typeof value !== 'string') return null
+  if (typeof value !== "string") return null
   const trimmed = value.trim()
   return /^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/.test(trimmed) ? trimmed : null
 }
@@ -147,7 +145,7 @@ function numberOrNull(value) {
 }
 
 function closestPreset(width, height) {
-  let best = 'medium'
+  let best = "medium"
   let bestScore = Number.POSITIVE_INFINITY
   for (const [key, preset] of Object.entries(SIZE_PRESETS)) {
     const score = Math.abs(preset.width - width) + Math.abs(preset.height - height)
@@ -160,58 +158,58 @@ function closestPreset(width, height) {
 }
 
 function inferTypeFromStyle(style, label) {
-  const shape = style.get('shape')
-  if (shape === 'cylinder3' || shape === 'cylinder') return 'database'
-  if (shape === 'parallelogram') return 'queue'
-  if (shape === 'document') return 'document'
-  if (shape === 'cloud') return 'cloud'
-  if (shape === 'cube') return 'tensor3d'
-  if (style.has('rhombus')) return 'decision'
-  if (style.has('ellipse')) {
+  const shape = style.get("shape")
+  if (shape === "cylinder3" || shape === "cylinder") return "database"
+  if (shape === "parallelogram") return "queue"
+  if (shape === "document") return "document"
+  if (shape === "cloud") return "cloud"
+  if (shape === "cube") return "tensor3d"
+  if (style.has("rhombus")) return "decision"
+  if (style.has("ellipse")) {
     const detected = detectSemanticType(label, null)
-    return detected === 'operator' ? 'operator' : 'user'
+    return detected === "operator" ? "operator" : "user"
   }
 
-  const arcSize = numberOrNull(style.get('arcSize'))
-  if (style.get('rounded') === '1' && arcSize != null && arcSize >= 40) return 'terminal'
+  const arcSize = numberOrNull(style.get("arcSize"))
+  if (style.get("rounded") === "1" && arcSize != null && arcSize >= 40) return "terminal"
   return detectSemanticType(label, null)
 }
 
 function inferIconFromStyle(style) {
-  const resIcon = style.get('resIcon')
-  const shape = style.get('shape')
+  const resIcon = style.get("resIcon")
+  const shape = style.get("shape")
   const raw = resIcon || shape
-  if (!raw || typeof raw !== 'string') return null
+  if (!raw || typeof raw !== "string") return null
 
-  if (raw.startsWith('mxgraph.aws4.')) return `aws.${raw.slice('mxgraph.aws4.'.length)}`
-  if (raw.startsWith('mxgraph.gcp2.')) return `gcp.${raw.slice('mxgraph.gcp2.'.length)}`
-  if (raw.startsWith('mxgraph.azure.')) return `azure.${raw.slice('mxgraph.azure.'.length)}`
-  if (raw.startsWith('mxgraph.kubernetes.')) return `k8s.${raw.slice('mxgraph.kubernetes.'.length)}`
-  if (raw.startsWith('mxgraph.')) return raw
+  if (raw.startsWith("mxgraph.aws4.")) return `aws.${raw.slice("mxgraph.aws4.".length)}`
+  if (raw.startsWith("mxgraph.gcp2.")) return `gcp.${raw.slice("mxgraph.gcp2.".length)}`
+  if (raw.startsWith("mxgraph.azure.")) return `azure.${raw.slice("mxgraph.azure.".length)}`
+  if (raw.startsWith("mxgraph.kubernetes.")) return `k8s.${raw.slice("mxgraph.kubernetes.".length)}`
+  if (raw.startsWith("mxgraph.")) return raw
   return null
 }
 
 function inferEdgeTypeFromStyle(style) {
-  const endArrow = style.get('endArrow') || 'block'
-  const startArrow = style.get('startArrow') || ''
-  const dashed = style.get('dashed') === '1'
-  const dashPattern = style.get('dashPattern') || ''
+  const endArrow = style.get("endArrow") || "block"
+  const startArrow = style.get("startArrow") || ""
+  const dashed = style.get("dashed") === "1"
+  const dashPattern = style.get("dashPattern") || ""
 
-  if (endArrow === 'diamond') return 'dependency'
-  if (dashed && endArrow === 'open') return 'optional'
-  if (dashed && /^(2\s+2|3\s+3)$/.test(dashPattern.trim())) return 'optional'
-  if (dashed) return 'data'
-  if (endArrow === 'none' && !startArrow) return 'bidirectional'
-  if (startArrow && endArrow && startArrow === endArrow) return 'bidirectional'
-  return 'primary'
+  if (endArrow === "diamond") return "dependency"
+  if (dashed && endArrow === "open") return "optional"
+  if (dashed && /^(2\s+2|3\s+3)$/.test(dashPattern.trim())) return "optional"
+  if (dashed) return "data"
+  if (endArrow === "none" && !startArrow) return "bidirectional"
+  if (startArrow && endArrow && startArrow === endArrow) return "bidirectional"
+  return "primary"
 }
 
 function extractNodeStyleOverrides(style) {
-  const fillColor = hexOrNull(style.get('fillColor'))
-  const strokeColor = hexOrNull(style.get('strokeColor'))
-  const fontColor = hexOrNull(style.get('fontColor'))
-  const strokeWidth = numberOrNull(style.get('strokeWidth'))
-  const fontSize = numberOrNull(style.get('fontSize'))
+  const fillColor = hexOrNull(style.get("fillColor"))
+  const strokeColor = hexOrNull(style.get("strokeColor"))
+  const fontColor = hexOrNull(style.get("fontColor"))
+  const strokeWidth = numberOrNull(style.get("strokeWidth"))
+  const fontSize = numberOrNull(style.get("fontSize"))
 
   const overrides = {}
   if (fillColor) overrides.fillColor = fillColor
@@ -223,19 +221,16 @@ function extractNodeStyleOverrides(style) {
 }
 
 function extractEdgeStyleOverrides(style) {
-  const strokeColor = hexOrNull(style.get('strokeColor'))
-  const strokeWidth = numberOrNull(style.get('strokeWidth'))
-  const dashed = style.get('dashed') === '1'
-  const dashPattern = style.get('dashPattern') || null
-  const endArrow = style.get('endArrow') || null
-  const endFill = style.get('endFill')
-  const startArrow = style.get('startArrow') || null
-  const startFill = style.get('startFill')
+  const strokeColor = hexOrNull(style.get("strokeColor"))
+  const strokeWidth = numberOrNull(style.get("strokeWidth"))
+  const dashed = style.get("dashed") === "1"
+  const dashPattern = style.get("dashPattern") || null
+  const endArrow = style.get("endArrow") || null
+  const endFill = style.get("endFill")
+  const startArrow = style.get("startArrow") || null
+  const startFill = style.get("startFill")
 
-  const numericFields = [
-    'exitX', 'exitY', 'exitDx', 'exitDy',
-    'entryX', 'entryY', 'entryDx', 'entryDy'
-  ]
+  const numericFields = ["exitX", "exitY", "exitDx", "exitDy", "entryX", "entryY", "entryDx", "entryDy"]
 
   const overrides = {}
   if (strokeColor) overrides.strokeColor = strokeColor
@@ -243,9 +238,9 @@ function extractEdgeStyleOverrides(style) {
   if (dashed) overrides.dashed = true
   if (dashPattern) overrides.dashPattern = dashPattern
   if (endArrow) overrides.endArrow = endArrow
-  if (endFill != null) overrides.endFill = endFill === '1'
+  if (endFill != null) overrides.endFill = endFill === "1"
   if (startArrow) overrides.startArrow = startArrow
-  if (startFill != null) overrides.startFill = startFill === '1'
+  if (startFill != null) overrides.startFill = startFill === "1"
 
   for (const field of numericFields) {
     const value = numberOrNull(style.get(field))
@@ -256,14 +251,14 @@ function extractEdgeStyleOverrides(style) {
 }
 
 function makeSpecId(prefix, raw) {
-  const cleaned = String(raw || '')
+  const cleaned = String(raw || "")
     .trim()
-    .replace(/[^A-Za-z0-9_-]+/g, '_')
-  return `${prefix}${cleaned || '0'}`
+    .replace(/[^A-Za-z0-9_-]+/g, "_")
+  return `${prefix}${cleaned || "0"}`
 }
 
 function inferLayout(nodes) {
-  if (!Array.isArray(nodes) || nodes.length < 2) return 'horizontal'
+  if (!Array.isArray(nodes) || nodes.length < 2) return "horizontal"
   let minX = Number.POSITIVE_INFINITY
   let maxX = Number.NEGATIVE_INFINITY
   let minY = Number.POSITIVE_INFINITY
@@ -275,10 +270,10 @@ function inferLayout(nodes) {
     minY = Math.min(minY, node.position.y)
     maxY = Math.max(maxY, node.position.y)
   }
-  if (!Number.isFinite(minX) || !Number.isFinite(minY)) return 'horizontal'
+  if (!Number.isFinite(minX) || !Number.isFinite(minY)) return "horizontal"
   const spanX = maxX - minX
   const spanY = maxY - minY
-  return spanX >= spanY ? 'horizontal' : 'vertical'
+  return spanX >= spanY ? "horizontal" : "vertical"
 }
 
 /**
@@ -287,8 +282,8 @@ function inferLayout(nodes) {
  * @param {{ theme?: string, page?: string|number, title?: string }} options
  */
 export function drawioToSpec(drawioFileText, options = {}) {
-  if (typeof drawioFileText !== 'string' || drawioFileText.trim() === '') {
-    throw new Error('drawioToSpec: input must be a non-empty string')
+  if (typeof drawioFileText !== "string" || drawioFileText.trim() === "") {
+    throw new Error("drawioToSpec: input must be a non-empty string")
   }
 
   const diagrams = extractDiagrams(drawioFileText)
@@ -301,8 +296,8 @@ export function drawioToSpec(drawioFileText, options = {}) {
     if (cell.id) cellMap.set(cell.id, cell)
   }
 
-  const vertices = cells.filter(c => c.vertex && c.id !== '0' && c.id !== '1')
-  const edges = cells.filter(c => c.edge)
+  const vertices = cells.filter((c) => c.vertex && c.id !== "0" && c.id !== "1")
+  const edges = cells.filter((c) => c.edge)
 
   const verticesByParent = new Map()
   for (const v of vertices) {
@@ -313,13 +308,13 @@ export function drawioToSpec(drawioFileText, options = {}) {
 
   const isEdgeLabelCell = (cell) => {
     const style = parseStyle(cell.style)
-    return style.has('edgeLabel') || style.get('edgeLabel') === '1'
+    return style.has("edgeLabel") || style.get("edgeLabel") === "1"
   }
 
   const moduleCells = new Set()
   for (const v of vertices) {
     const children = verticesByParent.get(v.id)
-    if (children && children.some(child => child.vertex && !isEdgeLabelCell(child))) {
+    if (children && children.some((child) => child.vertex && !isEdgeLabelCell(child))) {
       moduleCells.add(v)
     }
   }
@@ -327,14 +322,14 @@ export function drawioToSpec(drawioFileText, options = {}) {
   const modules = []
   const moduleIdByCellId = new Map()
   for (const modCell of moduleCells) {
-    const id = makeSpecId('m', modCell.id)
+    const id = makeSpecId("m", modCell.id)
     moduleIdByCellId.set(modCell.id, id)
 
     const label = labelFromCellValue(modCell.value) || id
     const style = parseStyle(modCell.style)
-    const fillColor = hexOrNull(style.get('fillColor'))
-    const dashed = style.get('dashed') === '1'
-    const dashPattern = style.get('dashPattern') || undefined
+    const fillColor = hexOrNull(style.get("fillColor"))
+    const dashed = style.get("dashed") === "1"
+    const dashPattern = style.get("dashPattern") || undefined
 
     const module = { id, label }
     if (fillColor) module.color = fillColor
@@ -379,7 +374,7 @@ export function drawioToSpec(drawioFileText, options = {}) {
     if (isEdgeLabelCell(v)) continue
     if (!v.id) continue
 
-    const id = makeSpecId('n', v.id)
+    const id = makeSpecId("n", v.id)
     nodeIdByCellId.set(v.id, id)
 
     const label = labelFromCellValue(v.value) || id
@@ -391,7 +386,7 @@ export function drawioToSpec(drawioFileText, options = {}) {
     const node = {
       id,
       label,
-      type: inferredType
+      type: inferredType,
     }
 
     if (icon) node.icon = icon
@@ -418,7 +413,7 @@ export function drawioToSpec(drawioFileText, options = {}) {
     if (label) {
       edgeLabelsByParent.set(v.parent, {
         label,
-        labelX: v.geometry?.labelX
+        labelX: v.geometry?.labelX,
       })
     }
   }
@@ -439,7 +434,7 @@ export function drawioToSpec(drawioFileText, options = {}) {
     const edge = {
       from,
       to,
-      type: edgeType
+      type: edgeType,
     }
 
     if (label) edge.label = label
@@ -448,22 +443,22 @@ export function drawioToSpec(drawioFileText, options = {}) {
 
     const labelX = imported?.labelX != null ? Number(imported.labelX) : null
     if (labelX != null && Number.isFinite(labelX)) {
-      if (labelX <= 0.35) edge.labelPosition = 'start'
-      else if (labelX >= 0.65) edge.labelPosition = 'end'
-      else edge.labelPosition = 'center'
+      if (labelX <= 0.35) edge.labelPosition = "start"
+      else if (labelX >= 0.65) edge.labelPosition = "end"
+      else edge.labelPosition = "center"
     }
 
     specEdges.push(edge)
   }
 
-  const theme = options.theme || 'tech-blue'
-  const profile = theme.startsWith('academic') ? 'academic-paper' : undefined
+  const theme = options.theme || "tech-blue"
+  const profile = theme.startsWith("academic") ? "academic-paper" : undefined
   const title = options.title || selected.name || undefined
 
   const meta = {
     theme,
     layout: inferLayout(nodes),
-    source: 'edited'
+    source: "edited",
   }
   if (profile) meta.profile = profile
   if (title) meta.title = title
@@ -472,7 +467,6 @@ export function drawioToSpec(drawioFileText, options = {}) {
     meta,
     modules,
     nodes,
-    edges: specEdges
+    edges: specEdges,
   }
 }
-

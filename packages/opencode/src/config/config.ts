@@ -394,8 +394,8 @@ export const layer = Layer.effect(
         mergeDeep(yield* loadFile(path.join(Global.Path.config, "opencode.jsonc"))),
       )
 
-          return result
-        })
+      return result
+    })
 
     const [cachedGlobal, invalidateGlobal] = yield* Effect.cachedInvalidateWithTTL(
       loadGlobal().pipe(

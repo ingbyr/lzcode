@@ -1,6 +1,6 @@
 ---
 name: java-springboot
-description: 'Get best practices for developing applications with Spring Boot.'
+description: "Get best practices for developing applications with Spring Boot."
 ---
 
 # Spring Boot Best Practices

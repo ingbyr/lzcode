@@ -630,8 +630,7 @@ export const dict = {
   "workspace.black.waitlist.title": "Liste d'attente",
   "workspace.black.waitlist.joined":
     "Vous êtes sur la liste d'attente pour le forfait LzCode Black à {{plan}} $ par mois.",
-  "workspace.black.waitlist.ready":
-    "Nous sommes prêts à vous inscrire au forfait LzCode Black à {{plan}} $ par mois.",
+  "workspace.black.waitlist.ready": "Nous sommes prêts à vous inscrire au forfait LzCode Black à {{plan}} $ par mois.",
   "workspace.black.waitlist.leave": "Quitter la liste d'attente",
   "workspace.black.waitlist.leaving": "Sortie...",
   "workspace.black.waitlist.left": "Quitté",

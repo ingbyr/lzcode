@@ -10,7 +10,7 @@ import semver from "semver"
 import {
   InstallationChannel,
   InstallationVersion,
-  LZ_BASE_OPENCODE_VERSION
+  LZ_BASE_OPENCODE_VERSION,
 } from "@opencode-ai/core/installation/version"
 
 const log = Log.create({ service: "installation" })
@@ -23,15 +23,15 @@ export const Event = {
   Updated: BusEvent.define(
     "installation.updated",
     Schema.Struct({
-      version: Schema.String
-    })
+      version: Schema.String,
+    }),
   ),
   UpdateAvailable: BusEvent.define(
     "installation.update-available",
     Schema.Struct({
       version: Schema.String,
-    })
-  )
+    }),
+  ),
 }
 
 export function getReleaseType(current: string, latest: string): ReleaseType {
@@ -48,15 +48,14 @@ export function getReleaseType(current: string, latest: string): ReleaseType {
 export const Info = z
   .object({
     version: z.string(),
-    latest: z.string()
+    latest: z.string(),
   })
   .meta({
-    ref: "InstallationInfo"
+    ref: "InstallationInfo",
   })
 export type Info = z.infer<typeof Info>
 
 export const USER_AGENT = `opencode/${InstallationChannel}/${InstallationVersion}/${Flag.OPENCODE_CLIENT}`
-
 
 export function isPreview() {
   return InstallationChannel !== "latest"
@@ -67,9 +66,8 @@ export function isLocal() {
 }
 
 export class UpgradeFailedError extends Schema.TaggedErrorClass<UpgradeFailedError>()("UpgradeFailedError", {
-  stderr: Schema.String
-}) {
-}
+  stderr: Schema.String,
+}) {}
 
 // Response schema for lzcode release API
 const LzRelease = Schema.Struct({ version: Schema.String, pub_date: Schema.String })
@@ -83,8 +81,7 @@ export interface Interface {
   readonly upgrade: (method: Method, target: string) => Effect.Effect<void, UpgradeFailedError>
 }
 
-export class Service extends Context.Service<Service, Interface>()("@opencode/Installation") {
-}
+export class Service extends Context.Service<Service, Interface>()("@opencode/Installation") {}
 
 export const layer: Layer.Layer<Service, never, HttpClient.HttpClient> = Layer.effect(
   Service,
@@ -119,14 +116,14 @@ export const layer: Layer.Layer<Service, never, HttpClient.HttpClient> = Layer.e
       info: Effect.fn("Installation.info")(function* () {
         return {
           version: LZ_BASE_OPENCODE_VERSION,
-          latest: yield* latestImpl()
+          latest: yield* latestImpl(),
         }
       }),
       method: methodImpl,
       latest: latestImpl,
-      upgrade: upgradeImpl
+      upgrade: upgradeImpl,
     })
-  })
+  }),
 )
 
 export const defaultLayer = layer.pipe(Layer.provide(FetchHttpClient.layer))

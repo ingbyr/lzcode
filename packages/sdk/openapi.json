@@ -7167,7 +7167,7 @@
           }
         ],
         "summary": "Dispose instance",
-        "description": "Clean up and dispose the current LzCode instance, releasing all resources.",
+        "description": "Clean up and dispose the current OpenCode instance, releasing all resources.",
         "responses": {
           "200": {
             "description": "Instance disposed",
@@ -7208,7 +7208,7 @@
           }
         ],
         "summary": "Get paths",
-        "description": "Retrieve the current working directory and related path information for the LzCode instance.",
+        "description": "Retrieve the current working directory and related path information for the OpenCode instance.",
         "responses": {
           "200": {
             "description": "Path",
@@ -7343,7 +7343,7 @@
           }
         ],
         "summary": "List commands",
-        "description": "Get a list of all available commands in the LzCode system.",
+        "description": "Get a list of all available commands in the OpenCode system.",
         "responses": {
           "200": {
             "description": "List of commands",
@@ -7387,7 +7387,7 @@
           }
         ],
         "summary": "List agents",
-        "description": "Get a list of all available AI agents in the LzCode system.",
+        "description": "Get a list of all available AI agents in the OpenCode system.",
         "responses": {
           "200": {
             "description": "List of agents",
@@ -7431,7 +7431,7 @@
           }
         ],
         "summary": "List skills",
-        "description": "Get a list of all available skills in the LzCode system.",
+        "description": "Get a list of all available skills in the OpenCode system.",
         "responses": {
           "200": {
             "description": "List of skills",

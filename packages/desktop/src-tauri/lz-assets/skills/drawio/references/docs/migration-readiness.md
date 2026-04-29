@@ -27,11 +27,11 @@ These are optional enhancements only:
 
 ## 2. Capability gaps across providers
 
-| Provider | Good at | Missing |
-|----------|---------|---------|
-| Current next-ai live MCP | Real edit sessions, read-back, patching, export | Shape search, inline chat preview |
-| Official Tool Server | Browser handoff from XML/CSV/Mermaid | Read-back, patching, export, inline preview, shape search |
-| Official App Server | Inline preview and official shape search | Read-back, patching, export |
+| Provider                 | Good at                                         | Missing                                                   |
+| ------------------------ | ----------------------------------------------- | --------------------------------------------------------- |
+| Current next-ai live MCP | Real edit sessions, read-back, patching, export | Shape search, inline chat preview                         |
+| Official Tool Server     | Browser handoff from XML/CSV/Mermaid            | Read-back, patching, export, inline preview, shape search |
+| Official App Server      | Inline preview and official shape search        | Read-back, patching, export                               |
 
 ## 3. What does that mean today?
 
