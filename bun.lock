@@ -193,7 +193,7 @@
     },
     "packages/core": {
       "name": "@opencode-ai/core",
-      "version": "1.14.29",
+      "version": "1.14.2901",
       "bin": {
         "opencode": "./bin/opencode",
       },
