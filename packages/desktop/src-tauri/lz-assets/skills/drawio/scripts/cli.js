@@ -4,25 +4,22 @@
  * Usage: node cli.js input.yaml [output.drawio|output.svg] [--theme name] [--strict] [--validate]
  */
 
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
-import { tmpdir } from 'node:os'
-import { extname, join, resolve } from 'node:path'
-import { parseSpecYaml, specToDrawioXml, validateSpec, validateXml } from './dsl/spec-to-drawio.js'
-import { parseMermaidToSpec, parseCsvToSpec } from './adapters/index.js'
-import { drawioToSpec } from './dsl/drawio-to-spec.js'
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs"
+import { tmpdir } from "node:os"
+import { extname, join, resolve } from "node:path"
+import { parseSpecYaml, specToDrawioXml, validateSpec, validateXml } from "./dsl/spec-to-drawio.js"
+import { parseMermaidToSpec, parseCsvToSpec } from "./adapters/index.js"
+import { drawioToSpec } from "./dsl/drawio-to-spec.js"
 import {
   buildArchMetadata,
   createDrawioFileContent,
   deriveArtifactPaths,
-  serializeSpecYaml
-} from './runtime/artifacts.js'
-import {
-  exportWithDrawioDesktop,
-  isDesktopExportFormat
-} from './runtime/desktop.js'
+  serializeSpecYaml,
+} from "./runtime/artifacts.js"
+import { exportWithDrawioDesktop, isDesktopExportFormat } from "./runtime/desktop.js"
 
 /** draw.io format compatibility version */
-const DRAWIO_COMPAT_VERSION = '21.0.0'
+const DRAWIO_COMPAT_VERSION = "21.0.0"
 
 // ---------------------------------------------------------------------------
 // Argument parsing
@@ -30,8 +27,9 @@ const DRAWIO_COMPAT_VERSION = '21.0.0'
 
 const args = process.argv.slice(2)
 
-if (args.length === 0 || args.includes('--help') || args.includes('-h')) {
-  console.log(`
+if (args.length === 0 || args.includes("--help") || args.includes("-h")) {
+  console.log(
+    `
 draw.io YAML → XML/SVG Converter
 
 Usage:
@@ -58,17 +56,18 @@ Options:
   --write-sidecars    Emit canonical .spec.yaml and .arch.json next to the output
   --use-desktop       Prefer draw.io Desktop CLI for SVG export; required for PNG/PDF/JPG
   --help, -h          Show this help message
-`.trim())
+`.trim(),
+  )
   process.exit(0)
 }
 
 // Extract positional arguments (non-flag args, excluding values of --flags)
-const flagsWithValues = new Set(['--theme', '--input-format', '--page'])
+const flagsWithValues = new Set(["--theme", "--input-format", "--page"])
 const positional = []
 for (let i = 0; i < args.length; i++) {
   if (flagsWithValues.has(args[i])) {
     i++ // skip the flag value
-  } else if (!args[i].startsWith('--')) {
+  } else if (!args[i].startsWith("--")) {
     positional.push(args[i])
   }
 }
@@ -76,16 +75,16 @@ const inputFile = positional[0]
 const outputFile = positional[1] || null
 
 // Extract flags
-const themeIndex = args.indexOf('--theme')
+const themeIndex = args.indexOf("--theme")
 const themeName = themeIndex !== -1 ? args[themeIndex + 1] : null
-const inputFormatIndex = args.indexOf('--input-format')
-const inputFormat = inputFormatIndex !== -1 ? args[inputFormatIndex + 1] : 'yaml'
-const strict = args.includes('--strict') || args.includes('--strict-warnings')
-const doValidate = args.includes('--validate')
-const writeSidecars = args.includes('--write-sidecars')
-const useDesktop = args.includes('--use-desktop')
-const exportSpec = args.includes('--export-spec')
-const pageIndex = args.indexOf('--page')
+const inputFormatIndex = args.indexOf("--input-format")
+const inputFormat = inputFormatIndex !== -1 ? args[inputFormatIndex + 1] : "yaml"
+const strict = args.includes("--strict") || args.includes("--strict-warnings")
+const doValidate = args.includes("--validate")
+const writeSidecars = args.includes("--write-sidecars")
+const useDesktop = args.includes("--use-desktop")
+const exportSpec = args.includes("--export-spec")
+const pageIndex = args.indexOf("--page")
 const pageSelector = pageIndex !== -1 ? args[pageIndex + 1] : null
 
 // ---------------------------------------------------------------------------
@@ -94,7 +93,7 @@ const pageSelector = pageIndex !== -1 ? args[pageIndex + 1] : null
 
 let drawioToSvg = null
 try {
-  const svgModule = await import('./svg/drawio-to-svg.js')
+  const svgModule = await import("./svg/drawio-to-svg.js")
   drawioToSvg = svgModule.drawioToSvg
 } catch {
   // SVG export not available
@@ -105,16 +104,16 @@ try {
 // ---------------------------------------------------------------------------
 
 let inputText
-if (inputFile === '-' || (!inputFile && !process.stdin.isTTY)) {
+if (inputFile === "-" || (!inputFile && !process.stdin.isTTY)) {
   const chunks = []
   for await (const chunk of process.stdin) chunks.push(chunk)
-  inputText = Buffer.concat(chunks).toString('utf-8')
+  inputText = Buffer.concat(chunks).toString("utf-8")
 } else if (!inputFile) {
-  console.error('Error: input file is required. Use - for stdin.')
+  console.error("Error: input file is required. Use - for stdin.")
   process.exit(1)
 } else {
   try {
-    inputText = readFileSync(resolve(inputFile), 'utf-8')
+    inputText = readFileSync(resolve(inputFile), "utf-8")
   } catch (err) {
     console.error(`Error: Could not read input file "${inputFile}": ${err.message}`)
     process.exit(1)
@@ -123,13 +122,13 @@ if (inputFile === '-' || (!inputFile && !process.stdin.isTTY)) {
 
 let spec
 try {
-  if (inputFormat === 'yaml') {
+  if (inputFormat === "yaml") {
     spec = parseSpecYaml(inputText)
-  } else if (inputFormat === 'mermaid') {
-    spec = parseMermaidToSpec(inputText, { profile: themeName?.startsWith('academic') ? 'academic-paper' : 'default' })
-  } else if (inputFormat === 'csv') {
-    spec = parseCsvToSpec(inputText, { profile: themeName?.startsWith('academic') ? 'academic-paper' : 'default' })
-  } else if (inputFormat === 'drawio') {
+  } else if (inputFormat === "mermaid") {
+    spec = parseMermaidToSpec(inputText, { profile: themeName?.startsWith("academic") ? "academic-paper" : "default" })
+  } else if (inputFormat === "csv") {
+    spec = parseCsvToSpec(inputText, { profile: themeName?.startsWith("academic") ? "academic-paper" : "default" })
+  } else if (inputFormat === "drawio") {
     spec = drawioToSpec(inputText, { theme: themeName || undefined, page: pageSelector })
   } else {
     throw new Error(`Unsupported input format "${inputFormat}"`)
@@ -159,12 +158,12 @@ try {
   } else if (doValidate) {
     const result = specToDrawioXml(spec, { strict, returnWarnings: true, silent: true })
     xml = result.xml
-    const problems = (result.warnings || []).filter(w => w.level && w.level !== 'fatal')
+    const problems = (result.warnings || []).filter((w) => w.level && w.level !== "fatal")
     if (problems.length === 0) {
-      console.error('Spec validation: PASSED (no warnings)')
+      console.error("Spec validation: PASSED (no warnings)")
     } else {
       console.error(`Spec validation: WARNINGS (${problems.length})`)
-      problems.forEach(w => console.error(`  • [${w.level}] ${w.message}`))
+      problems.forEach((w) => console.error(`  • [${w.level}] ${w.message}`))
     }
   } else {
     xml = specToDrawioXml(spec, { strict })
@@ -181,9 +180,9 @@ try {
 if (doValidate && !exportSpec) {
   const result = validateXml(xml)
   if (result.valid) {
-    console.error('XML validation: PASSED (no errors)')
+    console.error("XML validation: PASSED (no errors)")
   } else {
-    console.error('XML validation: FAILED')
+    console.error("XML validation: FAILED")
     for (const e of result.errors) {
       console.error(`  - ${e}`)
     }
@@ -191,8 +190,13 @@ if (doValidate && !exportSpec) {
   }
 }
 
-if (!exportSpec && spec.meta?.profile === 'academic-paper' && outputFile && extname(outputFile).toLowerCase() !== '.svg') {
-  console.error('Validation: academic-paper profile recommends SVG export for paper-ready vector output.')
+if (
+  !exportSpec &&
+  spec.meta?.profile === "academic-paper" &&
+  outputFile &&
+  extname(outputFile).toLowerCase() !== ".svg"
+) {
+  console.error("Validation: academic-paper profile recommends SVG export for paper-ready vector output.")
 }
 
 // ---------------------------------------------------------------------------
@@ -202,18 +206,18 @@ if (!exportSpec && spec.meta?.profile === 'academic-paper' && outputFile && extn
 if (exportSpec) {
   const yamlOut = serializeSpecYaml(spec)
   let specPath = outputFile
-  if (!specPath && inputFormat === 'drawio' && inputFile && inputFile !== '-') {
+  if (!specPath && inputFormat === "drawio" && inputFile && inputFile !== "-") {
     specPath = deriveArtifactPaths(inputFile).specPath
   }
 
   if (!specPath) {
     process.stdout.write(yamlOut)
-    if (!yamlOut.endsWith('\n')) process.stdout.write('\n')
+    if (!yamlOut.endsWith("\n")) process.stdout.write("\n")
     process.exit(0)
   }
 
   try {
-    writeFileSync(resolve(specPath), yamlOut, 'utf-8')
+    writeFileSync(resolve(specPath), yamlOut, "utf-8")
     console.error(`Saved spec: ${specPath}`)
   } catch (err) {
     console.error(`Error: Could not write spec file "${specPath}": ${err.message}`)
@@ -221,23 +225,21 @@ if (exportSpec) {
   }
 
   if (writeSidecars) {
-    const normalized = specPath.replace(/\\/g, '/')
+    const normalized = specPath.replace(/\\/g, "/")
     let archPath = null
     if (/\.spec\.ya?ml$/i.test(normalized)) {
-      archPath = normalized.replace(/\.spec\.ya?ml$/i, '.arch.json')
+      archPath = normalized.replace(/\.spec\.ya?ml$/i, ".arch.json")
     } else if (/\.ya?ml$/i.test(normalized)) {
-      archPath = normalized.replace(/\.ya?ml$/i, '.arch.json')
+      archPath = normalized.replace(/\.ya?ml$/i, ".arch.json")
     }
 
     if (archPath) {
-      const drawioPath = /\.arch\.json$/i.test(archPath)
-        ? archPath.replace(/\.arch\.json$/i, '.drawio')
-        : null
+      const drawioPath = /\.arch\.json$/i.test(archPath) ? archPath.replace(/\.arch\.json$/i, ".drawio") : null
       try {
         writeFileSync(
           resolve(archPath),
-          JSON.stringify(buildArchMetadata(spec, { outputFile: drawioPath || specPath }), null, 2) + '\n',
-          'utf-8'
+          JSON.stringify(buildArchMetadata(spec, { outputFile: drawioPath || specPath }), null, 2) + "\n",
+          "utf-8",
         )
         console.error(`Saved arch: ${archPath}`)
       } catch (err) {
@@ -252,25 +254,25 @@ if (exportSpec) {
 
 if (!outputFile) {
   process.stdout.write(xml)
-  process.stdout.write('\n')
+  process.stdout.write("\n")
   process.exit(0)
 }
 
 const ext = extname(outputFile).toLowerCase()
 const drawioContent = createDrawioFileContent(xml, { version: DRAWIO_COMPAT_VERSION })
 const artifactPaths = deriveArtifactPaths(outputFile)
-const needsDesktopExport = isDesktopExportFormat(ext.slice(1)) && (ext !== '.svg' || useDesktop)
+const needsDesktopExport = isDesktopExportFormat(ext.slice(1)) && (ext !== ".svg" || useDesktop)
 let tempDir = null
 let desktopInputPath = null
 
 function writeCanonicalSidecars() {
   if (!writeSidecars) return
 
-  writeFileSync(resolve(artifactPaths.specPath), serializeSpecYaml(spec), 'utf-8')
+  writeFileSync(resolve(artifactPaths.specPath), serializeSpecYaml(spec), "utf-8")
   writeFileSync(
     resolve(artifactPaths.archPath),
-    JSON.stringify(buildArchMetadata(spec, { outputFile }), null, 2) + '\n',
-    'utf-8'
+    JSON.stringify(buildArchMetadata(spec, { outputFile }), null, 2) + "\n",
+    "utf-8",
   )
 }
 
@@ -279,21 +281,21 @@ function ensureDesktopInput() {
 
   if (writeSidecars) {
     desktopInputPath = resolve(artifactPaths.drawioPath)
-    writeFileSync(desktopInputPath, drawioContent, 'utf-8')
+    writeFileSync(desktopInputPath, drawioContent, "utf-8")
     return desktopInputPath
   }
 
-  tempDir = mkdtempSync(join(tmpdir(), 'drawio-skill-'))
-  desktopInputPath = resolve(tempDir, 'export-input.drawio')
-  writeFileSync(desktopInputPath, drawioContent, 'utf-8')
+  tempDir = mkdtempSync(join(tmpdir(), "drawio-skill-"))
+  desktopInputPath = resolve(tempDir, "export-input.drawio")
+  writeFileSync(desktopInputPath, drawioContent, "utf-8")
   return desktopInputPath
 }
 
 let exitCode = 0
 
 try {
-  if (ext === '.drawio') {
-    writeFileSync(resolve(outputFile), drawioContent, 'utf-8')
+  if (ext === ".drawio") {
+    writeFileSync(resolve(outputFile), drawioContent, "utf-8")
     writeCanonicalSidecars()
     console.error(`Saved: ${outputFile}`)
   } else if (needsDesktopExport) {
@@ -301,7 +303,7 @@ try {
       exportWithDrawioDesktop({
         inputFile: ensureDesktopInput(),
         outputFile: resolve(outputFile),
-        format: ext.slice(1)
+        format: ext.slice(1),
       })
       writeCanonicalSidecars()
       console.error(`Saved: ${outputFile}`)
@@ -309,9 +311,9 @@ try {
       console.error(`Error: ${err.message}`)
       exitCode = 1
     }
-  } else if (ext === '.svg') {
+  } else if (ext === ".svg") {
     if (!drawioToSvg) {
-      console.error('Error: SVG export is not available (drawio-to-svg module not found).')
+      console.error("Error: SVG export is not available (drawio-to-svg module not found).")
       exitCode = 1
     } else {
       let svg
@@ -324,9 +326,9 @@ try {
 
       if (exitCode === 0) {
         try {
-          writeFileSync(resolve(outputFile), svg, 'utf-8')
+          writeFileSync(resolve(outputFile), svg, "utf-8")
           if (writeSidecars) {
-            writeFileSync(resolve(artifactPaths.drawioPath), drawioContent, 'utf-8')
+            writeFileSync(resolve(artifactPaths.drawioPath), drawioContent, "utf-8")
           }
           writeCanonicalSidecars()
           console.error(`Saved SVG: ${outputFile}`)
@@ -338,8 +340,7 @@ try {
     }
   } else {
     console.error(
-      `Error: Unsupported output extension "${ext || '(none)'}". ` +
-      'Use .drawio, .svg, .png, .pdf, or .jpg/.jpeg.'
+      `Error: Unsupported output extension "${ext || "(none)"}". ` + "Use .drawio, .svg, .png, .pdf, or .jpg/.jpeg.",
     )
     exitCode = 1
   }

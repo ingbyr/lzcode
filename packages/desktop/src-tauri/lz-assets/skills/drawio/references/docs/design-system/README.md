@@ -8,22 +8,22 @@ A unified design system providing consistent visual language for AI-generated dr
 
 ```yaml
 meta:
-  theme: tech-blue    # Select theme
-  layout: horizontal  # Layout direction
+  theme: tech-blue # Select theme
+  layout: horizontal # Layout direction
 
 nodes:
   - id: api
     label: API Gateway
-    type: service     # Auto-selects rounded rectangle
+    type: service # Auto-selects rounded rectangle
 
   - id: db
     label: User Database
-    type: database    # Auto-selects cylinder
+    type: database # Auto-selects cylinder
 
 edges:
   - from: api
     to: db
-    type: data        # Dashed line with arrow
+    type: data # Dashed line with arrow
     label: Query
 ```
 
@@ -35,43 +35,43 @@ edges:
 
 Use profiles to choose the validation posture:
 
-| Profile | Best For |
-|---------|----------|
-| `default` | Standard diagrams |
-| `academic-paper` | IEEE figures, thesis diagrams, paper-ready exports |
-| `engineering-review` | Dense architecture and network diagrams |
+| Profile              | Best For                                           |
+| -------------------- | -------------------------------------------------- |
+| `default`            | Standard diagrams                                  |
+| `academic-paper`     | IEEE figures, thesis diagrams, paper-ready exports |
+| `engineering-review` | Dense architecture and network diagrams            |
 
 ### 8px Grid System
 
 All positions, sizes, and spacing are multiples of 8px for professional alignment.
 
-| Spacing | Value | Usage |
-|---------|-------|-------|
-| Node margin | 32px | Minimum space between nodes |
-| Container padding | 24px | Space inside modules |
-| Canvas padding | 32px | Edge to content |
+| Spacing           | Value | Usage                       |
+| ----------------- | ----- | --------------------------- |
+| Node margin       | 32px  | Minimum space between nodes |
+| Container padding | 24px  | Space inside modules        |
+| Canvas padding    | 32px  | Edge to content             |
 
 ### Themes
 
 6 built-in themes for different use cases:
 
-| Theme | Use Case |
-|-------|----------|
-| **Tech Blue** | Software architecture, DevOps |
-| **Academic** | IEEE papers, grayscale print |
-| **Nature** | Environmental, lifecycle |
-| **Dark Mode** | Presentations, slides |
+| Theme              | Use Case                                        |
+| ------------------ | ----------------------------------------------- |
+| **Tech Blue**      | Software architecture, DevOps                   |
+| **Academic**       | IEEE papers, grayscale print                    |
+| **Nature**         | Environmental, lifecycle                        |
+| **Dark Mode**      | Presentations, slides                           |
 | **Academic Color** | Academic papers, research (color print/digital) |
-| **High Contrast** | WCAG AA accessible, maximum readability |
+| **High Contrast**  | WCAG AA accessible, maximum readability         |
 
 ### Replication Color Modes
 
 When redrawing from an uploaded image, keep theme selection and color extraction separate:
 
-| Mode | Default? | Behavior |
-|------|----------|----------|
-| `preserve-original` | Yes | Keep the source background and dominant palette, writing explicit style overrides for high-confidence colors. |
-| `theme-first` | No | Use the selected theme as the primary palette and only keep source colors as hints/reference metadata. |
+| Mode                | Default? | Behavior                                                                                                      |
+| ------------------- | -------- | ------------------------------------------------------------------------------------------------------------- |
+| `preserve-original` | Yes      | Keep the source background and dominant palette, writing explicit style overrides for high-confidence colors. |
+| `theme-first`       | No       | Use the selected theme as the primary palette and only keep source colors as hints/reference metadata.        |
 
 Replicated specs should usually include `meta.source: replicated` and a `meta.replication` block so later edits can tell which colors came from the image and which colors are theme fallbacks.
 
@@ -79,40 +79,40 @@ Replicated specs should usually include `meta.source: replicated` and a `meta.re
 
 Automatic shape selection based on node type:
 
-| Type | Shape |
-|------|-------|
-| `service` | Rounded rectangle |
-| `database` | Cylinder |
-| `decision` | Diamond |
-| `terminal` | Stadium/Pill |
-| `queue` | Parallelogram |
-| `user` | Ellipse |
-| `document` | Document |
-| `formula` | Rectangle |
+| Type       | Shape             |
+| ---------- | ----------------- |
+| `service`  | Rounded rectangle |
+| `database` | Cylinder          |
+| `decision` | Diamond           |
+| `terminal` | Stadium/Pill      |
+| `queue`    | Parallelogram     |
+| `user`     | Ellipse           |
+| `document` | Document          |
+| `formula`  | Rectangle         |
 
 ### Typed Connectors
 
 Visual hierarchy through connector semantics:
 
-| Type | Style | Usage |
-|------|-------|-------|
-| `primary` | Solid 2px | Main flow |
-| `data` | Dashed 2px | Data/async |
+| Type       | Style      | Usage         |
+| ---------- | ---------- | ------------- |
+| `primary`  | Solid 2px  | Main flow     |
+| `data`     | Dashed 2px | Data/async    |
 | `optional` | Dotted 1px | Weak relation |
 
 ---
 
 ## Documentation
 
-| Topic | Description |
-|-------|-------------|
-| [tokens.md](tokens.md) | Color, spacing, typography tokens |
-| [themes.md](themes.md) | Built-in themes & customization |
-| [shapes.md](shapes.md) | Semantic shape vocabulary |
-| [connectors.md](connectors.md) | Connector types & routing |
-| [icons.md](icons.md) | Cloud provider & DevOps icons |
-| [formulas.md](formulas.md) | LaTeX/MathJax integration |
-| [specification.md](specification.md) | YAML specification format |
+| Topic                                | Description                       |
+| ------------------------------------ | --------------------------------- |
+| [tokens.md](tokens.md)               | Color, spacing, typography tokens |
+| [themes.md](themes.md)               | Built-in themes & customization   |
+| [shapes.md](shapes.md)               | Semantic shape vocabulary         |
+| [connectors.md](connectors.md)       | Connector types & routing         |
+| [icons.md](icons.md)                 | Cloud provider & DevOps icons     |
+| [formulas.md](formulas.md)           | LaTeX/MathJax integration         |
+| [specification.md](specification.md) | YAML specification format         |
 
 ---
 
@@ -136,18 +136,18 @@ nodes:
     label: Web App
     type: service
     module: frontend
-    
+
   - id: api
     label: API Gateway
     type: service
     module: backend
     icon: aws.api-gateway
-    
+
   - id: users
     label: User Service
     type: service
     module: backend
-    
+
   - id: db
     label: PostgreSQL
     type: database
@@ -157,11 +157,11 @@ edges:
   - from: web
     to: api
     type: primary
-    
+
   - from: api
     to: users
     type: primary
-    
+
   - from: users
     to: db
     type: data
@@ -185,8 +185,8 @@ edges:
 
 The legacy A-H format is replaced by YAML specification. See [specification.md](specification.md) for migration guide.
 
-| Before (A-H) | After (YAML) |
-|--------------|--------------|
+| Before (A-H)       | After (YAML)      |
+| ------------------ | ----------------- |
 | Free-text sections | Structured fields |
-| Implicit styling | Explicit themes |
-| No validation | JSON Schema |
+| Implicit styling   | Explicit themes   |
+| No validation      | JSON Schema       |

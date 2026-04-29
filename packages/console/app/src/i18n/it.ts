@@ -374,8 +374,7 @@ export const dict = {
     "La promozione gratuita di {{model}} è terminata. Puoi continuare a usare il modello abbonandoti a OpenCode Go - {{link}}",
 
   "black.meta.title": "LzCode Black | Accedi ai migliori modelli di coding al mondo",
-  "black.meta.description":
-    "Ottieni l'accesso a Claude, GPT, Gemini e altri con i piani di abbonamento LzCode Black.",
+  "black.meta.description": "Ottieni l'accesso a Claude, GPT, Gemini e altri con i piani di abbonamento LzCode Black.",
   "black.hero.title": "Accedi ai migliori modelli di coding al mondo",
   "black.hero.subtitle": "Inclusi Claude, GPT, Gemini e altri",
   "black.title": "LzCode Black | Prezzi",

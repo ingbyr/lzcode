@@ -4,36 +4,36 @@
  */
 
 const SUPPORTED_MERMAID_TYPES = new Set([
-  'flowchart',
-  'graph',
-  'sequencediagram',
-  'classdiagram',
-  'statediagram-v2',
-  'statediagram',
-  'erdiagram',
-  'gantt'
+  "flowchart",
+  "graph",
+  "sequencediagram",
+  "classdiagram",
+  "statediagram-v2",
+  "statediagram",
+  "erdiagram",
+  "gantt",
 ])
 
-function normalizeId(raw, fallback = 'node') {
+function normalizeId(raw, fallback = "node") {
   const cleaned = String(raw || fallback)
     .trim()
-    .replace(/^[^A-Za-z]+/, '')
-    .replace(/[^A-Za-z0-9_-]+/g, '_')
+    .replace(/^[^A-Za-z]+/, "")
+    .replace(/[^A-Za-z0-9_-]+/g, "_")
   return cleaned || fallback
 }
 
 function inferNodeType(label, explicitType = null) {
   if (explicitType) return explicitType
-  const lower = String(label || '').toLowerCase()
-  if (!lower) return 'service'
-  if (lower.includes('start') || lower.includes('end')) return 'terminal'
-  if (lower.includes('db') || lower.includes('database') || lower.includes('table')) return 'database'
-  if (lower.includes('decision') || lower.includes('approve') || lower.includes('reject')) return 'decision'
-  if (lower.includes('user') || lower.includes('actor') || lower.includes('client')) return 'user'
-  if (lower.includes('doc') || lower.includes('report') || lower.includes('paper')) return 'document'
-  if (lower.includes('queue') || lower.includes('buffer') || lower.includes('stream')) return 'queue'
-  if (lower.includes('cloud') || lower.includes('internet')) return 'cloud'
-  return 'service'
+  const lower = String(label || "").toLowerCase()
+  if (!lower) return "service"
+  if (lower.includes("start") || lower.includes("end")) return "terminal"
+  if (lower.includes("db") || lower.includes("database") || lower.includes("table")) return "database"
+  if (lower.includes("decision") || lower.includes("approve") || lower.includes("reject")) return "decision"
+  if (lower.includes("user") || lower.includes("actor") || lower.includes("client")) return "user"
+  if (lower.includes("doc") || lower.includes("report") || lower.includes("paper")) return "document"
+  if (lower.includes("queue") || lower.includes("buffer") || lower.includes("stream")) return "queue"
+  if (lower.includes("cloud") || lower.includes("internet")) return "cloud"
+  return "service"
 }
 
 function parseMermaidNodeToken(token) {
@@ -48,15 +48,15 @@ function parseMermaidNodeToken(token) {
   const id = normalizeId(rawId)
   const label = decoration
     ? decoration
-      .replace(/^[\[\(\{>:"]+/, '')
-      .replace(/[\]\)\}"]+$/, '')
-      .trim()
+        .replace(/^[\[\(\{>:"]+/, "")
+        .replace(/[\]\)\}"]+$/, "")
+        .trim()
     : rawId
 
   let type = inferNodeType(label)
-  if (decoration?.startsWith('{')) type = 'decision'
-  if (decoration?.startsWith('(')) type = 'terminal'
-  if (decoration?.startsWith('[')) type = inferNodeType(label)
+  if (decoration?.startsWith("{")) type = "decision"
+  if (decoration?.startsWith("(")) type = "terminal"
+  if (decoration?.startsWith("[")) type = inferNodeType(label)
   return { id, label, type }
 }
 
@@ -71,7 +71,7 @@ function pushNode(nodeMap, nodes, node) {
   if (current.label === current.id && node.label && node.label !== node.id) {
     current.label = node.label
   }
-  if (current.type === 'service' && node.type && node.type !== 'service') {
+  if (current.type === "service" && node.type && node.type !== "service") {
     current.type = node.type
   }
   if (!current.module && node.module) {
@@ -85,43 +85,43 @@ function pushNode(nodeMap, nodes, node) {
  * engine matches them before shorter prefixes.
  */
 const ARROW_TYPE_MAP = [
-  { pattern: '-.->',  type: 'data' },
-  { pattern: '===>',  type: 'primary' },
-  { pattern: '==>',   type: 'primary' },
-  { pattern: '-->>',  type: 'primary' },
-  { pattern: '->>',   type: 'primary' },
-  { pattern: '--x',   type: 'optional' },
-  { pattern: '-->',   type: 'primary' },
-  { pattern: '---',   type: 'bidirectional' },
-  { pattern: '->',    type: 'primary' },
+  { pattern: "-.->", type: "data" },
+  { pattern: "===>", type: "primary" },
+  { pattern: "==>", type: "primary" },
+  { pattern: "-->>", type: "primary" },
+  { pattern: "->>", type: "primary" },
+  { pattern: "--x", type: "optional" },
+  { pattern: "-->", type: "primary" },
+  { pattern: "---", type: "bidirectional" },
+  { pattern: "->", type: "primary" },
 ]
 
 function escapeRegex(s) {
-  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
 }
 
-const ARROW_SPLIT_RE = new RegExp(
-  ARROW_TYPE_MAP.map(a => escapeRegex(a.pattern)).join('|'),
-  'g'
-)
+const ARROW_SPLIT_RE = new RegExp(ARROW_TYPE_MAP.map((a) => escapeRegex(a.pattern)).join("|"), "g")
 
 function splitMermaidArrow(line) {
-  const cleaned = line.replace(/\|[^|]+\|/g, ' ')
+  const cleaned = line.replace(/\|[^|]+\|/g, " ")
 
   // Collect arrows in order of appearance
   const arrows = []
   let m
-  const re = new RegExp(ARROW_SPLIT_RE.source, 'g')
+  const re = new RegExp(ARROW_SPLIT_RE.source, "g")
   while ((m = re.exec(cleaned)) !== null) {
-    const mapped = ARROW_TYPE_MAP.find(a => a.pattern === m[0])
-    arrows.push(mapped ? mapped.type : 'primary')
+    const mapped = ARROW_TYPE_MAP.find((a) => a.pattern === m[0])
+    arrows.push(mapped ? mapped.type : "primary")
   }
 
-  const parts = cleaned.split(ARROW_SPLIT_RE).map(part => part.trim()).filter(Boolean)
+  const parts = cleaned
+    .split(ARROW_SPLIT_RE)
+    .map((part) => part.trim())
+    .filter(Boolean)
   return { parts, arrows }
 }
 
-function parseFlowchart(text, profile = 'default') {
+function parseFlowchart(text, profile = "default") {
   const nodes = []
   const edges = []
   const nodeMap = new Map()
@@ -131,7 +131,7 @@ function parseFlowchart(text, profile = 'default') {
 
   for (const rawLine of text.split(/\r?\n/)) {
     const line = rawLine.trim()
-    if (!line || line.startsWith('%%') || /^(graph|flowchart)\b/i.test(line)) {
+    if (!line || line.startsWith("%%") || /^(graph|flowchart)\b/i.test(line)) {
       continue
     }
 
@@ -156,7 +156,7 @@ function parseFlowchart(text, profile = 'default') {
       continue
     }
 
-    if (!line.includes('-')) continue
+    if (!line.includes("-")) continue
 
     const { parts, arrows } = splitMermaidArrow(line)
     if (parts.length < 2) continue
@@ -172,20 +172,20 @@ function parseFlowchart(text, profile = 'default') {
       }
       pushNode(nodeMap, nodes, source)
       pushNode(nodeMap, nodes, target)
-      const connectorType = arrows[i] || 'primary'
+      const connectorType = arrows[i] || "primary"
       edges.push({ from: source.id, to: target.id, type: connectorType })
     }
   }
 
   return {
-    meta: { layout: 'horizontal', profile },
+    meta: { layout: "horizontal", profile },
     nodes,
     edges,
-    modules
+    modules,
   }
 }
 
-function parseSequenceDiagram(text, profile = 'default') {
+function parseSequenceDiagram(text, profile = "default") {
   const nodes = []
   const edges = []
   const nodeMap = new Map()
@@ -194,64 +194,67 @@ function parseSequenceDiagram(text, profile = 'default') {
     const line = rawLine.trim()
     if (!line || /^sequencediagram$/i.test(line)) continue
     if (/^participant\s+/i.test(line)) {
-      const label = line.replace(/^participant\s+/i, '').trim()
+      const label = line.replace(/^participant\s+/i, "").trim()
       const id = normalizeId(label)
-      pushNode(nodeMap, nodes, { id, label, type: 'user' })
+      pushNode(nodeMap, nodes, { id, label, type: "user" })
       continue
     }
 
     const message = line.match(/^([A-Za-z0-9_]+)\s*[-.]*>>?\s*([A-Za-z0-9_]+)\s*:\s*(.+)$/)
     if (!message) continue
     const [, rawFrom, rawTo, label] = message
-    const from = { id: normalizeId(rawFrom), label: rawFrom, type: 'user' }
-    const to = { id: normalizeId(rawTo), label: rawTo, type: 'user' }
+    const from = { id: normalizeId(rawFrom), label: rawFrom, type: "user" }
+    const to = { id: normalizeId(rawTo), label: rawTo, type: "user" }
     pushNode(nodeMap, nodes, from)
     pushNode(nodeMap, nodes, to)
-    edges.push({ from: from.id, to: to.id, type: 'primary', label: label.trim() })
+    edges.push({ from: from.id, to: to.id, type: "primary", label: label.trim() })
   }
 
   return {
-    meta: { layout: 'horizontal', profile },
+    meta: { layout: "horizontal", profile },
     nodes,
     edges,
-    modules: []
+    modules: [],
   }
 }
 
-function parseClassDiagram(text, profile = 'default') {
+function parseClassDiagram(text, profile = "default") {
   const nodes = []
   const edges = []
   const nodeMap = new Map()
 
   for (const rawLine of text.split(/\r?\n/)) {
     const line = rawLine.trim()
-    if (!line || /^classdiagram$/i.test(line) || line === '}') continue
+    if (!line || /^classdiagram$/i.test(line) || line === "}") continue
     if (/^class\s+/i.test(line)) {
-      const name = line.replace(/^class\s+/i, '').replace(/\s*\{.*/, '').trim()
+      const name = line
+        .replace(/^class\s+/i, "")
+        .replace(/\s*\{.*/, "")
+        .trim()
       const id = normalizeId(name)
-      pushNode(nodeMap, nodes, { id, label: name, type: 'service' })
+      pushNode(nodeMap, nodes, { id, label: name, type: "service" })
       continue
     }
 
     const rel = line.match(/^([A-Za-z0-9_]+)\s+([<|o*.\-]+--[<|o*.\-]+|<\|--|--\|>)\s+([A-Za-z0-9_]+)(?:\s*:\s*(.+))?$/)
     if (!rel) continue
     const [, rawFrom, , rawTo, label] = rel
-    const from = { id: normalizeId(rawFrom), label: rawFrom, type: 'service' }
-    const to = { id: normalizeId(rawTo), label: rawTo, type: 'service' }
+    const from = { id: normalizeId(rawFrom), label: rawFrom, type: "service" }
+    const to = { id: normalizeId(rawTo), label: rawTo, type: "service" }
     pushNode(nodeMap, nodes, from)
     pushNode(nodeMap, nodes, to)
-    edges.push({ from: from.id, to: to.id, type: 'dependency', label: label?.trim() })
+    edges.push({ from: from.id, to: to.id, type: "dependency", label: label?.trim() })
   }
 
   return {
-    meta: { layout: 'horizontal', profile },
+    meta: { layout: "horizontal", profile },
     nodes,
     edges,
-    modules: []
+    modules: [],
   }
 }
 
-function parseStateDiagram(text, profile = 'default') {
+function parseStateDiagram(text, profile = "default") {
   const nodes = []
   const edges = []
   const nodeMap = new Map()
@@ -262,55 +265,56 @@ function parseStateDiagram(text, profile = 'default') {
     const rel = line.match(/^(.+?)\s*-->\s*(.+?)(?:\s*:\s*(.+))?$/)
     if (!rel) continue
     const [, rawFrom, rawTo, label] = rel
-    const fromToken = rawFrom === '[*]' ? { id: 'Start', label: 'Start', type: 'terminal' } : parseMermaidNodeToken(rawFrom)
-    const toToken = rawTo === '[*]' ? { id: 'End', label: 'End', type: 'terminal' } : parseMermaidNodeToken(rawTo)
+    const fromToken =
+      rawFrom === "[*]" ? { id: "Start", label: "Start", type: "terminal" } : parseMermaidNodeToken(rawFrom)
+    const toToken = rawTo === "[*]" ? { id: "End", label: "End", type: "terminal" } : parseMermaidNodeToken(rawTo)
     pushNode(nodeMap, nodes, fromToken)
     pushNode(nodeMap, nodes, toToken)
-    edges.push({ from: fromToken.id, to: toToken.id, type: 'primary', label: label?.trim() })
+    edges.push({ from: fromToken.id, to: toToken.id, type: "primary", label: label?.trim() })
   }
 
   return {
-    meta: { layout: 'vertical', profile },
+    meta: { layout: "vertical", profile },
     nodes,
     edges,
-    modules: []
+    modules: [],
   }
 }
 
-function parseErDiagram(text, profile = 'default') {
+function parseErDiagram(text, profile = "default") {
   const nodes = []
   const edges = []
   const nodeMap = new Map()
 
   for (const rawLine of text.split(/\r?\n/)) {
     const line = rawLine.trim()
-    if (!line || /^erdiagram$/i.test(line) || line === '}') continue
+    if (!line || /^erdiagram$/i.test(line) || line === "}") continue
     if (/^[A-Z0-9_]+\s*\{$/.test(line)) {
-      const entity = line.replace('{', '').trim()
+      const entity = line.replace("{", "").trim()
       const id = normalizeId(entity)
-      pushNode(nodeMap, nodes, { id, label: entity, type: 'database' })
+      pushNode(nodeMap, nodes, { id, label: entity, type: "database" })
       continue
     }
 
     const rel = line.match(/^([A-Z0-9_]+)\s+.+\s+([A-Z0-9_]+)\s*:\s*(.+)$/)
     if (!rel) continue
     const [, rawFrom, rawTo, label] = rel
-    const from = { id: normalizeId(rawFrom), label: rawFrom, type: 'database' }
-    const to = { id: normalizeId(rawTo), label: rawTo, type: 'database' }
+    const from = { id: normalizeId(rawFrom), label: rawFrom, type: "database" }
+    const to = { id: normalizeId(rawTo), label: rawTo, type: "database" }
     pushNode(nodeMap, nodes, from)
     pushNode(nodeMap, nodes, to)
-    edges.push({ from: from.id, to: to.id, type: 'dependency', label: label.trim() })
+    edges.push({ from: from.id, to: to.id, type: "dependency", label: label.trim() })
   }
 
   return {
-    meta: { layout: 'horizontal', profile },
+    meta: { layout: "horizontal", profile },
     nodes,
     edges,
-    modules: []
+    modules: [],
   }
 }
 
-function parseGantt(text, profile = 'default') {
+function parseGantt(text, profile = "default") {
   const nodes = []
   const edges = []
   let section = null
@@ -320,37 +324,37 @@ function parseGantt(text, profile = 'default') {
     const line = rawLine.trim()
     if (!line || /^gantt$/i.test(line) || /^title\s+/i.test(line) || /^dateFormat\s+/i.test(line)) continue
     if (/^section\s+/i.test(line)) {
-      section = line.replace(/^section\s+/i, '').trim()
+      section = line.replace(/^section\s+/i, "").trim()
       prevTaskId = null
       continue
     }
 
-    const taskName = line.split(':')[0]?.trim()
+    const taskName = line.split(":")[0]?.trim()
     if (!taskName) continue
     const id = normalizeId(taskName)
-    nodes.push({ id, label: section ? `${section}: ${taskName}` : taskName, type: 'process' })
+    nodes.push({ id, label: section ? `${section}: ${taskName}` : taskName, type: "process" })
     if (prevTaskId) {
-      edges.push({ from: prevTaskId, to: id, type: 'primary' })
+      edges.push({ from: prevTaskId, to: id, type: "primary" })
     }
     prevTaskId = id
   }
 
   return {
-    meta: { layout: 'vertical', profile },
+    meta: { layout: "vertical", profile },
     nodes,
     edges,
-    modules: []
+    modules: [],
   }
 }
 
-export function parseMermaidToSpec(text, { profile = 'default' } = {}) {
+export function parseMermaidToSpec(text, { profile = "default" } = {}) {
   const firstLine = text
     .split(/\r?\n/)
-    .map(line => line.trim())
+    .map((line) => line.trim())
     .find(Boolean)
 
   if (!firstLine) {
-    throw new Error('Mermaid input is empty')
+    throw new Error("Mermaid input is empty")
   }
 
   const type = firstLine.toLowerCase()
@@ -358,19 +362,19 @@ export function parseMermaidToSpec(text, { profile = 'default' } = {}) {
     throw new Error(`Unsupported Mermaid diagram type "${firstLine}"`)
   }
 
-  if (type.startsWith('flowchart') || type.startsWith('graph')) return parseFlowchart(text, profile)
-  if (type.startsWith('sequencediagram')) return parseSequenceDiagram(text, profile)
-  if (type.startsWith('classdiagram')) return parseClassDiagram(text, profile)
-  if (type.startsWith('statediagram')) return parseStateDiagram(text, profile)
-  if (type.startsWith('erdiagram')) return parseErDiagram(text, profile)
-  if (type.startsWith('gantt')) return parseGantt(text, profile)
+  if (type.startsWith("flowchart") || type.startsWith("graph")) return parseFlowchart(text, profile)
+  if (type.startsWith("sequencediagram")) return parseSequenceDiagram(text, profile)
+  if (type.startsWith("classdiagram")) return parseClassDiagram(text, profile)
+  if (type.startsWith("statediagram")) return parseStateDiagram(text, profile)
+  if (type.startsWith("erdiagram")) return parseErDiagram(text, profile)
+  if (type.startsWith("gantt")) return parseGantt(text, profile)
 
   throw new Error(`Unsupported Mermaid diagram type "${firstLine}"`)
 }
 
 function splitCsvLine(line) {
   const cells = []
-  let current = ''
+  let current = ""
   let inQuotes = false
 
   for (let i = 0; i < line.length; i++) {
@@ -384,9 +388,9 @@ function splitCsvLine(line) {
       }
       continue
     }
-    if (ch === ',' && !inQuotes) {
+    if (ch === "," && !inQuotes) {
       cells.push(current.trim())
-      current = ''
+      current = ""
       continue
     }
     current += ch
@@ -395,26 +399,26 @@ function splitCsvLine(line) {
   return cells
 }
 
-export function parseCsvToSpec(text, { profile = 'default' } = {}) {
+export function parseCsvToSpec(text, { profile = "default" } = {}) {
   const rows = text
     .split(/\r?\n/)
-    .map(line => line.trim())
-    .filter(line => line && !line.startsWith('#'))
+    .map((line) => line.trim())
+    .filter((line) => line && !line.startsWith("#"))
 
   if (rows.length < 2) {
-    throw new Error('CSV input must include a header row and at least one data row')
+    throw new Error("CSV input must include a header row and at least one data row")
   }
 
-  const headers = splitCsvLine(rows[0]).map(cell => cell.trim())
-  if (!headers.includes('name') || !headers.includes('parent')) {
+  const headers = splitCsvLine(rows[0]).map((cell) => cell.trim())
+  if (!headers.includes("name") || !headers.includes("parent")) {
     throw new Error('CSV input must include "name" and "parent" columns')
   }
 
-  const nameIndex = headers.indexOf('name')
-  const parentIndex = headers.indexOf('parent')
-  const labelIndex = headers.indexOf('label')
-  const typeIndex = headers.indexOf('type')
-  const moduleIndex = headers.indexOf('module')
+  const nameIndex = headers.indexOf("name")
+  const parentIndex = headers.indexOf("parent")
+  const labelIndex = headers.indexOf("label")
+  const typeIndex = headers.indexOf("type")
+  const moduleIndex = headers.indexOf("module")
 
   const nodes = []
   const edges = []
@@ -429,7 +433,7 @@ export function parseCsvToSpec(text, { profile = 'default' } = {}) {
       id: normalizeId(rawName),
       label,
       type: inferNodeType(label, values[typeIndex]),
-      module: values[moduleIndex] || undefined
+      module: values[moduleIndex] || undefined,
     }
     pushNode(nodeMap, nodes, node)
 
@@ -438,20 +442,20 @@ export function parseCsvToSpec(text, { profile = 'default' } = {}) {
       edges.push({
         from: normalizeId(rawParent),
         to: node.id,
-        type: 'primary'
+        type: "primary",
       })
       pushNode(nodeMap, nodes, {
         id: normalizeId(rawParent),
         label: rawParent,
-        type: 'service'
+        type: "service",
       })
     }
   }
 
   return {
-    meta: { layout: 'vertical', profile },
+    meta: { layout: "vertical", profile },
     nodes,
     edges,
-    modules: []
+    modules: [],
   }
 }

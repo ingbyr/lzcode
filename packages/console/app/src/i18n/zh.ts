@@ -420,8 +420,7 @@ export const dict = {
   "workspace.newUser.feature.quality.title": "最高质量",
   "workspace.newUser.feature.quality.body": "访问配置为最佳性能的模型 - 无需降级或路由到更便宜的提供商。",
   "workspace.newUser.feature.lockin.title": "无锁定",
-  "workspace.newUser.feature.lockin.body":
-    "将 Zen 与任何编程代理结合使用，并在需要时继续在 LzCode 中使用其他提供商。",
+  "workspace.newUser.feature.lockin.body": "将 Zen 与任何编程代理结合使用，并在需要时继续在 LzCode 中使用其他提供商。",
   "workspace.newUser.copyApiKey": "复制 API 密钥",
   "workspace.newUser.copyKey": "复制密钥",
   "workspace.newUser.copied": "已复制！",
@@ -625,8 +624,7 @@ export const dict = {
   "workspace.lite.subscription.monthlyUsage": "每月用量",
   "workspace.lite.subscription.resetsIn": "重置于",
   "workspace.lite.subscription.useBalance": "达到使用限额后使用您的可用余额",
-  "workspace.lite.subscription.selectProvider":
-    "在你的 opencode 配置中选择「LzCode Go」作为提供商，即可使用 Go 模型。",
+  "workspace.lite.subscription.selectProvider": "在你的 opencode 配置中选择「LzCode Go」作为提供商，即可使用 Go 模型。",
   "workspace.lite.black.message": "您当前已订阅 LzCode Black 或在候补名单中。如需切换到 Go，请先取消订阅。",
   "workspace.lite.other.message": "此工作区中的另一位成员已经订阅了 LzCode Go。每个工作区只有一名成员可以订阅。",
   "workspace.lite.promo.description":

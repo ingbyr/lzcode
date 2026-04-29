@@ -72,39 +72,39 @@ Step 8: Validate (Optional)
 
 ### Theme Selection by Domain
 
-| Domain | Recommended Theme | Reason |
-|--------|-------------------|--------|
-| 软件架构 (Software Architecture) | tech-blue | Professional technical style |
-| 商业流程 (Business Process) | tech-blue | Clean corporate look |
-| 科研流程 (Research Workflow) | academic | IEEE-compatible, grayscale-safe |
-| 工业流程 (Industrial Process) | tech-blue | Clear technical diagrams |
-| 项目管理 (Project Management) | tech-blue | Standard project visuals |
-| 教学设计 (Teaching Design) | nature | Friendly, accessible colors |
+| Domain                           | Recommended Theme | Reason                          |
+| -------------------------------- | ----------------- | ------------------------------- |
+| 软件架构 (Software Architecture) | tech-blue         | Professional technical style    |
+| 商业流程 (Business Process)      | tech-blue         | Clean corporate look            |
+| 科研流程 (Research Workflow)     | academic          | IEEE-compatible, grayscale-safe |
+| 工业流程 (Industrial Process)    | tech-blue         | Clear technical diagrams        |
+| 项目管理 (Project Management)    | tech-blue         | Standard project visuals        |
+| 教学设计 (Teaching Design)       | nature            | Friendly, accessible colors     |
 
 ### Semantic Shape Mapping
 
 During extraction, map visual elements to semantic types:
 
-| Visual Element | Semantic Type | Draw.io Shape |
-|----------------|---------------|---------------|
-| Rectangle/Box | `service` | Rounded rectangle |
-| Cylinder/Drum | `database` | Cylinder |
-| Diamond | `decision` | Rhombus |
-| Oval/Rounded rect | `terminal` | Stadium |
-| Parallelogram | `queue` | Parallelogram |
-| Person/Stick figure | `user` | Circle |
-| Document shape | `document` | Wave rect |
-| Math formula | `formula` | White rect with border |
+| Visual Element      | Semantic Type | Draw.io Shape          |
+| ------------------- | ------------- | ---------------------- |
+| Rectangle/Box       | `service`     | Rounded rectangle      |
+| Cylinder/Drum       | `database`    | Cylinder               |
+| Diamond             | `decision`    | Rhombus                |
+| Oval/Rounded rect   | `terminal`    | Stadium                |
+| Parallelogram       | `queue`       | Parallelogram          |
+| Person/Stick figure | `user`        | Circle                 |
+| Document shape      | `document`    | Wave rect              |
+| Math formula        | `formula`     | White rect with border |
 
 ### Connector Type Mapping
 
-| Visual Style | Connector Type | Output Style |
-|--------------|----------------|--------------|
-| Solid arrow | `primary` | Solid 2px, filled arrow |
-| Dashed arrow | `data` | Dashed 2px, filled arrow |
-| Dotted line | `optional` | Dotted 1px, open arrow |
-| Diamond end | `dependency` | Solid 1px, diamond |
-| Double-headed | `bidirectional` | Solid 1.5px, no arrow |
+| Visual Style  | Connector Type  | Output Style             |
+| ------------- | --------------- | ------------------------ |
+| Solid arrow   | `primary`       | Solid 2px, filled arrow  |
+| Dashed arrow  | `data`          | Dashed 2px, filled arrow |
+| Dotted line   | `optional`      | Dotted 1px, open arrow   |
+| Diamond end   | `dependency`    | Solid 1px, diamond       |
+| Double-headed | `bidirectional` | Solid 1.5px, no arrow    |
 
 ## Extraction Rules
 

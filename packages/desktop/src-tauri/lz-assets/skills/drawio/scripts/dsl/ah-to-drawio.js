@@ -1,13 +1,13 @@
-import { prepareMathLabel } from '../math/index.js'
-import { loadTheme } from './spec-to-drawio.js'
+import { prepareMathLabel } from "../math/index.js"
+import { loadTheme } from "./spec-to-drawio.js"
 
 function parseSections(text) {
-  if (typeof text !== 'string' || text.trim().length === 0) {
-    throw new TypeError('A–H spec must be a non-empty string')
+  if (typeof text !== "string" || text.trim().length === 0) {
+    throw new TypeError("A–H spec must be a non-empty string")
   }
 
-  const normalized = text.replace(/\r\n/g, '\n')
-  const lines = normalized.split('\n')
+  const normalized = text.replace(/\r\n/g, "\n")
+  const lines = normalized.split("\n")
 
   const sections = new Map()
   let currentKey = null
@@ -15,7 +15,7 @@ function parseSections(text) {
 
   const flush = () => {
     if (!currentKey) return
-    const value = buffer.join('\n').trim()
+    const value = buffer.join("\n").trim()
     sections.set(currentKey, value)
     buffer = []
   }
@@ -25,7 +25,7 @@ function parseSections(text) {
     if (m) {
       flush()
       currentKey = m[1]
-      buffer.push(line.replace(/^\s*[A-H]\s+/, ''))
+      buffer.push(line.replace(/^\s*[A-H]\s+/, ""))
       continue
     }
     if (currentKey) buffer.push(line)
@@ -36,28 +36,28 @@ function parseSections(text) {
 }
 
 function parseModules(sectionB) {
-  if (typeof sectionB !== 'string' || sectionB.trim().length === 0) return []
+  if (typeof sectionB !== "string" || sectionB.trim().length === 0) return []
 
   const modules = []
-  for (const rawLine of sectionB.split('\n')) {
+  for (const rawLine of sectionB.split("\n")) {
     const line = rawLine.trim()
     const m = /^(模块|Module)\s*(\d+)\s*[:：]\s*(.+)$/.exec(line)
     if (!m) continue
     modules.push({
       key: `${m[1]}${m[2]}`,
-      name: m[3].trim()
+      name: m[3].trim(),
     })
   }
   return modules
 }
 
 function parseNodes(sectionC) {
-  if (typeof sectionC !== 'string' || sectionC.trim().length === 0) {
-    throw new Error('Missing section C (nodes)')
+  if (typeof sectionC !== "string" || sectionC.trim().length === 0) {
+    throw new Error("Missing section C (nodes)")
   }
 
   const nodes = []
-  const lines = sectionC.split('\n')
+  const lines = sectionC.split("\n")
   let currentModuleKey = null
   let pendingModuleLine = null
 
@@ -77,7 +77,7 @@ function parseNodes(sectionC) {
     if (!idMatch) continue
 
     const id = idMatch[1]
-    const nextLine = (lines[i + 1] ?? '').trim()
+    const nextLine = (lines[i + 1] ?? "").trim()
     const labelMatch = /^Label\s*:\s*(.+)\s*$/i.exec(nextLine)
     if (!labelMatch) continue
 
@@ -86,7 +86,7 @@ function parseNodes(sectionC) {
       id,
       label,
       moduleKey: currentModuleKey,
-      moduleLine: pendingModuleLine
+      moduleLine: pendingModuleLine,
     })
 
     pendingModuleLine = null
@@ -94,17 +94,17 @@ function parseNodes(sectionC) {
   }
 
   if (nodes.length === 0) {
-    throw new Error('No nodes parsed from section C')
+    throw new Error("No nodes parsed from section C")
   }
 
   return nodes
 }
 
 function parseEdges(sectionD) {
-  if (typeof sectionD !== 'string' || sectionD.trim().length === 0) return []
+  if (typeof sectionD !== "string" || sectionD.trim().length === 0) return []
 
   const edges = []
-  for (const rawLine of sectionD.split('\n')) {
+  for (const rawLine of sectionD.split("\n")) {
     const line = rawLine.trim()
     if (line.length === 0) continue
 
@@ -113,7 +113,7 @@ function parseEdges(sectionD) {
 
     const source = m[1]
     const target = m[2]
-    const rest = m[3] ?? ''
+    const rest = m[3] ?? ""
 
     const isDashed = /虚线/.test(rest)
     // isT (T形线) was parsed here but never used in rendering — removed.
@@ -134,7 +134,7 @@ function buildXml({ modules, nodes, edges, page, theme }) {
     nodeWidth = 220,
     nodeHeight = 70,
     nodeGapY = 30,
-    containerPadding = 24
+    containerPadding = 24,
   } = page ?? {}
 
   // Derive style values from theme
@@ -144,37 +144,33 @@ function buildXml({ modules, nodes, edges, page, theme }) {
   const connectorData = theme.connector?.data ?? {}
   const gridSize = theme.canvas?.gridSize ?? 8
 
-  const nodeFill = nodeDefault.fillColor ?? '#dae8fc'
-  const nodeStroke = nodeDefault.strokeColor ?? '#6c8ebf'
-  const nodeFontColor = nodeDefault.fontColor ?? '#000000'
+  const nodeFill = nodeDefault.fillColor ?? "#dae8fc"
+  const nodeStroke = nodeDefault.strokeColor ?? "#6c8ebf"
+  const nodeFontColor = nodeDefault.fontColor ?? "#000000"
   const nodeFontSize = nodeDefault.fontSize ?? 14
 
-  const containerFill = moduleCfg.fillColor ?? '#f5f5f5'
-  const containerStroke = moduleCfg.strokeColor ?? '#999999'
-  const containerFontColor = moduleCfg.labelFontColor ?? '#333333'
+  const containerFill = moduleCfg.fillColor ?? "#f5f5f5"
+  const containerStroke = moduleCfg.strokeColor ?? "#999999"
+  const containerFontColor = moduleCfg.labelFontColor ?? "#333333"
   const containerFontSize = moduleCfg.labelFontSize ?? 12
 
-  const edgeStroke = connectorPrimary.strokeColor ?? '#333333'
+  const edgeStroke = connectorPrimary.strokeColor ?? "#333333"
   const edgeWidth = connectorPrimary.strokeWidth ?? 2
-  const dashedStroke = connectorData.strokeColor ?? '#333333'
+  const dashedStroke = connectorData.strokeColor ?? "#333333"
   const dashedWidth = connectorData.strokeWidth ?? 2
-  const dashedPattern = connectorData.dashPattern ?? '6 4'
+  const dashedPattern = connectorData.dashPattern ?? "6 4"
 
-  const containerStyle =
-    `rounded=0;html=1;whiteSpace=wrap;align=left;verticalAlign=top;fillColor=${containerFill};strokeColor=${containerStroke};fontSize=${containerFontSize};fontColor=${containerFontColor};spacingLeft=12;spacingRight=12;spacingTop=10;spacingBottom=10`
-  const nodeStyle =
-    `rounded=1;html=1;whiteSpace=wrap;align=left;verticalAlign=middle;fillColor=${nodeFill};strokeColor=${nodeStroke};fontSize=${nodeFontSize};fontColor=${nodeFontColor};spacingLeft=10;spacingRight=10;spacingTop=6;spacingBottom=6`
-  const edgeStyle =
-    `edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;endArrow=block;endFill=1;strokeColor=${edgeStroke};strokeWidth=${edgeWidth};html=1`
-  const dashedEdgeStyle =
-    `edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;endArrow=block;endFill=1;strokeColor=${dashedStroke};strokeWidth=${dashedWidth};dashed=1;dashPattern=${dashedPattern};html=1`
+  const containerStyle = `rounded=0;html=1;whiteSpace=wrap;align=left;verticalAlign=top;fillColor=${containerFill};strokeColor=${containerStroke};fontSize=${containerFontSize};fontColor=${containerFontColor};spacingLeft=12;spacingRight=12;spacingTop=10;spacingBottom=10`
+  const nodeStyle = `rounded=1;html=1;whiteSpace=wrap;align=left;verticalAlign=middle;fillColor=${nodeFill};strokeColor=${nodeStroke};fontSize=${nodeFontSize};fontColor=${nodeFontColor};spacingLeft=10;spacingRight=10;spacingTop=6;spacingBottom=6`
+  const edgeStyle = `edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;endArrow=block;endFill=1;strokeColor=${edgeStroke};strokeWidth=${edgeWidth};html=1`
+  const dashedEdgeStyle = `edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;endArrow=block;endFill=1;strokeColor=${dashedStroke};strokeWidth=${dashedWidth};dashed=1;dashPattern=${dashedPattern};html=1`
 
   const moduleOrder = new Map()
   for (let i = 0; i < modules.length; i++) moduleOrder.set(modules[i].key, i)
 
   const distinctModuleKeys = new Map()
   for (const node of nodes) {
-    const key = node.moduleKey ?? '模块1'
+    const key = node.moduleKey ?? "模块1"
     if (!distinctModuleKeys.has(key)) distinctModuleKeys.set(key, distinctModuleKeys.size)
   }
 
@@ -186,7 +182,7 @@ function buildXml({ modules, nodes, edges, page, theme }) {
 
   const moduleBuckets = new Map()
   for (const node of nodes) {
-    const k = node.moduleKey ?? '模块1'
+    const k = node.moduleKey ?? "模块1"
     if (!moduleBuckets.has(k)) moduleBuckets.set(k, [])
     moduleBuckets.get(k).push(node)
   }
@@ -218,7 +214,7 @@ function buildXml({ modules, nodes, edges, page, theme }) {
     const containerHeight = innerHeight + containerPadding * 2 + 40
 
     cells.push(
-      `<mxCell id="${containerId}" data-id="${containerLogicalId}" value="${prepareMathLabel(moduleName)}" style="${containerStyle}" vertex="1" parent="1"><mxGeometry x="${x0}" y="${y0}" width="${containerWidth}" height="${containerHeight}" as="geometry"/></mxCell>`
+      `<mxCell id="${containerId}" data-id="${containerLogicalId}" value="${prepareMathLabel(moduleName)}" style="${containerStyle}" vertex="1" parent="1"><mxGeometry x="${x0}" y="${y0}" width="${containerWidth}" height="${containerHeight}" as="geometry"/></mxCell>`,
     )
 
     for (let i = 0; i < bucket.length; i++) {
@@ -229,7 +225,7 @@ function buildXml({ modules, nodes, edges, page, theme }) {
       const cellId = allocId()
       logicalIdToCellId.set(n.id, cellId)
       cells.push(
-        `<mxCell id="${cellId}" data-id="${n.id}" value="${prepareMathLabel(n.label)}" style="${nodeStyle}" vertex="1" parent="${containerId}"><mxGeometry x="${nx - x0}" y="${ny - y0}" width="${nodeWidth}" height="${nodeHeight}" as="geometry"/></mxCell>`
+        `<mxCell id="${cellId}" data-id="${n.id}" value="${prepareMathLabel(n.label)}" style="${nodeStyle}" vertex="1" parent="${containerId}"><mxGeometry x="${nx - x0}" y="${ny - y0}" width="${nodeWidth}" height="${nodeHeight}" as="geometry"/></mxCell>`,
       )
     }
   }
@@ -243,7 +239,7 @@ function buildXml({ modules, nodes, edges, page, theme }) {
     const edgeId = allocId()
     const edgeLogicalId = `edge_${e.source}_${e.target}`
     cells.push(
-      `<mxCell id="${edgeId}" data-id="${edgeLogicalId}" style="${style}" edge="1" parent="1" source="${sourceId}" target="${targetId}"><mxGeometry relative="1" as="geometry"/></mxCell>`
+      `<mxCell id="${edgeId}" data-id="${edgeLogicalId}" style="${style}" edge="1" parent="1" source="${sourceId}" target="${targetId}"><mxGeometry relative="1" as="geometry"/></mxCell>`,
     )
   }
 
@@ -252,7 +248,7 @@ function buildXml({ modules, nodes, edges, page, theme }) {
     `<root>` +
     `<mxCell id="0"/>` +
     `<mxCell id="1" parent="0"/>` +
-    cells.join('') +
+    cells.join("") +
     `</root>` +
     `</mxGraphModel>`
 
@@ -261,11 +257,11 @@ function buildXml({ modules, nodes, edges, page, theme }) {
 
 export function ahToDrawioXml(ahText, options = {}) {
   const { page, theme: themeOverride, themeName } = options
-  const theme = themeOverride || loadTheme(themeName || 'tech-blue')
+  const theme = themeOverride || loadTheme(themeName || "tech-blue")
   const sections = parseSections(ahText)
-  const modules = parseModules(sections.B ?? '')
-  const nodes = parseNodes(sections.C ?? '')
-  const edges = parseEdges(sections.D ?? '')
+  const modules = parseModules(sections.B ?? "")
+  const nodes = parseNodes(sections.C ?? "")
+  const edges = parseEdges(sections.D ?? "")
   return buildXml({ modules, nodes, edges, page, theme })
 }
 
@@ -273,8 +269,8 @@ export function parseAh(text) {
   const sections = parseSections(text)
   return {
     sections,
-    modules: parseModules(sections.B ?? ''),
-    nodes: parseNodes(sections.C ?? ''),
-    edges: parseEdges(sections.D ?? '')
+    modules: parseModules(sections.B ?? ""),
+    nodes: parseNodes(sections.C ?? ""),
+    edges: parseEdges(sections.D ?? ""),
   }
 }

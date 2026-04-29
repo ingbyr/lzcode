@@ -4,9 +4,9 @@
  * Uses Node.js built-in test runner
  */
 
-import { describe, it } from 'node:test'
-import assert from 'node:assert'
-import { drawioToSvg } from './drawio-to-svg.js'
+import { describe, it } from "node:test"
+import assert from "node:assert"
+import { drawioToSvg } from "./drawio-to-svg.js"
 
 // ============================================================================
 // Test Fixtures
@@ -246,107 +246,101 @@ const EDGE_WITH_LABEL = `
 // Tests
 // ============================================================================
 
-describe('drawioToSvg', () => {
-  it('should convert basic 2-node 1-edge diagram to SVG', () => {
+describe("drawioToSvg", () => {
+  it("should convert basic 2-node 1-edge diagram to SVG", () => {
     const svg = drawioToSvg(BASIC_TWO_NODES_ONE_EDGE)
-    assert.ok(svg.startsWith('<svg'), 'Output should start with <svg')
-    assert.ok(svg.includes('</svg>'), 'Output should contain closing </svg>')
+    assert.ok(svg.startsWith("<svg"), "Output should start with <svg")
+    assert.ok(svg.includes("</svg>"), "Output should contain closing </svg>")
   })
 
-  it('should render service node as rounded rect', () => {
+  it("should render service node as rounded rect", () => {
     const svg = drawioToSvg(SERVICE_NODE)
-    assert.ok(svg.includes('<rect'), 'Service node should produce a <rect element')
-    assert.ok(svg.includes('rx='), 'Rounded rect should have rx attribute')
+    assert.ok(svg.includes("<rect"), "Service node should produce a <rect element")
+    assert.ok(svg.includes("rx="), "Rounded rect should have rx attribute")
   })
 
-  it('should render database shape as cylinder with ellipse', () => {
+  it("should render database shape as cylinder with ellipse", () => {
     const svg = drawioToSvg(DATABASE_NODE)
     assert.ok(
-      svg.includes('<ellipse') || svg.includes('<path'),
-      'Database/cylinder shape should contain <ellipse or <path'
+      svg.includes("<ellipse") || svg.includes("<path"),
+      "Database/cylinder shape should contain <ellipse or <path",
     )
   })
 
-  it('should render edges between nodes', () => {
+  it("should render edges between nodes", () => {
     const svg = drawioToSvg(BASIC_TWO_NODES_ONE_EDGE)
-    assert.ok(
-      svg.includes('<line') || svg.includes('<path'),
-      'Edge should produce a <line or <path element'
-    )
+    assert.ok(svg.includes("<line") || svg.includes("<path"), "Edge should produce a <line or <path element")
   })
 
-  it('should include arrow marker definition for endArrow=block', () => {
+  it("should include arrow marker definition for endArrow=block", () => {
     const svg = drawioToSvg(EDGE_WITH_BLOCK_ARROW)
-    assert.ok(svg.includes('<marker'), 'Output should contain <marker for arrow definition')
-    assert.ok(svg.includes('arrow-block'), 'Output should contain arrow-block marker id')
+    assert.ok(svg.includes("<marker"), "Output should contain <marker for arrow definition")
+    assert.ok(svg.includes("arrow-block"), "Output should contain arrow-block marker id")
   })
 
-  it('should render text label from node value', () => {
+  it("should render text label from node value", () => {
     const svg = drawioToSvg(NODE_WITH_LABEL)
-    assert.ok(svg.includes('>Hello<'), 'Output should contain the label text Hello')
+    assert.ok(svg.includes(">Hello<"), "Output should contain the label text Hello")
   })
 
-  it('should apply fill color from style', () => {
+  it("should apply fill color from style", () => {
     const svg = drawioToSvg(NODE_WITH_COLOR)
     assert.ok(
-      svg.includes('fill="#FF0000"') || svg.includes('fill: #FF0000'),
-      'Output should contain the fill color #FF0000'
+      svg.includes('fill="#FF0000"') || svg.includes("fill: #FF0000"),
+      "Output should contain the fill color #FF0000",
     )
   })
 
-  it('should embed original XML as data-drawio attribute', () => {
+  it("should embed original XML as data-drawio attribute", () => {
     const svg = drawioToSvg(SERVICE_NODE)
-    assert.ok(svg.includes('data-drawio='), 'Output should contain data-drawio attribute')
+    assert.ok(svg.includes("data-drawio="), "Output should contain data-drawio attribute")
   })
 
-  it('should throw on empty input', () => {
-    assert.throws(() => drawioToSvg(''), Error, 'Empty string should throw Error')
-    assert.throws(() => drawioToSvg('   '), Error, 'Whitespace-only string should throw Error')
+  it("should throw on empty input", () => {
+    assert.throws(() => drawioToSvg(""), Error, "Empty string should throw Error")
+    assert.throws(() => drawioToSvg("   "), Error, "Whitespace-only string should throw Error")
   })
 
-  it('should include marker-start when startArrow is specified', () => {
+  it("should include marker-start when startArrow is specified", () => {
     const svg = drawioToSvg(EDGE_WITH_START_ARROW)
-    assert.ok(
-      svg.includes('marker-start'),
-      'Output should contain marker-start attribute when startArrow is set'
-    )
+    assert.ok(svg.includes("marker-start"), "Output should contain marker-start attribute when startArrow is set")
   })
 
   // --- Multi-edge and arrow type tests ---
 
-  it('should render multi-edge diagram with 3+ edges', () => {
+  it("should render multi-edge diagram with 3+ edges", () => {
     const svg = drawioToSvg(MULTI_EDGE_TRIANGLE)
-    assert.ok(svg.startsWith('<svg'), 'Output should start with <svg')
+    assert.ok(svg.startsWith("<svg"), "Output should start with <svg")
     const edgeMatches = svg.match(/<(line|path)\b/g) || []
     assert.ok(edgeMatches.length >= 3, `Should have at least 3 edge elements, found ${edgeMatches.length}`)
   })
 
-  it('should render module/container and child node', () => {
+  it("should render module/container and child node", () => {
     const svg = drawioToSvg(MODULE_WITH_CHILD)
-    assert.ok(svg.includes('Module'), 'Output should contain module label')
-    assert.ok(svg.includes('Child Node'), 'Output should contain child node label')
+    assert.ok(svg.includes("Module"), "Output should contain module label")
+    assert.ok(svg.includes("Child Node"), "Output should contain child node label")
   })
 
-  it('should handle open arrow type', () => {
+  it("should handle open arrow type", () => {
     const svg = drawioToSvg(EDGE_WITH_OPEN_ARROW)
-    assert.ok(svg.includes('<marker'), 'Output should contain marker for arrow')
-    assert.ok(svg.includes('arrow-open'), 'Output should contain arrow-open marker id')
+    assert.ok(svg.includes("<marker"), "Output should contain marker for arrow")
+    assert.ok(svg.includes("arrow-open"), "Output should contain arrow-open marker id")
   })
 
-  it('should handle none arrow type (no marker-end)', () => {
+  it("should handle none arrow type (no marker-end)", () => {
     const svg = drawioToSvg(EDGE_WITH_NO_ARROW)
-    assert.ok(svg.startsWith('<svg'), 'Output should start with <svg')
-    assert.ok(!svg.includes('marker-end'), 'endArrow=none should not produce marker-end attribute')
+    assert.ok(svg.startsWith("<svg"), "Output should start with <svg")
+    assert.ok(!svg.includes("marker-end"), "endArrow=none should not produce marker-end attribute")
   })
 
-  it('should render edge label text', () => {
+  it("should render edge label text", () => {
     const svg = drawioToSvg(EDGE_WITH_LABEL)
-    assert.ok(svg.includes('>connects<'), 'Output should contain the edge label text')
+    assert.ok(svg.includes(">connects<"), "Output should contain the edge label text")
   })
 
   // --- Shape type rendering tests ---
 
-  it('should render rhombus shape as <polygon>', () => {
+  it("should render rhombus shape as <polygon>", () => {
     const xml = `
 <mxGraphModel>
   <root>
@@ -358,10 +352,10 @@ describe('drawioToSvg', () => {
   </root>
 </mxGraphModel>`
     const svg = drawioToSvg(xml)
-    assert.ok(svg.includes('<polygon'), 'Rhombus shape should render as <polygon>')
+    assert.ok(svg.includes("<polygon"), "Rhombus shape should render as <polygon>")
   })
 
-  it('should render ellipse shape as <ellipse>', () => {
+  it("should render ellipse shape as <ellipse>", () => {
     const xml = `
 <mxGraphModel>
   <root>
@@ -373,10 +367,10 @@ describe('drawioToSvg', () => {
   </root>
 </mxGraphModel>`
     const svg = drawioToSvg(xml)
-    assert.ok(svg.includes('<ellipse'), 'Ellipse shape should render as <ellipse>')
+    assert.ok(svg.includes("<ellipse"), "Ellipse shape should render as <ellipse>")
   })
 
-  it('should render roundedRect with rx attribute on <rect>', () => {
+  it("should render roundedRect with rx attribute on <rect>", () => {
     const xml = `
 <mxGraphModel>
   <root>
@@ -388,43 +382,43 @@ describe('drawioToSvg', () => {
   </root>
 </mxGraphModel>`
     const svg = drawioToSvg(xml)
-    assert.ok(svg.includes('<rect'), 'Rounded rect should render as <rect>')
-    assert.ok(svg.includes('rx='), 'Rounded rect should have rx attribute')
+    assert.ok(svg.includes("<rect"), "Rounded rect should render as <rect>")
+    assert.ok(svg.includes("rx="), "Rounded rect should have rx attribute")
   })
 
-  it('should render cylinder shape with <ellipse> elements', () => {
+  it("should render cylinder shape with <ellipse> elements", () => {
     const svg = drawioToSvg(DATABASE_NODE)
-    assert.ok(svg.includes('<ellipse'), 'Cylinder shape should contain <ellipse> for top/bottom caps')
+    assert.ok(svg.includes("<ellipse"), "Cylinder shape should contain <ellipse> for top/bottom caps")
   })
 
-  it('should render switch shapes without falling back to plain rectangles', () => {
+  it("should render switch shapes without falling back to plain rectangles", () => {
     const svg = drawioToSvg(SWITCH_NODE)
-    assert.ok(svg.includes('<path'), 'Switch shape should render as a path-based stencil')
+    assert.ok(svg.includes("<path"), "Switch shape should render as a path-based stencil")
   })
 
-  it('should render load balancer hexagons as polygons', () => {
+  it("should render load balancer hexagons as polygons", () => {
     const svg = drawioToSvg(LOAD_BALANCER_NODE)
-    assert.ok(svg.includes('<polygon'), 'Hexagon shape should render as <polygon>')
+    assert.ok(svg.includes("<polygon"), "Hexagon shape should render as <polygon>")
   })
 
-  it('should render firewall stencils as composed SVG shapes', () => {
+  it("should render firewall stencils as composed SVG shapes", () => {
     const svg = drawioToSvg(FIREWALL_NODE)
     const pathCount = (svg.match(/<path\b/g) || []).length
-    assert.ok(pathCount >= 2, 'Firewall shape should render multiple path elements')
+    assert.ok(pathCount >= 2, "Firewall shape should render multiple path elements")
   })
 
-  it('should render wireless access points with antenna arcs', () => {
+  it("should render wireless access points with antenna arcs", () => {
     const svg = drawioToSvg(AP_NODE)
-    assert.ok(svg.includes('<ellipse'), 'AP shape should include a base ellipse')
-    assert.ok(svg.includes('<path'), 'AP shape should include antenna arcs')
+    assert.ok(svg.includes("<ellipse"), "AP shape should include a base ellipse")
+    assert.ok(svg.includes("<path"), "AP shape should include antenna arcs")
   })
 
-  it('should render edge as <line> element', () => {
+  it("should render edge as <line> element", () => {
     const svg = drawioToSvg(EDGE_WITH_BLOCK_ARROW)
-    assert.ok(svg.includes('<line'), 'Edge should render as <line> element')
+    assert.ok(svg.includes("<line"), "Edge should render as <line> element")
   })
 
-  it('should render background color from graph attributes', () => {
+  it("should render background color from graph attributes", () => {
     const xml = `
 <mxGraphModel background="#E0F2FE">
   <root>
@@ -436,18 +430,15 @@ describe('drawioToSvg', () => {
   </root>
 </mxGraphModel>`
     const svg = drawioToSvg(xml)
-    assert.ok(
-      svg.includes('fill="#E0F2FE"'),
-      'Background color should render as <rect> with matching fill'
-    )
+    assert.ok(svg.includes('fill="#E0F2FE"'), "Background color should render as <rect> with matching fill")
   })
 
-  it('should throw Error on null input', () => {
-    assert.throws(() => drawioToSvg(null), Error, 'null input should throw Error')
+  it("should throw Error on null input", () => {
+    assert.throws(() => drawioToSvg(null), Error, "null input should throw Error")
   })
 
-  it('should throw Error on non-string input', () => {
-    assert.throws(() => drawioToSvg(42), Error, 'Number input should throw Error')
-    assert.throws(() => drawioToSvg(undefined), Error, 'undefined input should throw Error')
+  it("should throw Error on non-string input", () => {
+    assert.throws(() => drawioToSvg(42), Error, "Number input should throw Error")
+    assert.throws(() => drawioToSvg(undefined), Error, "undefined input should throw Error")
   })
 })

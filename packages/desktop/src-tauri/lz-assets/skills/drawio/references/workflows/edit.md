@@ -72,11 +72,11 @@ Step 7: Verify and Iterate
 
 When editing, preserve the current theme unless the user asks to switch it:
 
-| Edit Type | Theme Behavior |
-|-----------|----------------|
-| Add node | Uses current theme's node style |
-| Add edge | Uses current theme's connector style |
-| Modify style | Suggest theme-compatible colors |
+| Edit Type    | Theme Behavior                           |
+| ------------ | ---------------------------------------- |
+| Add node     | Uses current theme's node style          |
+| Add edge     | Uses current theme's connector style     |
+| Modify style | Suggest theme-compatible colors          |
 | Switch theme | Re-applies all styles from the new theme |
 
 ### Semantic Type Changes
@@ -94,16 +94,16 @@ For efficiency, batch multiple changes in one planning pass. If the active live 
 
 ## Preferred Operation Mapping
 
-| Operation | Preferred Path | Notes |
-|-----------|----------------|-------|
-| Update label | YAML sidecar (or import to sidecar) | Preserves style |
-| Update style | YAML sidecar (or import to sidecar) | Use theme tokens |
-| Change type | YAML sidecar (or import to sidecar) | Updates shape |
-| Add node | YAML sidecar | Apply semantic type |
-| Add edge | YAML sidecar | Apply connector type |
-| Delete | YAML sidecar (or import to sidecar) | Keeps bundle coherent |
-| Move | YAML sidecar (or import to sidecar) | Snap to 8px grid |
-| Switch theme | Regenerate from YAML | Re-apply all tokens |
+| Operation              | Preferred Path                           | Notes                                |
+| ---------------------- | ---------------------------------------- | ------------------------------------ |
+| Update label           | YAML sidecar (or import to sidecar)      | Preserves style                      |
+| Update style           | YAML sidecar (or import to sidecar)      | Use theme tokens                     |
+| Change type            | YAML sidecar (or import to sidecar)      | Updates shape                        |
+| Add node               | YAML sidecar                             | Apply semantic type                  |
+| Add edge               | YAML sidecar                             | Apply connector type                 |
+| Delete                 | YAML sidecar (or import to sidecar)      | Keeps bundle coherent                |
+| Move                   | YAML sidecar (or import to sidecar)      | Snap to 8px grid                     |
+| Switch theme           | Regenerate from YAML                     | Re-apply all tokens                  |
 | Live incremental patch | Live provider with required capabilities | Requires current XML read-back first |
 
 ## Examples

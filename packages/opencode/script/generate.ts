@@ -7,7 +7,8 @@ const dir = path.resolve(__dirname, "..")
 
 process.chdir(dir)
 
-const modelsUrl = process.env.OPENCODE_MODELS_URL || "https://gh-proxy.org/https://github.com/ingbyr/lzmodels/releases/latest/download"
+const modelsUrl =
+  process.env.OPENCODE_MODELS_URL || "https://gh-proxy.org/https://github.com/ingbyr/lzmodels/releases/latest/download"
 // Fetch and generate models.dev snapshot
 const modelsData = process.env.MODELS_DEV_API_JSON
   ? await Bun.file(process.env.MODELS_DEV_API_JSON).text()

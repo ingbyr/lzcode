@@ -14,16 +14,16 @@ The A-H format is an 8-section specification that transforms text or images into
 Input (Text/Image) → A-H Spec → Draw.io XML → Rendered Diagram
 ```
 
-| Section | Purpose |
-|---------|---------|
-| **A** | Layout: canvas ratio, flow direction |
-| **B** | Modules: 1-4 logical groupings |
-| **C** | Nodes: ID and label for each node |
-| **D** | Edges: connections with relation types |
-| **E** | Groupings: phases or timelines |
-| **F** | Methods: tools, metrics, techniques |
-| **G** | Visual: colors, icons, emphasis |
-| **H** | Export: format recommendations |
+| Section | Purpose                                |
+| ------- | -------------------------------------- |
+| **A**   | Layout: canvas ratio, flow direction   |
+| **B**   | Modules: 1-4 logical groupings         |
+| **C**   | Nodes: ID and label for each node      |
+| **D**   | Edges: connections with relation types |
+| **E**   | Groupings: phases or timelines         |
+| **F**   | Methods: tools, metrics, techniques    |
+| **G**   | Visual: colors, icons, emphasis        |
+| **H**   | Export: format recommendations         |
 
 ---
 
@@ -140,38 +140,38 @@ H 导出建议：推荐格式（PNG/SVG/drawio）；超限时的简化策略
 
 ### Output Contract
 
-| Rule | Valid | Invalid |
-|------|-------|---------|
-| Section count | Exactly 8 (A–H) | Missing or extra sections |
-| Section order | A → B → C → D → E → F → G → H | Any other order |
-| Extra text | None | Preface like "好的，以下是..." or trailing notes |
+| Rule          | Valid                         | Invalid                                          |
+| ------------- | ----------------------------- | ------------------------------------------------ |
+| Section count | Exactly 8 (A–H)               | Missing or extra sections                        |
+| Section order | A → B → C → D → E → F → G → H | Any other order                                  |
+| Extra text    | None                          | Preface like "好的，以下是..." or trailing notes |
 
 ### Structure Constraints
 
-| Constraint | Limit | Failure Condition |
-|------------|-------|-------------------|
-| Module count | ≤ 4 | More than 4 modules |
-| Nodes per module | 3–5 | Fewer than 3 or more than 5 |
-| Missing info | "未提及" / "Not specified" | Inferred or guessed content |
+| Constraint       | Limit                      | Failure Condition           |
+| ---------------- | -------------------------- | --------------------------- |
+| Module count     | ≤ 4                        | More than 4 modules         |
+| Nodes per module | 3–5                        | Fewer than 3 or more than 5 |
+| Missing info     | "未提及" / "Not specified" | Inferred or guessed content |
 
 ### Node Label Rules (Section C)
 
-| Rule | Valid Example | Invalid Example |
-|------|---------------|-----------------|
-| Language | 用户认证 / User Auth | Mixed without reason |
-| Length | ≤14 chars/words | 这是一个非常长的节点标签名称 |
-| No numbers | 数据处理 | N1 数据处理 |
-| No brackets | 数据清洗 | 数据清洗(ETL) |
-| No punctuation | 异常检测 | 数据清洗-去噪 |
-| No special symbols | 用户验证 | AI模型★ |
+| Rule               | Valid Example        | Invalid Example              |
+| ------------------ | -------------------- | ---------------------------- |
+| Language           | 用户认证 / User Auth | Mixed without reason         |
+| Length             | ≤14 chars/words      | 这是一个非常长的节点标签名称 |
+| No numbers         | 数据处理             | N1 数据处理                  |
+| No brackets        | 数据清洗             | 数据清洗(ETL)                |
+| No punctuation     | 异常检测             | 数据清洗-去噪                |
+| No special symbols | 用户验证             | AI模型★                      |
 
 ### Edge Rules (Section D)
 
-| Rule | Valid | Invalid |
-|------|-------|---------|
-| Reference format | N1→N2 | 数据采集→数据处理 |
-| Relation values | 因果 / 并行 / 分支 / 反馈 / 依赖 | 连接 / 关联 / 其他 |
-| Line types | 实线箭头 / 虚线箭头 / T形线 | 双向箭头 / 波浪线 |
+| Rule             | Valid                            | Invalid            |
+| ---------------- | -------------------------------- | ------------------ |
+| Reference format | N1→N2                            | 数据采集→数据处理  |
+| Relation values  | 因果 / 并行 / 分支 / 反馈 / 依赖 | 连接 / 关联 / 其他 |
+| Line types       | 实线箭头 / 虚线箭头 / T形线      | 双向箭头 / 波浪线  |
 
 ---
 
@@ -251,7 +251,7 @@ D 连线关系：
 The converter is located at `scripts/dsl/ah-to-drawio.js`:
 
 ```javascript
-import { ahToDrawioXml, parseAh } from './scripts/dsl/ah-to-drawio.js'
+import { ahToDrawioXml, parseAh } from "./scripts/dsl/ah-to-drawio.js"
 
 // Parse A-H text to structured data
 const parsed = parseAh(ahText)

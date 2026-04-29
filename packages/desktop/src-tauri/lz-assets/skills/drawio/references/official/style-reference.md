@@ -47,7 +47,7 @@ A minimal valid draw.io file:
    - `id="1"` with `parent="0"` — default layer
 2. **All diagram elements must have `parent="1"`** (or the id of a group/layer).
 3. **IDs must be unique** within the diagram. Use any string (e.g. "2", "node-1", "abc123").
-4. **Vertices need `vertex="1"`**, edges need `edge="1"`** — these are mutually exclusive.
+4. **Vertices need `vertex="1"`**, edges need `edge="1"`\*\* — these are mutually exclusive.
 5. **Edges should reference source and target** via cell IDs. Edges without connections need explicit mxPoint sourcePoint/targetPoint.
 6. **Always use uncompressed XML** (no `compressed="true"`). AI should not generate compressed content.
 7. **Style strings end with semicolon.** Example: `"rounded=1;whiteSpace=wrap;html=1;"`
@@ -76,6 +76,7 @@ text;html=1;align=left;
 ```
 
 ### Rules
+
 - Keys and values are **case-sensitive**
 - **No spaces** around `=` or `;`
 - Boolean values use `0` and `1` (not true/false)
@@ -91,112 +92,112 @@ text;html=1;align=left;
 
 These shapes are defined in the mxGraph core library:
 
-| shape= value | Description | Notes |
-|---|---|---|
-| `rectangle` | Rectangle (default) | Also the default if no shape specified |
-| `ellipse` | Oval / ellipse | Use `aspect=fixed` for circle |
-| `rhombus` | Diamond | Use `perimeter=rhombusPerimeter` |
-| `triangle` | Triangle | Use `perimeter=trianglePerimeter` |
-| `hexagon` | Hexagon | Use `perimeter=hexagonPerimeter2` |
-| `cloud` | Cloud | |
-| `cylinder` | 3D Cylinder | |
-| `line` | Horizontal line | |
-| `arrow` | Block arrow | |
-| `arrowConnector` | Arrow-shaped connector | |
-| `doubleEllipse` | Double-bordered ellipse | |
-| `image` | Image container | Requires `image=<url>` |
-| `label` | Rectangle with icon area | Default vertex shape |
-| `swimlane` | Container with header bar | Use `startSize` for header height |
-| `actor` | Actor (stick figure outline) | |
-| `connector` | Edge connector | Default edge shape |
+| shape= value     | Description                  | Notes                                  |
+| ---------------- | ---------------------------- | -------------------------------------- |
+| `rectangle`      | Rectangle (default)          | Also the default if no shape specified |
+| `ellipse`        | Oval / ellipse               | Use `aspect=fixed` for circle          |
+| `rhombus`        | Diamond                      | Use `perimeter=rhombusPerimeter`       |
+| `triangle`       | Triangle                     | Use `perimeter=trianglePerimeter`      |
+| `hexagon`        | Hexagon                      | Use `perimeter=hexagonPerimeter2`      |
+| `cloud`          | Cloud                        |                                        |
+| `cylinder`       | 3D Cylinder                  |                                        |
+| `line`           | Horizontal line              |                                        |
+| `arrow`          | Block arrow                  |                                        |
+| `arrowConnector` | Arrow-shaped connector       |                                        |
+| `doubleEllipse`  | Double-bordered ellipse      |                                        |
+| `image`          | Image container              | Requires `image=<url>`                 |
+| `label`          | Rectangle with icon area     | Default vertex shape                   |
+| `swimlane`       | Container with header bar    | Use `startSize` for header height      |
+| `actor`          | Actor (stick figure outline) |                                        |
+| `connector`      | Edge connector               | Default edge shape                     |
 
 ### 3.2 Extended Shapes (draw.io Shapes.js)
 
 These are registered via `mxCellRenderer.registerShape()`:
 
-| shape= value | Description |
-|---|---|
-| `cube` | 3D cube |
-| `isoCube` | Isometric cube |
-| `isoCube2` | Isometric cube (variant 2) |
-| `isoRectangle` | Isometric rectangle |
-| `cylinder2` | Cylinder (variant 2, configurable) |
-| `cylinder3` | Cylinder (variant 3) |
-| `datastore` | Cylindrical data store |
-| `note` | Sticky note |
-| `note2` | Note (variant 2) |
-| `document` | Document page with curled bottom |
-| `folder` | Folder icon |
-| `card` | Card with cut corner |
-| `tape` | Punched tape |
-| `tapeData` | Tape data storage |
-| `process` | Process box (double-sided borders) |
-| `process2` | Same as process |
-| `step` | Step/chevron arrow |
-| `plus` | Plus sign |
-| `ext` | Extended rectangle (supports `double=1`) |
-| `callout` | Speech bubble |
-| `parallelogram` | Parallelogram (use `perimeter=parallelogramPerimeter`) |
-| `trapezoid` | Trapezoid (use `perimeter=trapezoidPerimeter`) |
-| `curlyBracket` | Curly bracket |
-| `switch` | Networking switch shape |
-| `transparent` | Invisible shape |
-| `message` | Envelope/message |
-| `corner` | L-shaped corner |
-| `crossbar` | Cross bar |
-| `tee` | T-shaped connector |
-| `singleArrow` | Single arrow |
-| `doubleArrow` | Double-headed arrow |
-| `flexArrow` | Flexible arrow |
-| `wire` | Wire connector |
-| `waypoint` | Waypoint marker |
-| `manualInput` | Manual input (flowchart) |
-| `internalStorage` | Internal storage (flowchart) |
-| `dataStorage` | Data storage (flowchart) |
-| `loopLimit` | Loop limit (flowchart) |
-| `offPageConnector` | Off-page connector |
-| `delay` | Delay shape |
-| `display` | Display device |
-| `or` | OR gate |
-| `orEllipse` | OR ellipse |
-| `xor` | XOR gate |
-| `sumEllipse` | Sum/sigma ellipse |
-| `sortShape` | Sort shape |
-| `collate` | Collate shape |
-| `cross` | Cross / X shape |
-| `dimension` | Dimension line |
-| `partialRectangle` | Rectangle with configurable borders |
-| `lineEllipse` | Line with ellipse |
-| `link` | Link / chain shape |
-| `pipe` | Pipe connector |
-| `zigzag` | Zigzag connector |
-| `filledEdge` | Filled edge connector |
-| `table` | Table container |
-| `tableRow` | Table row |
-| `tableLine` | Table line |
-| `rect2` | Alternative rectangle |
+| shape= value       | Description                                            |
+| ------------------ | ------------------------------------------------------ |
+| `cube`             | 3D cube                                                |
+| `isoCube`          | Isometric cube                                         |
+| `isoCube2`         | Isometric cube (variant 2)                             |
+| `isoRectangle`     | Isometric rectangle                                    |
+| `cylinder2`        | Cylinder (variant 2, configurable)                     |
+| `cylinder3`        | Cylinder (variant 3)                                   |
+| `datastore`        | Cylindrical data store                                 |
+| `note`             | Sticky note                                            |
+| `note2`            | Note (variant 2)                                       |
+| `document`         | Document page with curled bottom                       |
+| `folder`           | Folder icon                                            |
+| `card`             | Card with cut corner                                   |
+| `tape`             | Punched tape                                           |
+| `tapeData`         | Tape data storage                                      |
+| `process`          | Process box (double-sided borders)                     |
+| `process2`         | Same as process                                        |
+| `step`             | Step/chevron arrow                                     |
+| `plus`             | Plus sign                                              |
+| `ext`              | Extended rectangle (supports `double=1`)               |
+| `callout`          | Speech bubble                                          |
+| `parallelogram`    | Parallelogram (use `perimeter=parallelogramPerimeter`) |
+| `trapezoid`        | Trapezoid (use `perimeter=trapezoidPerimeter`)         |
+| `curlyBracket`     | Curly bracket                                          |
+| `switch`           | Networking switch shape                                |
+| `transparent`      | Invisible shape                                        |
+| `message`          | Envelope/message                                       |
+| `corner`           | L-shaped corner                                        |
+| `crossbar`         | Cross bar                                              |
+| `tee`              | T-shaped connector                                     |
+| `singleArrow`      | Single arrow                                           |
+| `doubleArrow`      | Double-headed arrow                                    |
+| `flexArrow`        | Flexible arrow                                         |
+| `wire`             | Wire connector                                         |
+| `waypoint`         | Waypoint marker                                        |
+| `manualInput`      | Manual input (flowchart)                               |
+| `internalStorage`  | Internal storage (flowchart)                           |
+| `dataStorage`      | Data storage (flowchart)                               |
+| `loopLimit`        | Loop limit (flowchart)                                 |
+| `offPageConnector` | Off-page connector                                     |
+| `delay`            | Delay shape                                            |
+| `display`          | Display device                                         |
+| `or`               | OR gate                                                |
+| `orEllipse`        | OR ellipse                                             |
+| `xor`              | XOR gate                                               |
+| `sumEllipse`       | Sum/sigma ellipse                                      |
+| `sortShape`        | Sort shape                                             |
+| `collate`          | Collate shape                                          |
+| `cross`            | Cross / X shape                                        |
+| `dimension`        | Dimension line                                         |
+| `partialRectangle` | Rectangle with configurable borders                    |
+| `lineEllipse`      | Line with ellipse                                      |
+| `link`             | Link / chain shape                                     |
+| `pipe`             | Pipe connector                                         |
+| `zigzag`           | Zigzag connector                                       |
+| `filledEdge`       | Filled edge connector                                  |
+| `table`            | Table container                                        |
+| `tableRow`         | Table row                                              |
+| `tableLine`        | Table line                                             |
+| `rect2`            | Alternative rectangle                                  |
 
 ### 3.3 UML Shapes
 
-| shape= value | Description |
-|---|---|
-| `umlActor` | UML stick figure |
-| `umlBoundary` | UML boundary |
-| `umlEntity` | UML entity |
-| `umlDestroy` | UML destruction mark |
-| `umlControl` | UML control |
-| `umlLifeline` | UML lifeline |
-| `umlFrame` | UML frame |
-| `umlState` | UML state (use `perimeter=mxPerimeter.StatePerimeter`) |
-| `lollipop` | UML provided interface |
-| `requires` | UML required interface |
-| `requiredInterface` | UML required interface (arc) |
-| `providedRequiredInterface` | UML assembly connector |
-| `module` | UML module |
-| `component` | UML component |
-| `associativeEntity` | ER associative entity |
-| `endState` | State diagram end state |
-| `startState` | State diagram start state |
+| shape= value                | Description                                            |
+| --------------------------- | ------------------------------------------------------ |
+| `umlActor`                  | UML stick figure                                       |
+| `umlBoundary`               | UML boundary                                           |
+| `umlEntity`                 | UML entity                                             |
+| `umlDestroy`                | UML destruction mark                                   |
+| `umlControl`                | UML control                                            |
+| `umlLifeline`               | UML lifeline                                           |
+| `umlFrame`                  | UML frame                                              |
+| `umlState`                  | UML state (use `perimeter=mxPerimeter.StatePerimeter`) |
+| `lollipop`                  | UML provided interface                                 |
+| `requires`                  | UML required interface                                 |
+| `requiredInterface`         | UML required interface (arc)                           |
+| `providedRequiredInterface` | UML assembly connector                                 |
+| `module`                    | UML module                                             |
+| `component`                 | UML component                                          |
+| `associativeEntity`         | ER associative entity                                  |
+| `endState`                  | State diagram end state                                |
+| `startState`                | State diagram start state                              |
 
 ### 3.4 Stencil Libraries
 
@@ -204,6 +205,7 @@ Additional shapes are available via stencil libraries in the `stencils/` directo
 Use with: `shape=stencil(<library>.<shape>)` or `shape=mxgraph.<library>.<shape>`.
 
 Major libraries:
+
 - `mxgraph.flowchart.*` — Flowchart shapes
 - `mxgraph.bpmn.*` — BPMN shapes
 - `mxgraph.aws4.*` — AWS architecture icons
@@ -225,208 +227,208 @@ Major libraries:
 
 ### 4.1 Fill and Stroke
 
-| Property | Values | Default | Description |
-|---|---|---|---|
-| `fillColor` | `#RRGGBB`, `none`, `default` | `default` | Shape fill color |
-| `gradientColor` | `#RRGGBB`, `none` | none | Gradient end color (gradient from fillColor to gradientColor) |
-| `gradientDirection` | `north`, `south`, `east`, `west` | `south` | Gradient direction |
-| `strokeColor` | `#RRGGBB`, `none`, `default` | `default` | Border/stroke color |
-| `strokeWidth` | number | `1` | Border width in pixels |
-| `dashed` | `0`, `1` | `0` | Dashed stroke |
-| `dashPattern` | string | — | Dash pattern, e.g. `"1 3"` (1px dash, 3px gap), `"8 8"` |
-| `opacity` | `0`–`100` | `100` | Overall opacity (0=transparent, 100=opaque) |
-| `fillOpacity` | `0`–`100` | `100` | Fill opacity only |
-| `strokeOpacity` | `0`–`100` | `100` | Stroke opacity only |
-| `glass` | `0`, `1` | `0` | Glass/shine overlay effect |
-| `shadow` | `0`, `1` | `0` | Drop shadow (also controlled globally on mxGraphModel) |
+| Property            | Values                           | Default   | Description                                                   |
+| ------------------- | -------------------------------- | --------- | ------------------------------------------------------------- |
+| `fillColor`         | `#RRGGBB`, `none`, `default`     | `default` | Shape fill color                                              |
+| `gradientColor`     | `#RRGGBB`, `none`                | none      | Gradient end color (gradient from fillColor to gradientColor) |
+| `gradientDirection` | `north`, `south`, `east`, `west` | `south`   | Gradient direction                                            |
+| `strokeColor`       | `#RRGGBB`, `none`, `default`     | `default` | Border/stroke color                                           |
+| `strokeWidth`       | number                           | `1`       | Border width in pixels                                        |
+| `dashed`            | `0`, `1`                         | `0`       | Dashed stroke                                                 |
+| `dashPattern`       | string                           | —         | Dash pattern, e.g. `"1 3"` (1px dash, 3px gap), `"8 8"`       |
+| `opacity`           | `0`–`100`                        | `100`     | Overall opacity (0=transparent, 100=opaque)                   |
+| `fillOpacity`       | `0`–`100`                        | `100`     | Fill opacity only                                             |
+| `strokeOpacity`     | `0`–`100`                        | `100`     | Stroke opacity only                                           |
+| `glass`             | `0`, `1`                         | `0`       | Glass/shine overlay effect                                    |
+| `shadow`            | `0`, `1`                         | `0`       | Drop shadow (also controlled globally on mxGraphModel)        |
 
 ### 4.2 Shape Geometry
 
-| Property | Values | Default | Description |
-|---|---|---|---|
-| `shape` | see Shape Types above | `label` | Shape type |
-| `perimeter` | see Perimeters below | `rectanglePerimeter` | Connection point calculation |
-| `rounded` | `0`, `1` | `0` | Round rectangle corners |
-| `arcSize` | number | — | Corner radius for rounded shapes (0–50, as percentage) |
-| `aspect` | `variable`, `fixed` | `variable` | `fixed` preserves width/height ratio |
-| `direction` | `north`, `south`, `east`, `west` | — | Rotate shape by 90° increments |
-| `flipH` | `0`, `1` | `0` | Flip horizontally |
-| `flipV` | `0`, `1` | `0` | Flip vertically |
-| `rotation` | number (degrees) | `0` | Free rotation angle (0–360) |
-| `fixedSize` | `0`, `1` | `0` | Shape keeps size independent of label |
+| Property    | Values                           | Default              | Description                                            |
+| ----------- | -------------------------------- | -------------------- | ------------------------------------------------------ |
+| `shape`     | see Shape Types above            | `label`              | Shape type                                             |
+| `perimeter` | see Perimeters below             | `rectanglePerimeter` | Connection point calculation                           |
+| `rounded`   | `0`, `1`                         | `0`                  | Round rectangle corners                                |
+| `arcSize`   | number                           | —                    | Corner radius for rounded shapes (0–50, as percentage) |
+| `aspect`    | `variable`, `fixed`              | `variable`           | `fixed` preserves width/height ratio                   |
+| `direction` | `north`, `south`, `east`, `west` | —                    | Rotate shape by 90° increments                         |
+| `flipH`     | `0`, `1`                         | `0`                  | Flip horizontally                                      |
+| `flipV`     | `0`, `1`                         | `0`                  | Flip vertically                                        |
+| `rotation`  | number (degrees)                 | `0`                  | Free rotation angle (0–360)                            |
+| `fixedSize` | `0`, `1`                         | `0`                  | Shape keeps size independent of label                  |
 
 ### 4.3 Text and Labels
 
-| Property | Values | Default | Description |
-|---|---|---|---|
-| `html` | `0`, `1` | `1` | Enable HTML label rendering |
-| `whiteSpace` | `wrap`, `nowrap` | — | Text wrapping mode. Use `wrap` for most shapes |
-| `fontSize` | number | `12` | Font size in pixels |
-| `fontFamily` | string | `Helvetica` | Font family name |
-| `fontColor` | `#RRGGBB`, `default` | `default` | Text color |
-| `fontStyle` | bitmask | `0` | Font style: 0=normal, 1=bold, 2=italic, 4=underline (combine by adding: 3=bold+italic) |
-| `align` | `left`, `center`, `right` | `center` | Horizontal text alignment |
-| `verticalAlign` | `top`, `middle`, `bottom` | `middle` | Vertical text alignment |
-| `labelPosition` | `left`, `center`, `right` | `center` | Horizontal label position relative to shape |
-| `verticalLabelPosition` | `top`, `middle`, `bottom` | `middle` | Vertical label position relative to shape |
-| `overflow` | `visible`, `hidden`, `fill`, `width` | — | Text overflow handling |
-| `spacing` | number | `2` | General padding in pixels |
-| `spacingTop` | number | `0` | Top padding |
-| `spacingBottom` | number | `0` | Bottom padding |
-| `spacingLeft` | number | `0` | Left padding |
-| `spacingRight` | number | `0` | Right padding |
-| `textOpacity` | `0`–`100` | `100` | Text opacity |
-| `labelBackgroundColor` | `#RRGGBB`, `none`, `default` | — | Background behind text (useful for edge labels) |
-| `labelBorderColor` | `#RRGGBB`, `none` | — | Border around label |
-| `labelWidth` | number | — | Fixed label width |
-| `textDirection` | `default`, `ltr`, `rtl` | `default` | Text direction |
-| `horizontal` | `0`, `1` | `1` | `0` for vertical text |
+| Property                | Values                               | Default     | Description                                                                            |
+| ----------------------- | ------------------------------------ | ----------- | -------------------------------------------------------------------------------------- |
+| `html`                  | `0`, `1`                             | `1`         | Enable HTML label rendering                                                            |
+| `whiteSpace`            | `wrap`, `nowrap`                     | —           | Text wrapping mode. Use `wrap` for most shapes                                         |
+| `fontSize`              | number                               | `12`        | Font size in pixels                                                                    |
+| `fontFamily`            | string                               | `Helvetica` | Font family name                                                                       |
+| `fontColor`             | `#RRGGBB`, `default`                 | `default`   | Text color                                                                             |
+| `fontStyle`             | bitmask                              | `0`         | Font style: 0=normal, 1=bold, 2=italic, 4=underline (combine by adding: 3=bold+italic) |
+| `align`                 | `left`, `center`, `right`            | `center`    | Horizontal text alignment                                                              |
+| `verticalAlign`         | `top`, `middle`, `bottom`            | `middle`    | Vertical text alignment                                                                |
+| `labelPosition`         | `left`, `center`, `right`            | `center`    | Horizontal label position relative to shape                                            |
+| `verticalLabelPosition` | `top`, `middle`, `bottom`            | `middle`    | Vertical label position relative to shape                                              |
+| `overflow`              | `visible`, `hidden`, `fill`, `width` | —           | Text overflow handling                                                                 |
+| `spacing`               | number                               | `2`         | General padding in pixels                                                              |
+| `spacingTop`            | number                               | `0`         | Top padding                                                                            |
+| `spacingBottom`         | number                               | `0`         | Bottom padding                                                                         |
+| `spacingLeft`           | number                               | `0`         | Left padding                                                                           |
+| `spacingRight`          | number                               | `0`         | Right padding                                                                          |
+| `textOpacity`           | `0`–`100`                            | `100`       | Text opacity                                                                           |
+| `labelBackgroundColor`  | `#RRGGBB`, `none`, `default`         | —           | Background behind text (useful for edge labels)                                        |
+| `labelBorderColor`      | `#RRGGBB`, `none`                    | —           | Border around label                                                                    |
+| `labelWidth`            | number                               | —           | Fixed label width                                                                      |
+| `textDirection`         | `default`, `ltr`, `rtl`              | `default`   | Text direction                                                                         |
+| `horizontal`            | `0`, `1`                             | `1`         | `0` for vertical text                                                                  |
 
 ### 4.4 Edge / Connector Properties
 
-| Property | Values | Default | Description |
-|---|---|---|---|
-| `edgeStyle` | see Edge Styles below | — | Routing algorithm |
-| `curved` | `0`, `1` | `0` | Curved edge path |
-| `rounded` | `0`, `1` | `1` | Round edge corners (for orthogonal) |
-| `jettySize` | `auto`, number | `auto` | Spacing from port for orthogonal edges |
-| `sourceJettySize` | number | — | Source-side jetty override |
-| `targetJettySize` | number | — | Target-side jetty override |
-| `orthogonalLoop` | `0`, `1` | `1` | Self-loop routing style |
-| `elbow` | `horizontal`, `vertical` | — | Elbow edge direction |
-| `jumpStyle` | `arc`, `gap`, `sharp` | — | Line crossing visualization |
-| `jumpSize` | number | `6` | Jump width at crossings |
+| Property          | Values                   | Default | Description                            |
+| ----------------- | ------------------------ | ------- | -------------------------------------- |
+| `edgeStyle`       | see Edge Styles below    | —       | Routing algorithm                      |
+| `curved`          | `0`, `1`                 | `0`     | Curved edge path                       |
+| `rounded`         | `0`, `1`                 | `1`     | Round edge corners (for orthogonal)    |
+| `jettySize`       | `auto`, number           | `auto`  | Spacing from port for orthogonal edges |
+| `sourceJettySize` | number                   | —       | Source-side jetty override             |
+| `targetJettySize` | number                   | —       | Target-side jetty override             |
+| `orthogonalLoop`  | `0`, `1`                 | `1`     | Self-loop routing style                |
+| `elbow`           | `horizontal`, `vertical` | —       | Elbow edge direction                   |
+| `jumpStyle`       | `arc`, `gap`, `sharp`    | —       | Line crossing visualization            |
+| `jumpSize`        | number                   | `6`     | Jump width at crossings                |
 
 ### 4.5 Arrow Markers
 
-| Property | Values | Default | Description |
-|---|---|---|---|
-| `startArrow` | arrow type | `none` | Marker at edge start |
-| `endArrow` | arrow type | `classic` | Marker at edge end |
-| `startSize` | number | — | Start marker size |
-| `endSize` | number | — | End marker size |
-| `startFill` | `0`, `1` | `1` | Fill start marker |
-| `endFill` | `0`, `1` | `1` | Fill end marker |
+| Property     | Values     | Default   | Description          |
+| ------------ | ---------- | --------- | -------------------- |
+| `startArrow` | arrow type | `none`    | Marker at edge start |
+| `endArrow`   | arrow type | `classic` | Marker at edge end   |
+| `startSize`  | number     | —         | Start marker size    |
+| `endSize`    | number     | —         | End marker size      |
+| `startFill`  | `0`, `1`   | `1`       | Fill start marker    |
+| `endFill`    | `0`, `1`   | `1`       | Fill end marker      |
 
 **Arrow type values:**
 
-| Value | Description |
-|---|---|
-| `none` | No arrow |
-| `classic` | Standard filled triangle |
-| `classicThin` | Thin triangle |
-| `block` | Filled block |
-| `blockThin` | Thin block |
-| `open` | Open (unfilled) triangle |
-| `openThin` | Thin open triangle |
-| `oval` | Circle/oval |
-| `diamond` | Diamond |
-| `diamondThin` | Thin diamond |
-| `box` | Square box |
-| `halfCircle` | Half circle |
-| `circle` | Circle |
-| `circlePlus` | Circle with plus |
-| `cross` | Cross mark |
-| `baseDash` | Perpendicular dash |
-| `doubleBlock` | Double filled block |
-| `dash` | Short dash |
-| `async` | Asynchronous (half-arrow) |
-| `openAsync` | Open asynchronous arrow |
+| Value          | Description                    |
+| -------------- | ------------------------------ |
+| `none`         | No arrow                       |
+| `classic`      | Standard filled triangle       |
+| `classicThin`  | Thin triangle                  |
+| `block`        | Filled block                   |
+| `blockThin`    | Thin block                     |
+| `open`         | Open (unfilled) triangle       |
+| `openThin`     | Thin open triangle             |
+| `oval`         | Circle/oval                    |
+| `diamond`      | Diamond                        |
+| `diamondThin`  | Thin diamond                   |
+| `box`          | Square box                     |
+| `halfCircle`   | Half circle                    |
+| `circle`       | Circle                         |
+| `circlePlus`   | Circle with plus               |
+| `cross`        | Cross mark                     |
+| `baseDash`     | Perpendicular dash             |
+| `doubleBlock`  | Double filled block            |
+| `dash`         | Short dash                     |
+| `async`        | Asynchronous (half-arrow)      |
+| `openAsync`    | Open asynchronous arrow        |
 | `manyOptional` | ER many-optional (crow's foot) |
 
 **Fill behavior:** `startFill=0`/`endFill=0` renders the marker as an outline only. This is important for UML and ER diagram conventions (e.g., open diamond = aggregation, filled diamond = composition).
 
 ### 4.6 Connection Points
 
-| Property | Values | Default | Description |
-|---|---|---|---|
-| `exitX` | `0.0`–`1.0` | — | Relative x of exit point (0=left, 0.5=center, 1=right) |
-| `exitY` | `0.0`–`1.0` | — | Relative y of exit point (0=top, 0.5=middle, 1=bottom) |
-| `exitDx` | number | — | Absolute x offset from exit point |
-| `exitDy` | number | — | Absolute y offset from exit point |
-| `exitPerimeter` | `0`, `1` | `1` | Use perimeter for exit point |
-| `entryX` | `0.0`–`1.0` | — | Relative x of entry point |
-| `entryY` | `0.0`–`1.0` | — | Relative y of entry point |
-| `entryDx` | number | — | Absolute x offset from entry point |
-| `entryDy` | number | — | Absolute y offset from entry point |
-| `entryPerimeter` | `0`, `1` | `1` | Use perimeter for entry point |
-| `portConstraint` | `eastwest`, `northsouth`, `perimeter`, `fixed` | — | Port constraint |
+| Property         | Values                                         | Default | Description                                            |
+| ---------------- | ---------------------------------------------- | ------- | ------------------------------------------------------ |
+| `exitX`          | `0.0`–`1.0`                                    | —       | Relative x of exit point (0=left, 0.5=center, 1=right) |
+| `exitY`          | `0.0`–`1.0`                                    | —       | Relative y of exit point (0=top, 0.5=middle, 1=bottom) |
+| `exitDx`         | number                                         | —       | Absolute x offset from exit point                      |
+| `exitDy`         | number                                         | —       | Absolute y offset from exit point                      |
+| `exitPerimeter`  | `0`, `1`                                       | `1`     | Use perimeter for exit point                           |
+| `entryX`         | `0.0`–`1.0`                                    | —       | Relative x of entry point                              |
+| `entryY`         | `0.0`–`1.0`                                    | —       | Relative y of entry point                              |
+| `entryDx`        | number                                         | —       | Absolute x offset from entry point                     |
+| `entryDy`        | number                                         | —       | Absolute y offset from entry point                     |
+| `entryPerimeter` | `0`, `1`                                       | `1`     | Use perimeter for entry point                          |
+| `portConstraint` | `eastwest`, `northsouth`, `perimeter`, `fixed` | —       | Port constraint                                        |
 
 ### 4.7 Container / Swimlane Properties
 
-| Property | Values | Default | Description |
-|---|---|---|---|
-| `container` | `0`, `1` | `0` | Cell is a container (children can be placed inside) |
-| `collapsible` | `0`, `1` | `1` | Container can be collapsed |
-| `recursiveResize` | `0`, `1` | `1` | Resize children when container resizes |
-| `swimlaneFillColor` | `#RRGGBB` | — | Swimlane header fill color |
-| `startSize` | number | `23` | Swimlane header height in pixels |
-| `horizontal` | `0`, `1` | `1` | Swimlane orientation (1=header on top, 0=header on left) |
-| `childLayout` | `stackLayout`, `treeLayout`, `flowLayout` | — | Auto-layout for children |
-| `resizeParent` | `0`, `1` | — | Parent resizes to fit children |
-| `resizeParentMax` | `0`, `1` | — | Limit parent resize |
-| `resizeLast` | `0`, `1` | — | Last child fills remaining space |
-| `horizontalStack` | `0`, `1` | — | Stack direction (1=horizontal, 0=vertical) |
-| `marginBottom` | number | — | Bottom margin for stack layout |
+| Property            | Values                                    | Default | Description                                              |
+| ------------------- | ----------------------------------------- | ------- | -------------------------------------------------------- |
+| `container`         | `0`, `1`                                  | `0`     | Cell is a container (children can be placed inside)      |
+| `collapsible`       | `0`, `1`                                  | `1`     | Container can be collapsed                               |
+| `recursiveResize`   | `0`, `1`                                  | `1`     | Resize children when container resizes                   |
+| `swimlaneFillColor` | `#RRGGBB`                                 | —       | Swimlane header fill color                               |
+| `startSize`         | number                                    | `23`    | Swimlane header height in pixels                         |
+| `horizontal`        | `0`, `1`                                  | `1`     | Swimlane orientation (1=header on top, 0=header on left) |
+| `childLayout`       | `stackLayout`, `treeLayout`, `flowLayout` | —       | Auto-layout for children                                 |
+| `resizeParent`      | `0`, `1`                                  | —       | Parent resizes to fit children                           |
+| `resizeParentMax`   | `0`, `1`                                  | —       | Limit parent resize                                      |
+| `resizeLast`        | `0`, `1`                                  | —       | Last child fills remaining space                         |
+| `horizontalStack`   | `0`, `1`                                  | —       | Stack direction (1=horizontal, 0=vertical)               |
+| `marginBottom`      | number                                    | —       | Bottom margin for stack layout                           |
 
 ### 4.8 Image Properties
 
-| Property | Values | Default | Description |
-|---|---|---|---|
-| `image` | URL string | — | Image URL (data: URIs also supported) |
-| `imageWidth` | number | `42` | Image width |
-| `imageHeight` | number | `42` | Image height |
-| `imageAlign` | `left`, `center`, `right` | — | Image horizontal alignment |
-| `imageVerticalAlign` | `top`, `middle`, `bottom` | — | Image vertical alignment |
-| `imageAspect` | `0`, `1` | `1` | Preserve image aspect ratio |
+| Property             | Values                    | Default | Description                           |
+| -------------------- | ------------------------- | ------- | ------------------------------------- |
+| `image`              | URL string                | —       | Image URL (data: URIs also supported) |
+| `imageWidth`         | number                    | `42`    | Image width                           |
+| `imageHeight`        | number                    | `42`    | Image height                          |
+| `imageAlign`         | `left`, `center`, `right` | —       | Image horizontal alignment            |
+| `imageVerticalAlign` | `top`, `middle`, `bottom` | —       | Image vertical alignment              |
+| `imageAspect`        | `0`, `1`                  | `1`     | Preserve image aspect ratio           |
 
 ### 4.9 Sketch / Hand-Drawn Style
 
-| Property | Values | Default | Description |
-|---|---|---|---|
-| `sketch` | `0`, `1` | `0` | Enable hand-drawn/sketch style (uses rough.js) |
-| `comic` | `0`, `1` | `0` | Comic book style |
-| `fillStyle` | `solid`, `hachure`, `cross-hatch`, `dots` | — | Fill pattern for sketch mode |
-| `fillWeight` | number | — | Hatch line weight (negative = thinner) |
-| `hachureGap` | number | — | Gap between hatch lines in pixels |
-| `hachureAngle` | number (degrees) | — | Angle of hatch lines |
-| `jiggle` | number | — | Hand-drawn jiggle amount |
-| `curveFitting` | `0`–`1` | — | Curve fitting quality |
-| `simplification` | `0`–`1` | — | Path simplification |
-| `disableMultiStroke` | `0`, `1` | — | Disable double-stroke effect |
-| `disableMultiStrokeFill` | `0`, `1` | — | Disable double-stroke fill |
+| Property                 | Values                                    | Default | Description                                    |
+| ------------------------ | ----------------------------------------- | ------- | ---------------------------------------------- |
+| `sketch`                 | `0`, `1`                                  | `0`     | Enable hand-drawn/sketch style (uses rough.js) |
+| `comic`                  | `0`, `1`                                  | `0`     | Comic book style                               |
+| `fillStyle`              | `solid`, `hachure`, `cross-hatch`, `dots` | —       | Fill pattern for sketch mode                   |
+| `fillWeight`             | number                                    | —       | Hatch line weight (negative = thinner)         |
+| `hachureGap`             | number                                    | —       | Gap between hatch lines in pixels              |
+| `hachureAngle`           | number (degrees)                          | —       | Angle of hatch lines                           |
+| `jiggle`                 | number                                    | —       | Hand-drawn jiggle amount                       |
+| `curveFitting`           | `0`–`1`                                   | —       | Curve fitting quality                          |
+| `simplification`         | `0`–`1`                                   | —       | Path simplification                            |
+| `disableMultiStroke`     | `0`, `1`                                  | —       | Disable double-stroke effect                   |
+| `disableMultiStrokeFill` | `0`, `1`                                  | —       | Disable double-stroke fill                     |
 
 ### 4.10 Behavior Properties
 
-| Property | Values | Default | Description |
-|---|---|---|---|
-| `movable` | `0`, `1` | `1` | Allow moving |
-| `resizable` | `0`, `1` | `1` | Allow resizing |
-| `rotatable` | `0`, `1` | `1` | Allow rotation |
-| `bendable` | `0`, `1` | `1` | Allow bending edges |
-| `editable` | `0`, `1` | `1` | Allow label editing |
-| `deletable` | `0`, `1` | `1` | Allow deletion |
-| `cloneable` | `0`, `1` | `1` | Allow cloning |
-| `foldable` | `0`, `1` | — | Allow fold/collapse |
-| `connectable` | `0`, `1` | `1` | Allow connections |
-| `pointerEvents` | `0`, `1` | `1` | Enable mouse events |
-| `autosize` | `0`, `1` | `0` | Auto-size to fit content |
+| Property        | Values   | Default | Description              |
+| --------------- | -------- | ------- | ------------------------ |
+| `movable`       | `0`, `1` | `1`     | Allow moving             |
+| `resizable`     | `0`, `1` | `1`     | Allow resizing           |
+| `rotatable`     | `0`, `1` | `1`     | Allow rotation           |
+| `bendable`      | `0`, `1` | `1`     | Allow bending edges      |
+| `editable`      | `0`, `1` | `1`     | Allow label editing      |
+| `deletable`     | `0`, `1` | `1`     | Allow deletion           |
+| `cloneable`     | `0`, `1` | `1`     | Allow cloning            |
+| `foldable`      | `0`, `1` | —       | Allow fold/collapse      |
+| `connectable`   | `0`, `1` | `1`     | Allow connections        |
+| `pointerEvents` | `0`, `1` | `1`     | Enable mouse events      |
+| `autosize`      | `0`, `1` | `0`     | Auto-size to fit content |
 
 ---
 
 ## 5. Edge Styles (Routing Algorithms)
 
-| edgeStyle= value | Description |
-|---|---|
-| `orthogonalEdgeStyle` | Routes with right-angle turns (most common) |
-| `segmentEdgeStyle` | Manual segments with horizontal/vertical segments |
-| `elbowEdgeStyle` | Single elbow (one bend). Combine with `elbow=horizontal` or `elbow=vertical` |
-| `entityRelationEdgeStyle` | Entity-relationship style (perpendicular exits) |
-| `isometricEdgeStyle` | Isometric diagram routing |
-| `loopEdgeStyle` | Self-referencing loop |
-| `sideToSideEdgeStyle` | Side-to-side connection |
-| `topToBottomEdgeStyle` | Top-to-bottom connection |
-| (empty/none) | Straight line, no routing |
+| edgeStyle= value          | Description                                                                  |
+| ------------------------- | ---------------------------------------------------------------------------- |
+| `orthogonalEdgeStyle`     | Routes with right-angle turns (most common)                                  |
+| `segmentEdgeStyle`        | Manual segments with horizontal/vertical segments                            |
+| `elbowEdgeStyle`          | Single elbow (one bend). Combine with `elbow=horizontal` or `elbow=vertical` |
+| `entityRelationEdgeStyle` | Entity-relationship style (perpendicular exits)                              |
+| `isometricEdgeStyle`      | Isometric diagram routing                                                    |
+| `loopEdgeStyle`           | Self-referencing loop                                                        |
+| `sideToSideEdgeStyle`     | Side-to-side connection                                                      |
+| `topToBottomEdgeStyle`    | Top-to-bottom connection                                                     |
+| (empty/none)              | Straight line, no routing                                                    |
 
 **Common edge style combinations:**
 
@@ -444,19 +446,19 @@ edgeStyle=none;                                    # Straight line
 
 The perimeter determines how connection points are calculated on a shape's border:
 
-| perimeter= value | Use with |
-|---|---|
-| `rectanglePerimeter` | Rectangles (default) |
-| `ellipsePerimeter` | Ellipses, circles |
-| `rhombusPerimeter` | Diamond shapes |
-| `trianglePerimeter` | Triangles |
-| `hexagonPerimeter2` | Hexagons |
-| `parallelogramPerimeter` | Parallelograms |
-| `trapezoidPerimeter` | Trapezoids |
-| `calloutPerimeter` | Callout/speech bubbles |
-| `backbonePerimeter` | Backbone/bus shapes |
-| `centerPerimeter` | Single center point |
-| `stepPerimeter` | Step/chevron shapes |
+| perimeter= value         | Use with               |
+| ------------------------ | ---------------------- |
+| `rectanglePerimeter`     | Rectangles (default)   |
+| `ellipsePerimeter`       | Ellipses, circles      |
+| `rhombusPerimeter`       | Diamond shapes         |
+| `trianglePerimeter`      | Triangles              |
+| `hexagonPerimeter2`      | Hexagons               |
+| `parallelogramPerimeter` | Parallelograms         |
+| `trapezoidPerimeter`     | Trapezoids             |
+| `calloutPerimeter`       | Callout/speech bubbles |
+| `backbonePerimeter`      | Backbone/bus shapes    |
+| `centerPerimeter`        | Single center point    |
+| `stepPerimeter`          | Step/chevron shapes    |
 
 **Important:** When using non-rectangular shapes, always set the matching perimeter. Otherwise edges will connect to the rectangular bounding box instead of the visible shape border.
 
@@ -466,36 +468,36 @@ The perimeter determines how connection points are calculated on a shape's borde
 
 These class names can be used as bare tokens in the style string. They set multiple style properties at once:
 
-| Class | Sets |
-|---|---|
-| `text` | No fill, no stroke, left-aligned, top-aligned |
-| `edgeLabel` | Extends text, adds label background, font size 11 |
-| `label` | Bold, left-aligned, with image area (42x42), rounded |
-| `icon` | Extends label, centered image above text |
-| `swimlane` | Swimlane shape, bold, header size 23 |
-| `group` | No fill, no stroke, transparent container |
-| `ellipse` | Ellipse shape with ellipsePerimeter |
-| `rhombus` | Diamond shape with rhombusPerimeter |
-| `triangle` | Triangle shape with trianglePerimeter |
-| `line` | Line shape, strokeWidth=4 |
-| `image` | Image shape with label below |
-| `arrow` | Arrow shape, no edge routing |
+| Class       | Sets                                                 |
+| ----------- | ---------------------------------------------------- |
+| `text`      | No fill, no stroke, left-aligned, top-aligned        |
+| `edgeLabel` | Extends text, adds label background, font size 11    |
+| `label`     | Bold, left-aligned, with image area (42x42), rounded |
+| `icon`      | Extends label, centered image above text             |
+| `swimlane`  | Swimlane shape, bold, header size 23                 |
+| `group`     | No fill, no stroke, transparent container            |
+| `ellipse`   | Ellipse shape with ellipsePerimeter                  |
+| `rhombus`   | Diamond shape with rhombusPerimeter                  |
+| `triangle`  | Triangle shape with trianglePerimeter                |
+| `line`      | Line shape, strokeWidth=4                            |
+| `image`     | Image shape with label below                         |
+| `arrow`     | Arrow shape, no edge routing                         |
 
 ### Color Theme Classes
 
 Each sets `fillColor`, `gradientColor`, `strokeColor`, plus `shadow=1` and `glass=1`:
 
-| Class | fillColor | gradientColor | strokeColor |
-|---|---|---|---|
-| `blue` | #DAE8FC | #7EA6E0 | #6C8EBF |
-| `green` | #D5E8D4 | #97D077 | #82B366 |
-| `yellow` | #FFF2CC | #FFD966 | #D6B656 |
-| `orange` | #FFCD28 | #FFA500 | #D79B00 |
-| `red` | #F8CECC | #EA6B66 | #B85450 |
-| `pink` | #E6D0DE | #B5739D | #996185 |
-| `purple` | #E1D5E7 | #8C6C9C | #9673A6 |
-| `gray` | #F5F5F5 | #B3B3B3 | #666666 |
-| `turquoise` | #D5E8D4 | #67AB9F | #6A9153 |
+| Class       | fillColor | gradientColor | strokeColor |
+| ----------- | --------- | ------------- | ----------- |
+| `blue`      | #DAE8FC   | #7EA6E0       | #6C8EBF     |
+| `green`     | #D5E8D4   | #97D077       | #82B366     |
+| `yellow`    | #FFF2CC   | #FFD966       | #D6B656     |
+| `orange`    | #FFCD28   | #FFA500       | #D79B00     |
+| `red`       | #F8CECC   | #EA6B66       | #B85450     |
+| `pink`      | #E6D0DE   | #B5739D       | #996185     |
+| `purple`    | #E1D5E7   | #8C6C9C       | #9673A6     |
+| `gray`      | #F5F5F5   | #B3B3B3       | #666666     |
+| `turquoise` | #D5E8D4   | #67AB9F       | #6A9153     |
 
 `plain-*` variants (e.g. `plain-blue`) set the same colors without shadow and glass.
 
@@ -508,6 +510,7 @@ Each sets `fillColor`, `gradientColor`, `strokeColor`, plus `shadow=1` and `glas
 These are commonly used in the draw.io UI:
 
 **Fill colors (light):**
+
 - `#DAE8FC` (light blue)
 - `#D5E8D4` (light green)
 - `#FFF2CC` (light yellow)
@@ -519,6 +522,7 @@ These are commonly used in the draw.io UI:
 - `#FFE6CC` (light orange)
 
 **Stroke colors (matching):**
+
 - `#6C8EBF` (blue)
 - `#82B366` (green)
 - `#D6B656` (yellow/gold)
@@ -529,6 +533,7 @@ These are commonly used in the draw.io UI:
 - `#D79B00` (orange)
 
 **Font/accent colors:**
+
 - `#000000` (black)
 - `#FFFFFF` (white)
 - `#333333` (dark gray)
@@ -546,6 +551,7 @@ These are commonly used in the draw.io UI:
 When `html=1` is set in the style, the cell's `value` attribute can contain HTML:
 
 ### Supported HTML Elements
+
 - `<b>`, `<i>`, `<u>`, `<s>` — text formatting
 - `<br>` / `<br/>` — line break
 - `<p>`, `<div>`, `<span>` — block/inline containers
@@ -560,12 +566,14 @@ When `html=1` is set in the style, the cell's `value` attribute can contain HTML
 ### HTML in Attributes
 
 HTML in the `value` attribute must be **XML-escaped**:
+
 - `<` → `&lt;`
 - `>` → `&gt;`
 - `&` → `&amp;`
 - `"` → `&quot;`
 
 Example:
+
 ```xml
 <mxCell value="&lt;b&gt;Title&lt;/b&gt;&lt;br&gt;Description"
         style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
@@ -574,11 +582,13 @@ Example:
 ### Common HTML Patterns
 
 **Bold title with description:**
+
 ```
 &lt;b&gt;Title&lt;/b&gt;&lt;br&gt;Description text
 ```
 
 **UML class box (within table container):**
+
 ```
 &lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;b&gt;ClassName&lt;/b&gt;&lt;/p&gt;
 &lt;hr size=&quot;1&quot;/&gt;
@@ -588,6 +598,7 @@ Example:
 ```
 
 **Colored text:**
+
 ```
 &lt;font color=&quot;#FF0000&quot;&gt;Red text&lt;/font&gt;
 ```
@@ -633,6 +644,7 @@ A group/container is a vertex that other cells reference as their parent:
 ```
 
 **Key points:**
+
 - Child coordinates are **relative to the parent container**
 - Use `style="group;"` for invisible containers
 - Use `style="swimlane;startSize=30;"` for containers with a visible header
@@ -903,11 +915,12 @@ Edge labels are usually encoded in the edge cell's `value`. The label position i
 These optional attributes on `<mxGraphModel>` are less commonly used but appear
 in real-world files:
 
-| Attribute | Values | Description |
-|---|---|---|
+| Attribute        | Values                              | Description                                           |
+| ---------------- | ----------------------------------- | ----------------------------------------------------- |
 | `adaptiveColors` | `auto`, `simple`, `none`, `default` | Controls color adaptation for light/dark mode viewing |
 
 **adaptiveColors** example:
+
 ```xml
 <mxGraphModel dx="0" dy="0" grid="1" ... adaptiveColors="auto">
 ```

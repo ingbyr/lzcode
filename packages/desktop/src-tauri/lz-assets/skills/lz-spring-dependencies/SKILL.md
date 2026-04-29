@@ -54,53 +54,53 @@ description: '组织内部强制使用的Spring项目依赖指南。当用户创
 
 根据项目需求，选择性引入以下模块：
 
-| 模块 | 场景 |
-|------|------|
-| `lz-base-cache` | 需要 Redis 缓存 |
-| `lz-base-bus` | 需要 RocketMQ 消息队列 |
-| `lz-base-msg` | 需要短信发送（亿美/阿里云等） |
-| `lz-base-file-minio` | MinIO 文件存储 |
-| `lz-base-file-aliyun` | 阿里云 OSS 文件存储 |
-| `lz-base-file-obs` | 华为云 OBS 文件存储 |
-| `lz-base-file-zos` | 天翼云 ZOS 文件存储 |
-| `lz-base-persistence` | 持久化增强 |
-| `lz-base-elastic-search` | Elasticsearch/OpenSearch |
-| `lz-base-discovery` | Nacos 服务发现 |
-| `lz-base-config` | 配置中心 |
-| `lz-base-distributed-transaction` | Seata 分布式事务 |
-| `lz-base-language` | 国际化 |
-| `lz-base-open-telemetry` | OpenTelemetry 链路追踪 |
-| `lz-base-opt-log` | 操作日志（依赖 ES） |
+| 模块                              | 场景                          |
+| --------------------------------- | ----------------------------- |
+| `lz-base-cache`                   | 需要 Redis 缓存               |
+| `lz-base-bus`                     | 需要 RocketMQ 消息队列        |
+| `lz-base-msg`                     | 需要短信发送（亿美/阿里云等） |
+| `lz-base-file-minio`              | MinIO 文件存储                |
+| `lz-base-file-aliyun`             | 阿里云 OSS 文件存储           |
+| `lz-base-file-obs`                | 华为云 OBS 文件存储           |
+| `lz-base-file-zos`                | 天翼云 ZOS 文件存储           |
+| `lz-base-persistence`             | 持久化增强                    |
+| `lz-base-elastic-search`          | Elasticsearch/OpenSearch      |
+| `lz-base-discovery`               | Nacos 服务发现                |
+| `lz-base-config`                  | 配置中心                      |
+| `lz-base-distributed-transaction` | Seata 分布式事务              |
+| `lz-base-language`                | 国际化                        |
+| `lz-base-open-telemetry`          | OpenTelemetry 链路追踪        |
+| `lz-base-opt-log`                 | 操作日志（依赖 ES）           |
 
 ## 核心工具类速查
 
-| 工具类 | 用途 |
-|--------|------|
-| `LzJsonUtil` | JSON 序列化/反序列化 |
-| `SM2Util`/`SM3Util`/`SM4Util` | 国密加密 |
-| `IdWorkerUtil` | 分布式 ID 生成 |
-| `LzAssertUtil` | 断言工具 |
-| `LzI18nUtils` | 国际化消息 |
-| `LzSessionUtil` | 会话管理（获取用户ID、租户ID） |
-| `TokenUtil` | Token 创建与验证 |
-| `QueryPanelUtil` | 前端查询条件转换 |
-| `LzTracingUtil` | 链路追踪 |
+| 工具类                        | 用途                           |
+| ----------------------------- | ------------------------------ |
+| `LzJsonUtil`                  | JSON 序列化/反序列化           |
+| `SM2Util`/`SM3Util`/`SM4Util` | 国密加密                       |
+| `IdWorkerUtil`                | 分布式 ID 生成                 |
+| `LzAssertUtil`                | 断言工具                       |
+| `LzI18nUtils`                 | 国际化消息                     |
+| `LzSessionUtil`               | 会话管理（获取用户ID、租户ID） |
+| `TokenUtil`                   | Token 创建与验证               |
+| `QueryPanelUtil`              | 前端查询条件转换               |
+| `LzTracingUtil`               | 链路追踪                       |
 
 ## 异常类
 
-| 异常类 | 用途 |
-|--------|------|
+| 异常类           | 用途                 |
+| ---------------- | -------------------- |
 | `LzBizException` | 业务异常（带错误码） |
-| `LzAppException` | 应用级异常 |
+| `LzAppException` | 应用级异常           |
 
 ## 验证注解
 
-| 注解 | 用途 |
-|------|------|
-| `@AddValidationGroup` | 新增操作分组 |
-| `@EditValidationGroup` | 编辑操作分组 |
-| `@SpecialChar` | 特殊字符校验（防 XSS） |
-| `@EnumValue` | 枚举值校验 |
+| 注解                   | 用途                   |
+| ---------------------- | ---------------------- |
+| `@AddValidationGroup`  | 新增操作分组           |
+| `@EditValidationGroup` | 编辑操作分组           |
+| `@SpecialChar`         | 特殊字符校验（防 XSS） |
+| `@EnumValue`           | 枚举值校验             |
 
 ## 配置示例
 
@@ -141,7 +141,7 @@ rocketmq:
 management:
   tracing:
     sampling:
-      probability: '1.0'
+      probability: "1.0"
   otlp:
     tracing:
       endpoint: http://localhost:4318/v1/traces

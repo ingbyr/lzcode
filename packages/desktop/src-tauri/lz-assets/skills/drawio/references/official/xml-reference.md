@@ -20,6 +20,7 @@ Detailed reference for styles, edge routing, containers, layers, tags, metadata,
 ## Common styles
 
 **Rounded rectangle:**
+
 ```xml
 <mxCell id="2" value="Label" style="rounded=1;whiteSpace=wrap;" vertex="1" parent="1">
   <mxGeometry x="100" y="100" width="120" height="60" as="geometry"/>
@@ -27,6 +28,7 @@ Detailed reference for styles, edge routing, containers, layers, tags, metadata,
 ```
 
 **Diamond (decision):**
+
 ```xml
 <mxCell id="3" value="Condition?" style="rhombus;whiteSpace=wrap;" vertex="1" parent="1">
   <mxGeometry x="100" y="200" width="120" height="80" as="geometry"/>
@@ -34,6 +36,7 @@ Detailed reference for styles, edge routing, containers, layers, tags, metadata,
 ```
 
 **Arrow (edge):**
+
 ```xml
 <mxCell id="4" value="" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="2" target="3" parent="1">
   <mxGeometry relative="1" as="geometry"/>
@@ -41,6 +44,7 @@ Detailed reference for styles, edge routing, containers, layers, tags, metadata,
 ```
 
 **Labeled arrow:**
+
 ```xml
 <mxCell id="5" value="Yes" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="3" target="6" parent="1">
   <mxGeometry relative="1" as="geometry"/>
@@ -49,28 +53,29 @@ Detailed reference for styles, edge routing, containers, layers, tags, metadata,
 
 ## Style properties
 
-| Property | Values | Use for |
-|----------|--------|---------|
-| `rounded=1` | 0 or 1 | Rounded corners |
-| `whiteSpace=wrap` | wrap | Text wrapping |
-| `fillColor=#dae8fc` | Hex color | Background color |
-| `strokeColor=#6c8ebf` | Hex color | Border color |
-| `fontColor=#333333` | Hex color | Text color |
-| `shape=cylinder3` | shape name | Database cylinders |
-| `shape=mxgraph.flowchart.document` | shape name | Document shapes |
-| `ellipse` | style keyword | Circles/ovals |
-| `rhombus` | style keyword | Diamonds |
-| `edgeStyle=orthogonalEdgeStyle` | style keyword | Right-angle connectors |
-| `edgeStyle=elbowEdgeStyle` | style keyword | Elbow connectors |
-| `dashed=1` | 0 or 1 | Dashed lines |
-| `swimlane` | style keyword | Swimlane containers |
-| `group` | style keyword | Invisible container (pointerEvents=0) |
-| `container=1` | 0 or 1 | Enable container behavior on any shape |
-| `pointerEvents=0` | 0 or 1 | Prevent container from capturing child connections |
+| Property                           | Values        | Use for                                            |
+| ---------------------------------- | ------------- | -------------------------------------------------- |
+| `rounded=1`                        | 0 or 1        | Rounded corners                                    |
+| `whiteSpace=wrap`                  | wrap          | Text wrapping                                      |
+| `fillColor=#dae8fc`                | Hex color     | Background color                                   |
+| `strokeColor=#6c8ebf`              | Hex color     | Border color                                       |
+| `fontColor=#333333`                | Hex color     | Text color                                         |
+| `shape=cylinder3`                  | shape name    | Database cylinders                                 |
+| `shape=mxgraph.flowchart.document` | shape name    | Document shapes                                    |
+| `ellipse`                          | style keyword | Circles/ovals                                      |
+| `rhombus`                          | style keyword | Diamonds                                           |
+| `edgeStyle=orthogonalEdgeStyle`    | style keyword | Right-angle connectors                             |
+| `edgeStyle=elbowEdgeStyle`         | style keyword | Elbow connectors                                   |
+| `dashed=1`                         | 0 or 1        | Dashed lines                                       |
+| `swimlane`                         | style keyword | Swimlane containers                                |
+| `group`                            | style keyword | Invisible container (pointerEvents=0)              |
+| `container=1`                      | 0 or 1        | Enable container behavior on any shape             |
+| `pointerEvents=0`                  | 0 or 1        | Prevent container from capturing child connections |
 
 ## Edge routing
 
 **CRITICAL: Every edge `mxCell` must contain a `<mxGeometry relative="1" as="geometry" />` child element**, even when there are no waypoints. Self-closing edge cells (e.g. `<mxCell ... edge="1" ... />`) are invalid and will not render correctly. Always use the expanded form:
+
 ```xml
 <mxCell id="e1" edge="1" parent="1" source="a" target="b" style="...">
   <mxGeometry relative="1" as="geometry" />
@@ -110,11 +115,11 @@ Set `parent="containerId"` on child cells. Children use **relative coordinates**
 
 ### Container types
 
-| Type | Style | When to use |
-|------|-------|-------------|
-| **Group** (invisible) | `group;` | No visual border needed, container has no connections. Includes `pointerEvents=0` so child connections are not captured |
-| **Swimlane** (titled) | `swimlane;startSize=30;` | Container needs a visible title bar/header, or the container itself has connections |
-| **Custom container** | Add `container=1;pointerEvents=0;` to any shape style | Any shape acting as a container without its own connections |
+| Type                  | Style                                                 | When to use                                                                                                             |
+| --------------------- | ----------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| **Group** (invisible) | `group;`                                              | No visual border needed, container has no connections. Includes `pointerEvents=0` so child connections are not captured |
+| **Swimlane** (titled) | `swimlane;startSize=30;`                              | Container needs a visible title bar/header, or the container itself has connections                                     |
+| **Custom container**  | Add `container=1;pointerEvents=0;` to any shape style | Any shape acting as a container without its own connections                                                             |
 
 ### Key rules
 
@@ -257,6 +262,7 @@ XML Schema (XSD): https://github.com/jgraph/drawio-mcp/blob/main/shared/mxfile.x
 ## CRITICAL: XML well-formedness
 
 When generating draw.io XML, the output **must** be well-formed XML:
+
 - **NEVER include ANY XML comments (`<!-- -->`) in the output.** XML comments are strictly forbidden — they waste tokens, can cause parse errors, and serve no purpose in diagram XML.
 - Escape special characters in attribute values: `&amp;`, `&lt;`, `&gt;`, `&quot;`
 - Always use unique `id` values for each `mxCell`

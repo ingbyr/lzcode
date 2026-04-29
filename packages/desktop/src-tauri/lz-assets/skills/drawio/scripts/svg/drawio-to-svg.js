@@ -4,14 +4,7 @@
  * Uses shared XML utilities from ../shared/xml-utils.js
  */
 
-import {
-  attr,
-  decodeEntities,
-  escapeXml,
-  extractCells,
-  extractGraphAttrs,
-  parseStyle
-} from '../shared/xml-utils.js'
+import { attr, decodeEntities, escapeXml, extractCells, extractGraphAttrs, parseStyle } from "../shared/xml-utils.js"
 
 /**
  * Parse mxGraphModel XML into a structured object
@@ -34,29 +27,29 @@ function parseDrawioXml(xml) {
  * @returns {string}
  */
 function classifyShape(style) {
-  const shape = style.get('shape')
-  if (shape === 'cylinder3' || shape === 'cylinder') return 'cylinder'
-  if (shape === 'parallelogram') return 'parallelogram'
-  if (shape === 'document') return 'document'
-  if (shape === 'cloud') return 'cloud'
-  if (shape === 'switch') return 'switch'
-  if (shape === 'hexagon') return 'hexagon'
-  if (shape === 'mxgraph.cisco.firewalls.firewall') return 'firewall'
-  if (shape === 'mxgraph.cisco.wireless.access_point') return 'wirelessAp'
-  if (style.has('rhombus')) return 'rhombus'
-  if (style.has('ellipse')) return 'ellipse'
-  const rounded = style.get('rounded')
-  const arcSize = Number(style.get('arcSize')) || 0
-  if (rounded === '1' && arcSize >= 50) return 'stadium'
-  if (rounded === '1') return 'roundedRect'
-  return 'rect'
+  const shape = style.get("shape")
+  if (shape === "cylinder3" || shape === "cylinder") return "cylinder"
+  if (shape === "parallelogram") return "parallelogram"
+  if (shape === "document") return "document"
+  if (shape === "cloud") return "cloud"
+  if (shape === "switch") return "switch"
+  if (shape === "hexagon") return "hexagon"
+  if (shape === "mxgraph.cisco.firewalls.firewall") return "firewall"
+  if (shape === "mxgraph.cisco.wireless.access_point") return "wirelessAp"
+  if (style.has("rhombus")) return "rhombus"
+  if (style.has("ellipse")) return "ellipse"
+  const rounded = style.get("rounded")
+  const arcSize = Number(style.get("arcSize")) || 0
+  if (rounded === "1" && arcSize >= 50) return "stadium"
+  if (rounded === "1") return "roundedRect"
+  return "rect"
 }
 
 // ============================================================================
 // Arrow Marker Definitions
 // ============================================================================
 
-const ARROW_TYPES = ['block', 'open', 'classic', 'diamond']
+const ARROW_TYPES = ["block", "open", "classic", "diamond"]
 
 /**
  * Build SVG <defs> with arrow markers
@@ -69,31 +62,31 @@ function buildMarkerDefs() {
   markers.push(
     '<marker id="arrow-block" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">',
     '  <path d="M 0 0 L 10 5 L 0 10 Z" fill="currentColor"/>',
-    '</marker>'
+    "</marker>",
   )
 
   // open arrow (chevron)
   markers.push(
     '<marker id="arrow-open" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">',
     '  <path d="M 0 0 L 10 5 L 0 10" fill="none" stroke="currentColor" stroke-width="1.5"/>',
-    '</marker>'
+    "</marker>",
   )
 
   // classic arrow (filled arrow)
   markers.push(
     '<marker id="arrow-classic" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">',
     '  <path d="M 0 0 L 10 5 L 0 10 L 3 5 Z" fill="currentColor"/>',
-    '</marker>'
+    "</marker>",
   )
 
   // diamond
   markers.push(
     '<marker id="arrow-diamond" viewBox="0 0 12 12" refX="12" refY="6" markerWidth="10" markerHeight="10" orient="auto-start-reverse">',
     '  <path d="M 0 6 L 6 0 L 12 6 L 6 12 Z" fill="currentColor"/>',
-    '</marker>'
+    "</marker>",
   )
 
-  return `<defs>\n${markers.join('\n')}\n</defs>`
+  return `<defs>\n${markers.join("\n")}\n</defs>`
 }
 
 /**
@@ -103,9 +96,9 @@ function buildMarkerDefs() {
  * @returns {string} marker-start or marker-end attribute, or empty string
  */
 function markerRef(arrowType, position) {
-  if (!arrowType || arrowType === 'none') return ''
-  const id = ARROW_TYPES.includes(arrowType) ? `arrow-${arrowType}` : 'arrow-block'
-  const attrName = position === 'start' ? 'marker-start' : 'marker-end'
+  if (!arrowType || arrowType === "none") return ""
+  const id = ARROW_TYPES.includes(arrowType) ? `arrow-${arrowType}` : "arrow-block"
+  const attrName = position === "start" ? "marker-start" : "marker-end"
   return ` ${attrName}="url(#${id})"`
 }
 
@@ -123,16 +116,16 @@ function renderVertex(cell, style) {
   const geo = cell.geometry || { x: 0, y: 0, width: 120, height: 60 }
   const { x, y, width, height } = geo
 
-  const fillColor = style.get('fillColor') || '#FFFFFF'
-  const strokeColor = style.get('strokeColor') || '#000000'
-  const strokeWidth = Number(style.get('strokeWidth')) || 1
-  const fontColor = style.get('fontColor') || '#000000'
-  const fontSize = Number(style.get('fontSize')) || 12
-  const fontFamily = style.get('fontFamily') || 'sans-serif'
+  const fillColor = style.get("fillColor") || "#FFFFFF"
+  const strokeColor = style.get("strokeColor") || "#000000"
+  const strokeWidth = Number(style.get("strokeWidth")) || 1
+  const fontColor = style.get("fontColor") || "#000000"
+  const fontSize = Number(style.get("fontSize")) || 12
+  const fontFamily = style.get("fontFamily") || "sans-serif"
 
-  let dashAttr = ''
-  if (style.get('dashed') === '1') {
-    const pattern = style.get('dashPattern') || '3 3'
+  let dashAttr = ""
+  if (style.get("dashed") === "1") {
+    const pattern = style.get("dashPattern") || "3 3"
     dashAttr = ` stroke-dasharray="${pattern}"`
   }
 
@@ -141,33 +134,43 @@ function renderVertex(cell, style) {
   const baseAttrs = `fill="${fillColor}" stroke="${strokeColor}" stroke-width="${strokeWidth}"${dashAttr}`
 
   switch (shapeType) {
-    case 'roundedRect': {
-      const rx = Number(style.get('arcSize')) || 8
+    case "roundedRect": {
+      const rx = Number(style.get("arcSize")) || 8
       parts.push(`<rect x="${x}" y="${y}" width="${width}" height="${height}" rx="${rx}" ${baseAttrs}/>`)
       break
     }
 
-    case 'stadium': {
+    case "stadium": {
       const rx = height / 2
       parts.push(`<rect x="${x}" y="${y}" width="${width}" height="${height}" rx="${rx}" ${baseAttrs}/>`)
       break
     }
 
-    case 'cylinder': {
+    case "cylinder": {
       const ellipseRY = Math.min(12, height * 0.15)
       // Body rectangle
-      parts.push(`<rect x="${x}" y="${y + ellipseRY}" width="${width}" height="${height - ellipseRY * 2}" ${baseAttrs}/>`)
+      parts.push(
+        `<rect x="${x}" y="${y + ellipseRY}" width="${width}" height="${height - ellipseRY * 2}" ${baseAttrs}/>`,
+      )
       // Bottom ellipse
-      parts.push(`<ellipse cx="${x + width / 2}" cy="${y + height - ellipseRY}" rx="${width / 2}" ry="${ellipseRY}" ${baseAttrs}/>`)
+      parts.push(
+        `<ellipse cx="${x + width / 2}" cy="${y + height - ellipseRY}" rx="${width / 2}" ry="${ellipseRY}" ${baseAttrs}/>`,
+      )
       // Top ellipse (drawn last so it's on top)
-      parts.push(`<ellipse cx="${x + width / 2}" cy="${y + ellipseRY}" rx="${width / 2}" ry="${ellipseRY}" ${baseAttrs}/>`)
+      parts.push(
+        `<ellipse cx="${x + width / 2}" cy="${y + ellipseRY}" rx="${width / 2}" ry="${ellipseRY}" ${baseAttrs}/>`,
+      )
       // Side lines connecting top and bottom ellipses
-      parts.push(`<line x1="${x}" y1="${y + ellipseRY}" x2="${x}" y2="${y + height - ellipseRY}" stroke="${strokeColor}" stroke-width="${strokeWidth}"/>`)
-      parts.push(`<line x1="${x + width}" y1="${y + ellipseRY}" x2="${x + width}" y2="${y + height - ellipseRY}" stroke="${strokeColor}" stroke-width="${strokeWidth}"/>`)
+      parts.push(
+        `<line x1="${x}" y1="${y + ellipseRY}" x2="${x}" y2="${y + height - ellipseRY}" stroke="${strokeColor}" stroke-width="${strokeWidth}"/>`,
+      )
+      parts.push(
+        `<line x1="${x + width}" y1="${y + ellipseRY}" x2="${x + width}" y2="${y + height - ellipseRY}" stroke="${strokeColor}" stroke-width="${strokeWidth}"/>`,
+      )
       break
     }
 
-    case 'rhombus': {
+    case "rhombus": {
       const cx = x + width / 2
       const cy = y + height / 2
       const points = `${cx},${y} ${x + width},${cy} ${cx},${y + height} ${x},${cy}`
@@ -175,21 +178,21 @@ function renderVertex(cell, style) {
       break
     }
 
-    case 'ellipse': {
+    case "ellipse": {
       const cx = x + width / 2
       const cy = y + height / 2
       parts.push(`<ellipse cx="${cx}" cy="${cy}" rx="${width / 2}" ry="${height / 2}" ${baseAttrs}/>`)
       break
     }
 
-    case 'parallelogram': {
+    case "parallelogram": {
       const skew = width * 0.2
       const points = `${x + skew},${y} ${x + width},${y} ${x + width - skew},${y + height} ${x},${y + height}`
       parts.push(`<polygon points="${points}" ${baseAttrs}/>`)
       break
     }
 
-    case 'hexagon': {
+    case "hexagon": {
       const inset = Math.min(width * 0.22, 24)
       const points = [
         `${x + inset},${y}`,
@@ -197,13 +200,13 @@ function renderVertex(cell, style) {
         `${x + width},${y + height / 2}`,
         `${x + width - inset},${y + height}`,
         `${x + inset},${y + height}`,
-        `${x},${y + height / 2}`
-      ].join(' ')
+        `${x},${y + height / 2}`,
+      ].join(" ")
       parts.push(`<polygon points="${points}" ${baseAttrs}/>`)
       break
     }
 
-    case 'switch': {
+    case "switch": {
       const inset = Math.min(width * 0.18, 18)
       const d = [
         `M ${x + inset} ${y}`,
@@ -212,17 +215,21 @@ function renderVertex(cell, style) {
         `L ${x + width - inset} ${y + height}`,
         `L ${x + inset} ${y + height}`,
         `L ${x} ${y + height / 2}`,
-        'Z'
-      ].join(' ')
+        "Z",
+      ].join(" ")
       const portY1 = y + height * 0.35
       const portY2 = y + height * 0.65
       parts.push(`<path d="${d}" ${baseAttrs}/>`)
-      parts.push(`<line x1="${x + inset}" y1="${portY1}" x2="${x + width - inset}" y2="${portY1}" stroke="${strokeColor}" stroke-width="${strokeWidth}"/>`)
-      parts.push(`<line x1="${x + inset}" y1="${portY2}" x2="${x + width - inset}" y2="${portY2}" stroke="${strokeColor}" stroke-width="${strokeWidth}"/>`)
+      parts.push(
+        `<line x1="${x + inset}" y1="${portY1}" x2="${x + width - inset}" y2="${portY1}" stroke="${strokeColor}" stroke-width="${strokeWidth}"/>`,
+      )
+      parts.push(
+        `<line x1="${x + inset}" y1="${portY2}" x2="${x + width - inset}" y2="${portY2}" stroke="${strokeColor}" stroke-width="${strokeWidth}"/>`,
+      )
       break
     }
 
-    case 'document': {
+    case "document": {
       const waveH = height * 0.1
       const d = [
         `M ${x} ${y}`,
@@ -230,13 +237,13 @@ function renderVertex(cell, style) {
         `L ${x + width} ${y + height - waveH}`,
         `Q ${x + width * 0.75} ${y + height + waveH} ${x + width / 2} ${y + height - waveH}`,
         `Q ${x + width * 0.25} ${y + height - waveH * 3} ${x} ${y + height - waveH}`,
-        'Z'
-      ].join(' ')
+        "Z",
+      ].join(" ")
       parts.push(`<path d="${d}" ${baseAttrs}/>`)
       break
     }
 
-    case 'cloud': {
+    case "cloud": {
       // Simplified cloud: overlapping circles
       const cx = x + width / 2
       const cy = y + height / 2
@@ -252,13 +259,13 @@ function renderVertex(cell, style) {
         `A ${rx * 0.5} ${ry * 0.6} 0 0 1 ${x + width * 0.75} ${cy + ry * 0.7}`,
         `A ${rx * 0.6} ${ry * 0.4} 0 0 1 ${x + width * 0.5} ${cy + ry * 0.8}`,
         `A ${rx * 0.5} ${ry * 0.4} 0 0 1 ${x + width * 0.25} ${cy + ry * 0.5}`,
-        'Z'
-      ].join(' ')
+        "Z",
+      ].join(" ")
       parts.push(`<path d="${d}" ${baseAttrs}/>`)
       break
     }
 
-    case 'firewall': {
+    case "firewall": {
       const archHeight = height * 0.18
       const bodyTop = y + archHeight
       const brickWidth = width / 4
@@ -268,35 +275,39 @@ function renderVertex(cell, style) {
         `Q ${x + width / 2} ${y - archHeight * 0.2} ${x + width} ${bodyTop}`,
         `L ${x + width} ${y + height}`,
         `L ${x} ${y + height}`,
-        'Z'
-      ].join(' ')
+        "Z",
+      ].join(" ")
       const mortar = [
         `M ${x + brickWidth} ${bodyTop} L ${x + brickWidth} ${y + height}`,
         `M ${x + brickWidth * 2} ${bodyTop} L ${x + brickWidth * 2} ${y + height}`,
         `M ${x + brickWidth * 3} ${bodyTop} L ${x + brickWidth * 3} ${y + height}`,
         `M ${x} ${bodyTop + brickHeight} L ${x + width} ${bodyTop + brickHeight}`,
-        `M ${x} ${bodyTop + brickHeight * 2} L ${x + width} ${bodyTop + brickHeight * 2}`
-      ].join(' ')
+        `M ${x} ${bodyTop + brickHeight * 2} L ${x + width} ${bodyTop + brickHeight * 2}`,
+      ].join(" ")
       parts.push(`<path d="${outer}" ${baseAttrs}/>`)
-      parts.push(`<path d="${mortar}" fill="none" stroke="${strokeColor}" stroke-width="${Math.max(strokeWidth * 0.8, 1)}"/>`)
+      parts.push(
+        `<path d="${mortar}" fill="none" stroke="${strokeColor}" stroke-width="${Math.max(strokeWidth * 0.8, 1)}"/>`,
+      )
       break
     }
 
-    case 'wirelessAp': {
+    case "wirelessAp": {
       const cx = x + width / 2
       const cy = y + height / 2
       const baseRy = height * 0.12
       const baseY = y + height * 0.78
       const arc1 = [
         `M ${cx - width * 0.16} ${cy + height * 0.02}`,
-        `Q ${cx} ${cy - height * 0.18} ${cx + width * 0.16} ${cy + height * 0.02}`
-      ].join(' ')
+        `Q ${cx} ${cy - height * 0.18} ${cx + width * 0.16} ${cy + height * 0.02}`,
+      ].join(" ")
       const arc2 = [
         `M ${cx - width * 0.28} ${cy + height * 0.1}`,
-        `Q ${cx} ${cy - height * 0.32} ${cx + width * 0.28} ${cy + height * 0.1}`
-      ].join(' ')
+        `Q ${cx} ${cy - height * 0.32} ${cx + width * 0.28} ${cy + height * 0.1}`,
+      ].join(" ")
       parts.push(`<ellipse cx="${cx}" cy="${baseY}" rx="${width * 0.16}" ry="${baseRy}" ${baseAttrs}/>`)
-      parts.push(`<line x1="${cx}" y1="${baseY - baseRy}" x2="${cx}" y2="${cy + height * 0.12}" stroke="${strokeColor}" stroke-width="${strokeWidth}"/>`)
+      parts.push(
+        `<line x1="${cx}" y1="${baseY - baseRy}" x2="${cx}" y2="${cy + height * 0.12}" stroke="${strokeColor}" stroke-width="${strokeWidth}"/>`,
+      )
       parts.push(`<path d="${arc1}" fill="none" stroke="${strokeColor}" stroke-width="${strokeWidth}"/>`)
       parts.push(`<path d="${arc2}" fill="none" stroke="${strokeColor}" stroke-width="${strokeWidth}"/>`)
       break
@@ -316,12 +327,12 @@ function renderVertex(cell, style) {
     const textY = y + height / 2
     parts.push(
       `<text x="${textX}" y="${textY}" text-anchor="middle" dominant-baseline="central" ` +
-      `font-family="${escapeXml(fontFamily)}" font-size="${fontSize}" fill="${fontColor}">` +
-      `${escapeXml(label)}</text>`
+        `font-family="${escapeXml(fontFamily)}" font-size="${fontSize}" fill="${fontColor}">` +
+        `${escapeXml(label)}</text>`,
     )
   }
 
-  return parts.join('\n')
+  return parts.join("\n")
 }
 
 // ============================================================================
@@ -337,7 +348,7 @@ function cellCenter(cell) {
   const geo = cell.geometry || { x: 0, y: 0, width: 120, height: 60 }
   return {
     x: geo.x + geo.width / 2,
-    y: geo.y + geo.height / 2
+    y: geo.y + geo.height / 2,
   }
 }
 
@@ -349,21 +360,24 @@ function cellCenter(cell) {
  * @returns {string} SVG markup
  */
 function renderEdge(cell, style, cellMap) {
-  const strokeColor = style.get('strokeColor') || '#000000'
-  const strokeWidth = Number(style.get('strokeWidth')) || 1
-  const fontColor = style.get('fontColor') || '#000000'
-  const fontSize = Number(style.get('fontSize')) || 11
+  const strokeColor = style.get("strokeColor") || "#000000"
+  const strokeWidth = Number(style.get("strokeWidth")) || 1
+  const fontColor = style.get("fontColor") || "#000000"
+  const fontSize = Number(style.get("fontSize")) || 11
 
-  let dashAttr = ''
-  if (style.get('dashed') === '1') {
-    const pattern = style.get('dashPattern') || '3 3'
+  let dashAttr = ""
+  if (style.get("dashed") === "1") {
+    const pattern = style.get("dashPattern") || "3 3"
     dashAttr = ` stroke-dasharray="${pattern}"`
   }
 
   const sourceCell = cell.source ? cellMap.get(cell.source) : null
   const targetCell = cell.target ? cellMap.get(cell.target) : null
 
-  let x1 = 0, y1 = 0, x2 = 100, y2 = 100
+  let x1 = 0,
+    y1 = 0,
+    x2 = 100,
+    y2 = 100
   if (sourceCell) {
     const c = cellCenter(sourceCell)
     x1 = c.x
@@ -378,16 +392,16 @@ function renderEdge(cell, style, cellMap) {
   const parts = []
 
   // Arrow markers
-  const endArrow = style.get('endArrow') || 'classic'
-  const startArrow = style.get('startArrow') || ''
-  const endRef = markerRef(endArrow, 'end')
-  const startRef = markerRef(startArrow, 'start')
+  const endArrow = style.get("endArrow") || "classic"
+  const startArrow = style.get("startArrow") || ""
+  const endRef = markerRef(endArrow, "end")
+  const startRef = markerRef(startArrow, "start")
   const colorStyle = ` style="color: ${strokeColor}"`
 
   parts.push(
     `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" ` +
-    `stroke="${strokeColor}" stroke-width="${strokeWidth}"${dashAttr}` +
-    `${endRef}${startRef}${colorStyle} fill="none"/>`
+      `stroke="${strokeColor}" stroke-width="${strokeWidth}"${dashAttr}` +
+      `${endRef}${startRef}${colorStyle} fill="none"/>`,
   )
 
   // Edge label
@@ -397,11 +411,11 @@ function renderEdge(cell, style, cellMap) {
     const midY = (y1 + y2) / 2
     parts.push(
       `<text x="${midX}" y="${midY - 6}" text-anchor="middle" dominant-baseline="auto" ` +
-      `font-size="${fontSize}" fill="${fontColor}">${escapeXml(label)}</text>`
+        `font-size="${fontSize}" fill="${fontColor}">${escapeXml(label)}</text>`,
     )
   }
 
-  return parts.join('\n')
+  return parts.join("\n")
 }
 
 // ============================================================================
@@ -415,8 +429,8 @@ function renderEdge(cell, style, cellMap) {
  * @throws {Error} if input is empty or not a string
  */
 export function drawioToSvg(xmlString) {
-  if (!xmlString || typeof xmlString !== 'string' || xmlString.trim().length === 0) {
-    throw new Error('Input XML string must be non-empty')
+  if (!xmlString || typeof xmlString !== "string" || xmlString.trim().length === 0) {
+    throw new Error("Input XML string must be non-empty")
   }
 
   const { graph, cells } = parseDrawioXml(xmlString)
@@ -428,8 +442,8 @@ export function drawioToSvg(xmlString) {
   }
 
   // Separate vertices and edges
-  const vertices = cells.filter(c => c.vertex && c.parent !== '0')
-  const edges = cells.filter(c => c.edge)
+  const vertices = cells.filter((c) => c.vertex && c.parent !== "0")
+  const edges = cells.filter((c) => c.edge)
 
   // Calculate viewBox dimensions from content if default
   let svgWidth = graph.pageWidth
@@ -444,20 +458,20 @@ export function drawioToSvg(xmlString) {
   }
 
   // Encode original XML as base64 for round-trip editing
-  const base64Xml = Buffer.from(xmlString, 'utf-8').toString('base64')
+  const base64Xml = Buffer.from(xmlString, "utf-8").toString("base64")
 
   // Build SVG
   const svgParts = []
   svgParts.push(
     `<svg xmlns="http://www.w3.org/2000/svg" width="${svgWidth}" height="${svgHeight}" ` +
-    `viewBox="0 0 ${svgWidth} ${svgHeight}" data-drawio="${base64Xml}">`
+      `viewBox="0 0 ${svgWidth} ${svgHeight}" data-drawio="${base64Xml}">`,
   )
 
   // Defs (arrow markers)
   svgParts.push(buildMarkerDefs())
 
   // Background
-  if (graph.background && graph.background !== 'none') {
+  if (graph.background && graph.background !== "none") {
     svgParts.push(`<rect width="100%" height="100%" fill="${graph.background}"/>`)
   }
 
@@ -472,6 +486,6 @@ export function drawioToSvg(xmlString) {
     svgParts.push(renderEdge(e, style, cellMap))
   }
 
-  svgParts.push('</svg>')
-  return svgParts.join('\n')
+  svgParts.push("</svg>")
+  return svgParts.join("\n")
 }

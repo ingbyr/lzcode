@@ -540,16 +540,16 @@ export class Agent implements ACPAgent {
       id: "opencode-login",
     }
 
-      // If client supports terminal-auth capability, use that instead.
-      if (params.clientCapabilities?._meta?.["terminal-auth"] === true) {
-        authMethod._meta = {
-          "terminal-auth": {
-            command: "opencode",
-            args: ["auth", "login"],
-            label: "LzCode Login",
-          },
-        }
+    // If client supports terminal-auth capability, use that instead.
+    if (params.clientCapabilities?._meta?.["terminal-auth"] === true) {
+      authMethod._meta = {
+        "terminal-auth": {
+          command: "opencode",
+          args: ["auth", "login"],
+          label: "LzCode Login",
+        },
       }
+    }
 
     return {
       protocolVersion: 1,

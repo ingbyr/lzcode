@@ -1,20 +1,20 @@
-import { execFile, execFileSync } from 'node:child_process'
-import { existsSync } from 'node:fs'
-import { resolve } from 'node:path'
+import { execFile, execFileSync } from "node:child_process"
+import { existsSync } from "node:fs"
+import { resolve } from "node:path"
 
-const EMBEDDABLE_FORMATS = new Set(['png', 'svg', 'pdf'])
-const EXPORTABLE_FORMATS = new Set(['png', 'svg', 'pdf', 'jpg', 'jpeg'])
+const EMBEDDABLE_FORMATS = new Set(["png", "svg", "pdf"])
+const EXPORTABLE_FORMATS = new Set(["png", "svg", "pdf", "jpg", "jpeg"])
 
 function isShellUnsafe(value) {
-  return /["'`;&|><\n\r]/.test(value) || value.includes('..')
+  return /["'`;&|><\n\r]/.test(value) || value.includes("..")
 }
 
 function looksLikePath(value) {
-  return value.includes('/') || value.includes('\\') || /^[A-Za-z]:/.test(value)
+  return value.includes("/") || value.includes("\\") || /^[A-Za-z]:/.test(value)
 }
 
 function isSafeExecutableCandidate(value) {
-  if (!value || typeof value !== 'string') return false
+  if (!value || typeof value !== "string") return false
   const trimmed = value.trim()
   if (!trimmed) return false
   if (isShellUnsafe(trimmed)) return false
@@ -37,28 +37,18 @@ export function listDrawioDesktopCandidates({ platform = process.platform, env =
     candidates.push(env.DRAWIO_CMD.trim())
   }
 
-  if (platform === 'win32') {
+  if (platform === "win32") {
     if (env.ProgramFiles) {
-      candidates.push(resolve(env.ProgramFiles, 'draw.io', 'draw.io.exe'))
+      candidates.push(resolve(env.ProgramFiles, "draw.io", "draw.io.exe"))
     }
     if (env.LOCALAPPDATA) {
-      candidates.push(resolve(env.LOCALAPPDATA, 'Programs', 'draw.io', 'draw.io.exe'))
+      candidates.push(resolve(env.LOCALAPPDATA, "Programs", "draw.io", "draw.io.exe"))
     }
-    candidates.push('draw.io.exe', 'drawio.exe')
-  } else if (platform === 'darwin') {
-    candidates.push(
-      '/Applications/draw.io.app/Contents/MacOS/draw.io',
-      'draw.io',
-      'drawio'
-    )
+    candidates.push("draw.io.exe", "drawio.exe")
+  } else if (platform === "darwin") {
+    candidates.push("/Applications/draw.io.app/Contents/MacOS/draw.io", "draw.io", "drawio")
   } else {
-    candidates.push(
-      '/usr/bin/drawio',
-      '/usr/local/bin/drawio',
-      '/snap/bin/drawio',
-      'drawio',
-      'draw.io'
-    )
+    candidates.push("/usr/bin/drawio", "/usr/local/bin/drawio", "/snap/bin/drawio", "drawio", "draw.io")
   }
 
   return uniq(candidates)
@@ -68,17 +58,17 @@ export function detectDrawioDesktop({
   platform = process.platform,
   env = process.env,
   exists = existsSync,
-  probeCommand = null
+  probeCommand = null,
 } = {}) {
   for (const candidate of listDrawioDesktopCandidates({ platform, env })) {
     if (!looksLikePath(candidate)) {
-      if (typeof probeCommand === 'function' && probeCommand(candidate)) {
-        return { executable: candidate, source: 'path' }
+      if (typeof probeCommand === "function" && probeCommand(candidate)) {
+        return { executable: candidate, source: "path" }
       }
       continue
     }
     if (exists(candidate)) {
-      return { executable: candidate, source: 'filesystem' }
+      return { executable: candidate, source: "filesystem" }
     }
   }
 
@@ -86,31 +76,25 @@ export function detectDrawioDesktop({
 }
 
 export function formatSupportsEmbed(format) {
-  return EMBEDDABLE_FORMATS.has(String(format || '').toLowerCase())
+  return EMBEDDABLE_FORMATS.has(String(format || "").toLowerCase())
 }
 
 export function isDesktopExportFormat(format) {
-  return EXPORTABLE_FORMATS.has(String(format || '').toLowerCase())
+  return EXPORTABLE_FORMATS.has(String(format || "").toLowerCase())
 }
 
-export function buildDrawioExportArgs({
-  inputFile,
-  outputFile,
-  format,
-  embedDiagram = true,
-  border = 10
-}) {
+export function buildDrawioExportArgs({ inputFile, outputFile, format, embedDiagram = true, border = 10 }) {
   const normalizedFormat = String(format).toLowerCase()
-  const args = ['-x', '-f', normalizedFormat]
+  const args = ["-x", "-f", normalizedFormat]
 
   if (embedDiagram && formatSupportsEmbed(normalizedFormat)) {
-    args.push('-e')
+    args.push("-e")
   }
-  if (typeof border === 'number') {
-    args.push('-b', String(border))
+  if (typeof border === "number") {
+    args.push("-b", String(border))
   }
 
-  args.push('-o', outputFile, inputFile)
+  args.push("-o", outputFile, inputFile)
   return args
 }
 
@@ -120,7 +104,7 @@ export function exportWithDrawioDesktop({
   format,
   env = process.env,
   platform = process.platform,
-  exists = existsSync
+  exists = existsSync,
 }) {
   const args = buildDrawioExportArgs({ inputFile, outputFile, format })
   const failures = []
@@ -132,27 +116,23 @@ export function exportWithDrawioDesktop({
 
     try {
       execFileSync(executable, args, {
-        stdio: 'pipe',
-        windowsHide: true
+        stdio: "pipe",
+        windowsHide: true,
       })
       return { executable, args }
     } catch (error) {
-      if (error.code === 'ENOENT') {
+      if (error.code === "ENOENT") {
         failures.push(executable)
         continue
       }
-      throw new Error(
-        `draw.io Desktop export failed via "${executable}": ${error.message}`
-      )
+      throw new Error(`draw.io Desktop export failed via "${executable}": ${error.message}`)
     }
   }
 
-  const checked = failures.length > 0
-    ? failures.join(', ')
-    : listDrawioDesktopCandidates({ platform, env }).join(', ')
+  const checked = failures.length > 0 ? failures.join(", ") : listDrawioDesktopCandidates({ platform, env }).join(", ")
   throw new Error(
     `draw.io Desktop CLI was not found. Checked: ${checked}. ` +
-    'Install draw.io Desktop or set DRAWIO_CMD to an absolute executable path.'
+      "Install draw.io Desktop or set DRAWIO_CMD to an absolute executable path.",
   )
 }
 
@@ -160,19 +140,17 @@ export function openWithDrawioDesktop({
   filePath,
   env = process.env,
   platform = process.platform,
-  exists = existsSync
+  exists = existsSync,
 }) {
   const desktop = detectDrawioDesktop({ env, platform, exists })
   if (!desktop) {
-    throw new Error(
-      'draw.io Desktop CLI was not found. Install draw.io Desktop or set DRAWIO_CMD.'
-    )
+    throw new Error("draw.io Desktop CLI was not found. Install draw.io Desktop or set DRAWIO_CMD.")
   }
 
   execFile(desktop.executable, [filePath], {
     windowsHide: true,
     detached: true,
-    stdio: 'ignore'
+    stdio: "ignore",
   }).unref()
 
   return desktop

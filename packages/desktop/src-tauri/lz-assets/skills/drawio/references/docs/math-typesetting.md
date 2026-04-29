@@ -9,11 +9,11 @@ Use this file as the syntax source of truth for formulas in draw.io labels and t
 
 Draw.io uses MathJax for mathematical typesetting. Math is recognized only when wrapped in explicit delimiters.
 
-| Syntax | Use It For | Example |
-|--------|------------|---------|
-| `$$...$$` | Standalone equations, dedicated formula nodes, labels that are entirely math | `$$E = mc^2$$` |
-| `\(...\)` | Inline math inside a longer sentence or label | `Output: \(y = f(x)\)` |
-| `` `...` `` | Simple AsciiMath expressions | `` `sum_(i=1)^n x_i` `` |
+| Syntax      | Use It For                                                                   | Example                 |
+| ----------- | ---------------------------------------------------------------------------- | ----------------------- |
+| `$$...$$`   | Standalone equations, dedicated formula nodes, labels that are entirely math | `$$E = mc^2$$`          |
+| `\(...\)`   | Inline math inside a longer sentence or label                                | `Output: \(y = f(x)\)`  |
+| `` `...` `` | Simple AsciiMath expressions                                                 | `` `sum_(i=1)^n x_i` `` |
 
 ### Rule of Thumb
 
@@ -171,14 +171,14 @@ Before finalizing any diagram with formulas, verify:
 
 ### Greek Letters
 
-| Symbol | Code | Symbol | Code |
-|--------|------|--------|------|
-| α | `\alpha` | Γ | `\Gamma` |
-| β | `\beta` | Δ | `\Delta` |
-| γ | `\gamma` | Θ | `\Theta` |
-| λ | `\lambda` | Σ | `\Sigma` |
-| μ | `\mu` | Φ | `\Phi` |
-| π | `\pi` | Ω | `\Omega` |
+| Symbol | Code      | Symbol | Code     |
+| ------ | --------- | ------ | -------- |
+| α      | `\alpha`  | Γ      | `\Gamma` |
+| β      | `\beta`   | Δ      | `\Delta` |
+| γ      | `\gamma`  | Θ      | `\Theta` |
+| λ      | `\lambda` | Σ      | `\Sigma` |
+| μ      | `\mu`     | Φ      | `\Phi`   |
+| π      | `\pi`     | Ω      | `\Omega` |
 
 ### Common Operators
 
