@@ -167,6 +167,7 @@ await $`rm -rf dist`
 const binaries: Record<string, string> = {}
 if (!skipInstall) {
   for (const { os, arch } of allTargets) {
+    console.log(`Installing ${os} - ${arch} dependencies...`)
     await $`bun install --os=${os} --cpu=${arch} @opentui/core@${pkg.dependencies["@opentui/core"]}`
     await $`bun install --os=${os} --cpu=${arch} @parcel/watcher@${pkg.dependencies["@parcel/watcher"]}`
   }
