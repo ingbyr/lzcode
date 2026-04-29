@@ -3,7 +3,7 @@ description: git commit and push
 subtask: true
 ---
 
-commit and push to remote origin "gh", use currnet branch
+commit and push
 
 make sure it includes a prefix like
 docs:
