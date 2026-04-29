@@ -850,49 +850,51 @@ function App(props: { onSnapshot?: () => Promise<string[]> }) {
 
   sdk.event.on("installation.update-available", async (evt) => {
     const version = evt.properties.version
+    const pubDate = evt.properties.pub_date
 
     const skipped = kv.get("skipped_version")
     if (skipped && !semver.gt(version, skipped)) return
 
-    const choice = await DialogConfirm.show(
-      dialog,
-      `Update Available`,
-      `A new release v${version} is available. Would you like to update now?`,
-      "skip",
-    )
-
-    if (choice === false) {
-      kv.set("skipped_version", version)
-      return
-    }
-
-    if (choice !== true) return
-
-    toast.show({
-      variant: "info",
-      message: `Updating to v${version}...`,
-      duration: 30000,
-    })
-
-    const result = await sdk.client.global.upgrade({ target: version })
-
-    if (result.error || !result.data?.success) {
-      toast.show({
-        variant: "error",
-        title: "Update Failed",
-        message: "Update failed",
-        duration: 10000,
-      })
-      return
-    }
-
     await DialogAlert.show(
       dialog,
-      "Update Complete",
-      `Successfully updated to OpenCode v${result.data.version}. Please restart the application.`,
+      "Update Available",
+      `A new version v${version} (published ${pubDate}) is available. Please update manually.`,
     )
+    kv.set("skipped_version", version)
 
-    exit()
+    // [BLOCKED] auto-upgrade disabled — user must update manually
+    // const choice = await DialogConfirm.show(
+    //   dialog,
+    //   `Update Available`,
+    //   `A new release v${version} is available. Would you like to update now?`,
+    //   "skip",
+    // )
+    // if (choice === false) {
+    //   kv.set("skipped_version", version)
+    //   return
+    // }
+    // if (choice !== true) return
+    // toast.show({
+    //   variant: "info",
+    //   message: `Updating to v${version}...`,
+    //   duration: 30000,
+    // })
+    // const result = await sdk.client.global.upgrade({ target: version })
+    // if (result.error || !result.data?.success) {
+    //   toast.show({
+    //     variant: "error",
+    //     title: "Update Failed",
+    //     message: "Update failed",
+    //     duration: 10000,
+    //   })
+    //   return
+    // }
+    // await DialogAlert.show(
+    //   dialog,
+    //   "Update Complete",
+    //   `Successfully updated to OpenCode v${result.data.version}. Please restart the application.`,
+    // )
+    // exit()
   })
 
   const plugin = createMemo(() => {
