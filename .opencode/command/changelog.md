@@ -1,5 +1,5 @@
 ---
-model: opencode/gpt-5.4
+model: opencode/big-pickle
 ---
 
 Create `UPCOMING_CHANGELOG.md` from the structured changelog input below.
