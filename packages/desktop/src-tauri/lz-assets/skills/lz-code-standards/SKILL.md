@@ -1,6 +1,6 @@
 ---
 name: lz-code-standards
-description: "适用于用户未提到特定的代码风格或明确提到使用“蓝舟”、“lanzhou”、“lz”代码规，或在项目中检索到“lz”开头的依赖库时，使用此代码规范指南。当编写、审查或重构代码时，务必遵循此规范，包含但不限于代码生成、代码审查、代码风格调整等场景。"
+description: '适用于用户未提到特定的代码风格或明确提到使用“蓝舟”、“lanzhou”、“lz”代码规，或在项目中检索到“lz”开头的依赖库时，使用此代码规范指南。当编写、审查或重构代码时，务必遵循此规范，包含但不限于代码生成、代码审查、代码风格调整等场景。'
 ---
 
 # 蓝舟平台服务端开发规范 Skill (Agentic Code 指导)
@@ -114,6 +114,7 @@ description: "适用于用户未提到特定的代码风格或明确提到使用
 - 禁止存储过程、函数、触发器、视图、事件、外键（业务逻辑移至应用层）。
 - 禁止负向查询（`NOT IN`, `NOT LIKE`, `<>`）。
 - 禁止在数据库内做数学运算、类型转换。
+- 严格禁止使用 MyBatis XML 映射文件，必须使用 MyBatis-Plus 编程式 API
 
 ### 6. 达梦数据库特定规范
 
@@ -128,15 +129,6 @@ description: "适用于用户未提到特定的代码风格或明确提到使用
 - **审计**：不建议开启审计，可用异步SQL日志替代。
 - **用户**：分管理、应用、维护、备份四类，应用用户无DBA权限。
 
-### 7. MySQL特定规范
-
-- **引擎**：InnoDB。
-- **字符集**：utf8/utf8mb4，统一。
-- **事务隔离级别**：REPEATABLE-READ。
-- **缓存**：读写比>10:1的热点数据可放入Redis。
-- **分区表**：禁止使用（改用分表或应用层分片）。
-- **分库分表**：单表预计超500万行或10GB时需分表。分表数≤4096，分库数≤1024。
-- **主从延迟**：读敏感业务强制走主库。
 
 ## 二、服务端开发规范（Java）
 
@@ -151,16 +143,16 @@ description: "适用于用户未提到特定的代码风格或明确提到使用
 
 ```
 api/                # 对外接口定义（service接口、BO）
-center/             # 接口实现（service.impl、atom、dao、po）
+center/             # 接口实现（service.impl、biz、dao、po）
 control/            # REST控制器（应用层）
 ```
 
 #### 类命名
 
-- 接口：`XxxService`
-- 实现：`XxxServiceImpl`
+- 接口：`XxxBizService`
+- 实现：`XxxBizServiceImpl`
 - 控制器：`XxxController`
-- 原子服务接口：`XxxAtomService`，实现：`XxxAtomServiceImpl`
+- 原子服务接口：`XxxService`，实现：`XxxServiceImpl`
 - DAO：`XxxMapper`
 - PO：`XxxPO`
 - BO：`XxxReqBO` / `XxxRspBO`
@@ -225,29 +217,45 @@ control/            # REST控制器（应用层）
 
 ### 1. 通用编码规则（部分示例）
 
-| 名称     | 字段名  | 长度 | 编码规则                   |
-| -------- | ------- | ---- | -------------------------- |
-| 租户组织 | GroupID | 6    | 顺序码，起始100001         |
-| 分支     | OrgID   | 6    | 全局唯一顺序码，起始100001 |
-| 成员     | OpenID  | 11   | 顺序码，起始10000000001    |
-| 应用     | AppID   | 6    | 顺序码，起始100001         |
-| 单位应用 | AgentID | 13   | OrgID@AppID                |
+| 名称   | 字段名    |
+|------|--------|
+| 组织编码 | OrgNo  |
+| 应用编码 | AppNo  |
 
-### 2. 主业务表通用字段
+### 2. BaseBo 基础业务对象字段说明
 
-所有业务表必须包含以下字段（按需）：
+`BaseBo` 是蓝舟框架中的基础业务对象基类，所有业务 BO（Business Object）都应继承此类。
 
-| 字段名          | 类型        | 说明                 |
-| --------------- | ----------- | -------------------- |
-| org_id          | BIGINT      | 所属分支ID           |
-| app_id          | BIGINT      | 所属应用ID           |
-| agent_id        | VARCHAR(30) | 所属单位应用         |
-| create_user_id  | BIGINT      | 创建人OpenID         |
-| create_time     | DATETIME    | 创建时间             |
-| create_agent_id | VARCHAR(30) | 创建单位应用         |
-| update_user_id  | BIGINT      | 修改人OpenID         |
-| update_time     | DATETIME    | 修改时间（自动更新） |
-| update_agent_id | VARCHAR(30) | 修改单位应用         |
+**包路径**: `cn.ccccltd.lz.bo.base.BaseBo`
+
+#### 主键与外键
+
+| 字段名 | 类型 | 描述 | 约束 |
+|--------|------|------|------|
+| `id` | `Long` | 主键ID，数据库自增或雪花算法生成 | 唯一标识 |
+| `masterId` | `Long` | 外键，关联主表ID | 可选 |
+
+#### 审计字段（自动填充）
+
+| 字段名 | 类型 | 描述 | 约束 |
+|--------|------|------|------|
+| `insertDt` | `LocalDateTime` | 创建时间 | 非空 |
+| `updateDt` | `LocalDateTime` | 更新时间 | 非空 |
+| `insertUserNo` | `String` | 创建者编码 | 最大100字符 |
+| `updateUserNo` | `String` | 更新者编码 | 最大100字符 |
+| `insertOrgNo` | `String` | 录入组织编码 | 最大100字符 |
+| `sourceAppNo` | `String` | 应用编码 | 最大100字符 |
+
+**特殊说明:**
+- `insertDt` 和 `updateDt` 支持多种日期格式：`yyyy-MM-dd HH:mm:ss`、`yyyy-MM-dd HH:mm`、`yyyy-MM-dd HH`、`yyyy-MM-dd`
+- 这些字段通常由框架自动填充，无需手动设置
+
+#### 版本控制与删除标记
+
+| 字段名 | 类型 | 描述 | 默认值 |
+|--------|------|------|--------|
+| `recordVer` | `Integer` | 版本号（乐观锁），用于并发控制 | `0` |
+| `deleted` | `Integer` | 删除标记，逻辑删除标识（`0`=未删除, `1`=已删除） | `0` |
 
 ### 3. 通用业务状态定义（`approve_status`）
 
