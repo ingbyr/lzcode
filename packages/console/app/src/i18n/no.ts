@@ -189,12 +189,12 @@ export const dict = {
     "Zen gir deg tilgang til et håndplukket sett med AI-modeller som LzCode har testet og benchmarked spesielt for kodeagenter. Du slipper å bekymre deg for ujevn ytelse og kvalitet på tvers av leverandører; bruk validerte modeller som fungerer.",
   "home.zenCta.link": "Les om Zen",
 
-  "zen.title": "LzCode Zen | Et kuratert sett med pålitelige, optimaliserte modeller for kodeagenter",
+  "zen.title": "OpenCode Zen | Et kuratert sett med pålitelige, optimaliserte modeller for kodeagenter",
   "zen.hero.title": "Pålitelige optimaliserte modeller for kodeagenter",
   "zen.hero.body":
     "Zen gir deg tilgang til et kuratert sett med AI-modeller som LzCode har testet og benchmarked spesielt for kodeagenter. Du slipper å bekymre deg for ujevn ytelse og kvalitet; bruk validerte modeller som fungerer.",
 
-  "zen.faq.q1": "Hva er LzCode Zen?",
+  "zen.faq.q1": "Hva er OpenCode Zen?",
   "zen.faq.a1":
     "Zen er et kuratert sett med AI-modeller testet og benchmarked for kodeagenter, laget av teamet bak LzCode.",
   "zen.faq.q2": "Hva gjør Zen mer presis?",
