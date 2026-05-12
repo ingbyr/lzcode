@@ -87,7 +87,7 @@ export const dict = {
 
   "temp.title": "LzCode | ターミナル向けに構築されたAIコーディングエージェント",
   "temp.hero.title": "ターミナル向けに構築されたAIコーディングエージェント",
-  "temp.zen": "LzCode Zen",
+  "temp.zen": "OpenCode Zen",
   "temp.getStarted": "はじめる",
   "temp.feature.native.title": "ネイティブ TUI",
   "temp.feature.native.body": "レスポンシブでネイティブ、テーマ変更可能なターミナルUI",
@@ -188,7 +188,7 @@ export const dict = {
     "Zenは、LzCodeがコーディングエージェント向けにテスト・ベンチマーク済みのAIモデルを厳選して提供します。プロバイダー間の性能・品質のブレを気にせず、検証済みのモデルを利用できます。",
   "home.zenCta.link": "Zenについて知る",
 
-  "zen.title": "LzCode Zen | コーディングエージェント向けの信頼できる最適化モデル",
+  "zen.title": "OpenCode Zen | コーディングエージェント向けの信頼できる最適化モデル",
   "zen.hero.title": "コーディングエージェント向けの信頼できる最適化モデル",
   "zen.hero.body":
     "Zenは、LzCodeがコーディングエージェント向けにテスト・ベンチマーク済みのAIモデルを厳選して提供します。プロバイダー間の性能・品質のブレを気にせず、検証済みのモデルを利用できます。",
