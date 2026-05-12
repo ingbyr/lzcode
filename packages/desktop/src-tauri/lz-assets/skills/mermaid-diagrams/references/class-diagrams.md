@@ -24,21 +24,18 @@ classDiagram
 ```
 
 **Visibility modifiers:**
-
 - `+` Public
 - `-` Private
 - `#` Protected
 - `~` Package/Internal
 
 **Member syntax:**
-
 - `+type attribute` - Attribute with type
 - `+method(params) ReturnType` - Method with parameters and return type
 
 ## Relationships
 
 ### Association (`--`)
-
 Loose relationship where entities use each other but exist independently.
 
 ```mermaid
@@ -47,7 +44,6 @@ classDiagram
 ```
 
 ### Composition (`*--`)
-
 Strong ownership - child cannot exist without parent. When parent is deleted, children are deleted.
 
 ```mermaid
@@ -57,7 +53,6 @@ classDiagram
 ```
 
 ### Aggregation (`o--`)
-
 Weaker ownership - child can exist independently. Represents "has-a" relationship.
 
 ```mermaid
@@ -67,26 +62,24 @@ classDiagram
 ```
 
 ### Inheritance (`<|--`)
-
 "Is-a" relationship. Child class inherits from parent class.
 
 ```mermaid
 classDiagram
     Animal <|-- Dog
     Animal <|-- Cat
-
+    
     class Animal {
         +String name
         +makeSound()
     }
-
+    
     class Dog {
         +bark()
     }
 ```
 
 ### Dependency (`<..`)
-
 One class depends on another, often as a parameter or local variable.
 
 ```mermaid
@@ -95,7 +88,6 @@ classDiagram
 ```
 
 ### Realization/Implementation (`<|..`)
-
 Class implements an interface.
 
 ```mermaid
@@ -120,7 +112,6 @@ classDiagram
 ```
 
 **Common multiplicities:**
-
 - `1` - Exactly one
 - `0..1` - Zero or one
 - `0..*` or `*` - Zero or many
@@ -147,12 +138,12 @@ classDiagram
         +save(entity)
         +findById(id)
     }
-
+    
     class UserService {
         <<service>>
         +createUser()
     }
-
+    
     class UserDTO {
         <<dataclass>>
         +String name
@@ -171,7 +162,7 @@ classDiagram
         +draw()* abstract
         +move(x, y)
     }
-
+    
     Shape <|-- Circle
     Shape <|-- Rectangle
 ```
@@ -184,7 +175,7 @@ classDiagram
         +add(item: T)
         +get(index: int) T
     }
-
+    
     List~String~ <-- StringProcessor
 ```
 
@@ -201,7 +192,7 @@ classDiagram
         +placeOrder(cart: Cart) Order
         +getOrderHistory() List~Order~
     }
-
+    
     class Order {
         +UUID id
         +DateTime orderDate
@@ -211,13 +202,13 @@ classDiagram
         +ship()
         +cancel()
     }
-
+    
     class LineItem {
         +int quantity
         +Decimal pricePerUnit
         +getSubtotal() Decimal
     }
-
+    
     class Product {
         +UUID id
         +String name
@@ -227,19 +218,19 @@ classDiagram
         +reduceStock(quantity: int)
         +isAvailable() bool
     }
-
+    
     class Category {
         +String name
         +String description
     }
-
+    
     class Cart {
         +addItem(product: Product, quantity: int)
         +removeItem(product: Product)
         +getTotal() Decimal
         +clear()
     }
-
+    
     %% Relationships
     Customer "1" --> "0..*" Order : places
     Customer "1" --> "1" Cart : has
@@ -247,7 +238,7 @@ classDiagram
     LineItem "1" --> "1" Product : references
     Product "0..*" --> "1" Category : belongs to
     Cart "1" o-- "0..*" Product : contains
-
+    
     %% Enums
     class OrderStatus {
         <<enumeration>>
@@ -257,14 +248,13 @@ classDiagram
         DELIVERED
         CANCELLED
     }
-
+    
     Order --> OrderStatus
 ```
 
 ## Domain-Driven Design Patterns
 
 ### Entities
-
 ```mermaid
 classDiagram
     class User {
@@ -276,7 +266,6 @@ classDiagram
 ```
 
 ### Value Objects
-
 ```mermaid
 classDiagram
     class Money {
@@ -285,7 +274,7 @@ classDiagram
         +String currency
         +add(other: Money) Money
     }
-
+    
     class Address {
         <<value object>>
         +String street
@@ -295,7 +284,6 @@ classDiagram
 ```
 
 ### Aggregates
-
 ```mermaid
 classDiagram
     class Order {
@@ -304,7 +292,7 @@ classDiagram
         +addLineItem(item)
         +removeLineItem(item)
     }
-
+    
     Order *-- LineItem
 ```
 
@@ -320,7 +308,6 @@ classDiagram
 ## Common Patterns
 
 ### Repository Pattern
-
 ```mermaid
 classDiagram
     class IRepository~T~ {
@@ -329,34 +316,32 @@ classDiagram
         +findById(id: UUID) T
         +delete(entity: T)
     }
-
+    
     class UserRepository {
         +findByEmail(email: String) User
     }
-
+    
     IRepository~User~ <|.. UserRepository
 ```
 
 ### Factory Pattern
-
 ```mermaid
 classDiagram
     class ShapeFactory {
         +createShape(type: String) Shape
     }
-
+    
     class Shape {
         <<abstract>>
         +draw()*
     }
-
+    
     ShapeFactory ..> Shape : creates
     Shape <|-- Circle
     Shape <|-- Rectangle
 ```
 
 ### Strategy Pattern
-
 ```mermaid
 classDiagram
     class PaymentProcessor {
@@ -364,12 +349,12 @@ classDiagram
         +setStrategy(strategy: PaymentStrategy)
         +processPayment(amount: Decimal)
     }
-
+    
     class PaymentStrategy {
         <<interface>>
         +pay(amount: Decimal)*
     }
-
+    
     PaymentStrategy <|.. CreditCardPayment
     PaymentStrategy <|.. PayPalPayment
     PaymentProcessor --> PaymentStrategy

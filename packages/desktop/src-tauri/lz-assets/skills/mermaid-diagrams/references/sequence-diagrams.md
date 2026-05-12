@@ -19,31 +19,28 @@ sequenceDiagram
     participant Frontend
     participant API
     participant Database
-
+    
     User->>Frontend: Click button
     Frontend->>API: POST /data
 ```
 
 **Difference:**
-
 - `participant` - System components (services, classes, databases)
 - `actor` - External entities (users, external systems)
 
 ## Message Types
 
 ### Solid Arrow (Synchronous)
-
 ```mermaid
 sequenceDiagram
     Client->>Server: Request
     Server-->>Client: Response
 ```
 
-- `->>` Solid arrow (request)
-- `-->>` Dotted arrow (response/return)
+- `->>`  Solid arrow (request)
+- `-->>`  Dotted arrow (response/return)
 
 ### Open Arrow (Asynchronous)
-
 ```mermaid
 sequenceDiagram
     Client-)Server: Async message
@@ -54,7 +51,6 @@ sequenceDiagram
 - `--)` Dotted open arrow
 
 ### Cross/X (Delete)
-
 ```mermaid
 sequenceDiagram
     Client-xServer: Delete
@@ -82,7 +78,7 @@ sequenceDiagram
     User->>API: POST /login
     API->>Database: Query user
     Database-->>API: User data
-
+    
     alt Valid credentials
         API-->>User: 200 OK + Token
     else Invalid credentials
@@ -98,11 +94,11 @@ sequenceDiagram
 sequenceDiagram
     User->>API: POST /order
     API->>PaymentService: Process payment
-
+    
     opt Payment successful
         API->>EmailService: Send confirmation
     end
-
+    
     API-->>User: Order result
 ```
 
@@ -113,7 +109,7 @@ Show concurrent operations:
 ```mermaid
 sequenceDiagram
     API->>Service: Process order
-
+    
     par Send email
         Service->>EmailService: Send confirmation
     and Update inventory
@@ -121,7 +117,7 @@ sequenceDiagram
     and Log event
         Service->>LogService: Log order
     end
-
+    
     Service-->>API: Complete
 ```
 
@@ -130,17 +126,16 @@ sequenceDiagram
 ```mermaid
 sequenceDiagram
     Client->>Server: Request batch
-
+    
     loop For each item
         Server->>Database: Process item
         Database-->>Server: Result
     end
-
+    
     Server-->>Client: All results
 ```
 
 **Loop with condition:**
-
 ```mermaid
 sequenceDiagram
     loop Every 5 seconds
@@ -155,11 +150,11 @@ sequenceDiagram
 sequenceDiagram
     User->>API: Submit form
     API->>Validator: Validate input
-
+    
     break Input invalid
         API-->>User: 400 Bad Request
     end
-
+    
     API->>Database: Save data
     Database-->>API: Success
     API-->>User: 200 OK
@@ -168,7 +163,6 @@ sequenceDiagram
 ## Notes
 
 ### Note over single participant
-
 ```mermaid
 sequenceDiagram
     User->>API: Request
@@ -177,7 +171,6 @@ sequenceDiagram
 ```
 
 ### Note spanning participants
-
 ```mermaid
 sequenceDiagram
     Frontend->>API: Request
@@ -186,7 +179,6 @@ sequenceDiagram
 ```
 
 ### Right/Left notes
-
 ```mermaid
 sequenceDiagram
     User->>System: Action
@@ -202,7 +194,7 @@ Automatically number messages:
 ```mermaid
 sequenceDiagram
     autonumber
-
+    
     User->>Frontend: Login
     Frontend->>API: Authenticate
     API->>Database: Verify credentials
@@ -220,7 +212,7 @@ sequenceDiagram
     participant A as Service A
     link A: Dashboard @ https://dashboard.example.com
     link A: API Docs @ https://docs.example.com
-
+    
     A->>B: Message
 ```
 
@@ -235,44 +227,44 @@ sequenceDiagram
     participant Database
     participant Redis
     participant EmailService
-
+    
     User->>+Frontend: Enter credentials
     Frontend->>+AuthAPI: POST /auth/login
-
+    
     AuthAPI->>+Database: Query user by email
     Database-->>-AuthAPI: User record
-
+    
     alt User not found
         AuthAPI-->>Frontend: 404 User not found
         Frontend-->>User: Show error
     else User found
         AuthAPI->>AuthAPI: Verify password hash
-
+        
         alt Invalid password
             AuthAPI->>Database: Increment failed attempts
-
+            
             opt Failed attempts > 5
                 AuthAPI->>Database: Lock account
                 AuthAPI->>EmailService: Send security alert
             end
-
+            
             AuthAPI-->>Frontend: 401 Invalid credentials
             Frontend-->>User: Show error
         else Valid password
             AuthAPI->>AuthAPI: Generate JWT token
             AuthAPI->>+Redis: Store session
             Redis-->>-AuthAPI: Confirm
-
+            
             par Update login metadata
                 AuthAPI->>Database: Update last_login
             and Track analytics
                 AuthAPI->>Database: Log login event
             end
-
+            
             AuthAPI-->>-Frontend: 200 OK + JWT token
             Frontend->>Frontend: Store token in localStorage
             Frontend-->>-User: Redirect to dashboard
-
+            
             opt First login
                 EmailService->>User: Welcome email
             end
@@ -290,23 +282,23 @@ sequenceDiagram
     participant AuthService
     participant UserService
     participant Database
-
+    
     Client->>+Gateway: GET /api/users/123
     Note over Gateway: Rate limiting check
-
+    
     Gateway->>+AuthService: Validate JWT
     AuthService->>AuthService: Verify signature
-
+    
     alt Token invalid or expired
         AuthService-->>Gateway: 401 Unauthorized
         Gateway-->>Client: 401 Unauthorized
     else Token valid
         AuthService-->>-Gateway: User context
-
+        
         Gateway->>+UserService: GET /users/123
         UserService->>+Database: SELECT * FROM users WHERE id=123
         Database-->>-UserService: User record
-
+        
         alt User not found
             UserService-->>Gateway: 404 Not Found
             Gateway-->>Client: 404 Not Found
@@ -328,32 +320,32 @@ sequenceDiagram
     participant InventoryService
     participant NotificationService
     participant MessageQueue
-
+    
     User->>+Gateway: POST /orders
     Gateway->>+OrderService: Create order
-
+    
     OrderService->>+InventoryService: Check stock
     InventoryService-->>-OrderService: Stock available
-
+    
     break Insufficient stock
         OrderService-->>Gateway: 400 Out of stock
         Gateway-->>User: Error message
     end
-
+    
     OrderService->>OrderService: Reserve order
     OrderService->>+PaymentService: Charge customer
-
+    
     alt Payment successful
         PaymentService-->>-OrderService: Payment confirmed
         OrderService->>MessageQueue: Publish OrderConfirmed event
-
+        
         par Async processing
             MessageQueue->>InventoryService: Reduce stock
         and
             MessageQueue->>NotificationService: Send confirmation
             NotificationService->>User: Email confirmation
         end
-
+        
         OrderService-->>-Gateway: 201 Created
         Gateway-->>User: Order confirmed
     else Payment failed
@@ -378,28 +370,24 @@ sequenceDiagram
 ## Common Use Cases
 
 ### Authentication
-
 - Login flows
 - OAuth/SSO flows
 - Token refresh
 - Password reset
 
 ### API Operations
-
 - CRUD operations
 - Search and filtering
 - Batch processing
 - Webhook handling
 
 ### System Integration
-
 - Microservice communication
 - Third-party API calls
 - Message queue processing
 - Event-driven architecture
 
 ### Business Processes
-
 - Order fulfillment
 - Payment processing
 - Approval workflows
