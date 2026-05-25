@@ -1,6 +1,6 @@
-import { Context, Effect, Layer, Schema } from "effect"
+import { Effect, Layer, Schema, Context, Stream } from "effect"
 import { serviceUse } from "@/effect/service-use"
-import { FetchHttpClient, HttpClient, HttpClientRequest } from "effect/unstable/http"
+import { FetchHttpClient, HttpClient, HttpClientRequest, HttpClientResponse } from "effect/unstable/http"
 import { withTransientReadRetry } from "@/util/effect-http-client"
 import { errorMessage } from "@/util/error"
 import { ChildProcess } from "effect/unstable/process"
@@ -9,17 +9,13 @@ import path from "path"
 import { BusEvent } from "@/bus/bus-event"
 import * as Log from "@opencode-ai/core/util/log"
 import { makeRuntime } from "@opencode-ai/core/effect/runtime"
-import { Flag } from "@opencode-ai/core/flag/flag"
 import semver from "semver"
-import {
-  InstallationChannel,
-  InstallationVersion,
-  LZ_BASE_OPENCODE_VERSION,
-} from "@opencode-ai/core/installation/version"
+import { InstallationChannel, InstallationVersion } from "@opencode-ai/core/installation/version"
+import { NpmConfig } from "@opencode-ai/core/npm-config"
 
 const log = Log.create({ service: "installation" })
 
-export type Method = "curl" | "unknown"
+export type Method = "curl" | "npm" | "yarn" | "pnpm" | "bun" | "brew" | "scoop" | "choco" | "unknown"
 
 export type ReleaseType = "patch" | "minor" | "major"
 
@@ -77,15 +73,22 @@ export class UpgradeFailedError extends Schema.TaggedErrorClass<UpgradeFailedErr
   }
 }
 
-// Response schema for lzcode release API
-const LzRelease = Schema.Struct({ version: Schema.String, pub_date: Schema.String })
-
-const lzReleaseUrl = "https://gh-proxy.org/https://github.com/ingbyr/lzcode/releases/latest/download/latest.json"
+// Response schemas for external version APIs
+const GitHubRelease = Schema.Struct({ tag_name: Schema.String })
+const NpmPackage = Schema.Struct({ version: Schema.String })
+const BrewFormula = Schema.Struct({ versions: Schema.Struct({ stable: Schema.String }) })
+const BrewInfoV2 = Schema.Struct({
+  formulae: Schema.Array(Schema.Struct({ versions: Schema.Struct({ stable: Schema.String }) })),
+})
+const ChocoPackage = Schema.Struct({
+  d: Schema.Struct({ results: Schema.Array(Schema.Struct({ Version: Schema.String })) }),
+})
+const ScoopManifest = NpmPackage
 
 export interface Interface {
   readonly info: () => Effect.Effect<Info>
   readonly method: () => Effect.Effect<Method>
-  readonly latest: () => Effect.Effect<string>
+  readonly latest: (method?: Method) => Effect.Effect<string>
   readonly upgrade: (method: Method, target: string) => Effect.Effect<void, UpgradeFailedError>
 }
 
@@ -132,10 +135,13 @@ export const layer: Layer.Layer<Service, never, HttpClient.HttpClient | AppProce
       Effect.catch((err) => Effect.succeed({ code: 1, stdout: "", stderr: errorMessage(err) })),
     )
 
-    const latestImpl = Effect.fn("Installation.latest")(function* () {
-      const meta = yield* latestWithMetaImpl()
-      return meta.version
-    }, Effect.orDie)
+    const getBrewFormula = Effect.fnUntraced(function* () {
+      const tapFormula = yield* text(["brew", "list", "--formula", "anomalyco/tap/opencode"])
+      if (tapFormula.includes("opencode")) return "anomalyco/tap/opencode"
+      const coreFormula = yield* text(["brew", "list", "--formula", "opencode"])
+      if (coreFormula.includes("opencode")) return "opencode"
+      return "opencode"
+    })
 
     const upgradeFailure = (method: Method, result?: { code: number; stdout: string; stderr: string }) => {
       if (method === "choco") return "not running from an elevated command shell"
