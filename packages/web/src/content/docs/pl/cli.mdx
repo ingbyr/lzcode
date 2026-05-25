@@ -1,17 +1,17 @@
 ---
 title: CLI
-description: Opcje i polecenia wiersza poleceń LzCode.
+description: Opcje i polecenia wiersza poleceń OpenCode.
 ---
 
 import { Tabs, TabItem } from "@astrojs/starlight/components"
 
-CLI LzCode domyślnie uruchamia [TUI](/docs/tui), gdy wywołasz je bez argumentów.
+CLI OpenCode domyślnie uruchamia [TUI](/docs/tui), gdy wywołasz je bez argumentów.
 
 ```bash
 opencode
 ```
 
-CLI obsługuje też polecenia opisane na tej stronie, więc możesz używać LzCode programowo.
+CLI obsługuje też polecenia opisane na tej stronie, więc możesz używać OpenCode programowo.
 
 ```bash
 opencode run "Explain how closures work in JavaScript"
@@ -21,7 +21,7 @@ opencode run "Explain how closures work in JavaScript"
 
 ### tui
 
-Uruchamia interfejs terminalowy (TUI) LzCode.
+Uruchamia interfejs terminalowy (TUI) OpenCode.
 
 ```bash
 opencode [project]
@@ -29,28 +29,28 @@ opencode [project]
 
 #### Flagi
 
-| Flaga        | Skrót | Opis                                                                    |
-| ------------ | ----- | ----------------------------------------------------------------------- |
-| `--continue` | `-c`  | Kontynuuj ostatnią sesję                                                |
-| `--session`  | `-s`  | Identyfikator sesji do kontynuowania                                    |
-| `--fork`     |       | Sklonuj sesję podczas kontynuacji (użyj z `--continue` lub `--session`) |
-| `--prompt`   |       | Monit do użycia                                                         |
-| `--model`    | `-m`  | Model do użycia w formacie dostawca/model                               |
-| `--agent`    |       | Agent do użycia                                                         |
-| `--port`     |       | Port do nasłuchiwania                                                   |
-| `--hostname` |       | Nazwa hosta, do której należy się powiązać                              |
+| Flaga                                    | Skrót | Opis                                                                    |
+| ---------------------------------------- | ----- | ----------------------------------------------------------------------- |
+| <nobr><code>{"--continue"}</code></nobr> | `-c`  | Kontynuuj ostatnią sesję                                                |
+| <nobr><code>{"--session"}</code></nobr>  | `-s`  | Identyfikator sesji do kontynuowania                                    |
+| <nobr><code>{"--fork"}</code></nobr>     |       | Sklonuj sesję podczas kontynuacji (użyj z `--continue` lub `--session`) |
+| <nobr><code>{"--prompt"}</code></nobr>   |       | Monit do użycia                                                         |
+| <nobr><code>{"--model"}</code></nobr>    | `-m`  | Model do użycia w formacie dostawca/model                               |
+| <nobr><code>{"--agent"}</code></nobr>    |       | Agent do użycia                                                         |
+| <nobr><code>{"--port"}</code></nobr>     |       | Port do nasłuchiwania                                                   |
+| <nobr><code>{"--hostname"}</code></nobr> |       | Nazwa hosta, do której należy się powiązać                              |
 
 ---
 
 ## Polecenia
 
-Interfejs CLI LzCode zawiera także dodatkowe polecenia.
+Interfejs CLI OpenCode zawiera także dodatkowe polecenia.
 
 ---
 
 ### agent
 
-Zarządzaj agentami LzCode.
+Zarządzaj agentami OpenCode.
 
 ```bash
 opencode agent [command]
@@ -60,13 +60,13 @@ opencode agent [command]
 
 ### attach
 
-Dołącz terminal do już działającego serwera backendu LzCode uruchomionego za pomocą `serve` lub `web`.
+Dołącz terminal do już działającego serwera backendu OpenCode uruchomionego za pomocą `serve` lub `web`.
 
 ```bash
 opencode attach [url]
 ```
 
-Pozwala to połączyć TUI ze zdalnym backendem LzCode. Na przykład:
+Pozwala to połączyć TUI ze zdalnym backendem OpenCode. Na przykład:
 
 ```bash
 # Start the backend server for web/mobile access
@@ -78,10 +78,14 @@ opencode attach http://10.20.30.40:4096
 
 #### Flagi
 
-| Flaga       | Skrót | Opis                                    |
-| ----------- | ----- | --------------------------------------- |
-| `--dir`     |       | Katalog roboczy, w którym uruchomić TUI |
-| `--session` | `-s`  | Identyfikator sesji do kontynuowania    |
+| Flaga                                    | Skrót | Opis                                                                                                  |
+| ---------------------------------------- | ----- | ----------------------------------------------------------------------------------------------------- |
+| <nobr><code>{"--dir"}</code></nobr>      |       | Katalog roboczy, w którym uruchomić TUI                                                               |
+| <nobr><code>{"--continue"}</code></nobr> | `-c`  | Kontynuuj ostatnią sesję                                                                              |
+| <nobr><code>{"--session"}</code></nobr>  | `-s`  | Identyfikator sesji do kontynuowania                                                                  |
+| <nobr><code>{"--fork"}</code></nobr>     |       | Rozgałęź sesję podczas kontynuowania (użyj z `--continue` lub `--session`)                            |
+| <nobr><code>{"--password"}</code></nobr> | `-p`  | Hasło uwierzytelniania podstawowego (domyślnie `OPENCODE_SERVER_PASSWORD`)                            |
+| <nobr><code>{"--username"}</code></nobr> | `-u`  | Nazwa użytkownika uwierzytelniania podstawowego (domyślnie `OPENCODE_SERVER_USERNAME` lub `opencode`) |
 
 ---
 
@@ -119,13 +123,13 @@ opencode auth [command]
 
 #### login
 
-LzCode integruje się z wieloma dostawcami. Możesz użyć `opencode auth login`, aby skonfigurować klucz API dla dowolnego obsługiwanego dostawcy. Klucze są bezpiecznie przechowywane w `~/.local/share/opencode/auth.json`.
+OpenCode integruje się z wieloma dostawcami. Możesz użyć `opencode auth login`, aby skonfigurować klucz API dla dowolnego obsługiwanego dostawcy. Klucze są bezpiecznie przechowywane w `~/.local/share/opencode/auth.json`.
 
 ```bash
 opencode auth login
 ```
 
-Podczas uruchamiania LzCode ładuje dostawców z pliku poświadczeń, a także ze zmiennych środowiskowych lub pliku `.env` w Twoim projekcie.
+Podczas uruchamiania OpenCode ładuje dostawców z pliku poświadczeń, a także ze zmiennych środowiskowych lub pliku `.env` w Twoim projekcie.
 
 ---
 
@@ -187,10 +191,10 @@ opencode github run
 
 ##### Flagi
 
-| Flaga     | Opis                                     |
-| --------- | ---------------------------------------- |
-| `--event` | Zdarzenie GitHub, które wyzwoliło agenta |
-| `--token` | Osobisty token dostępu GitHub            |
+| Flaga                                 | Opis                                     |
+| ------------------------------------- | ---------------------------------------- |
+| <nobr><code>{"--event"}</code></nobr> | Zdarzenie GitHub, które wyzwoliło agenta |
+| <nobr><code>{"--token"}</code></nobr> | Osobisty token dostępu GitHub            |
 
 ---
 
@@ -296,12 +300,12 @@ opencode models anthropic
 
 #### Flagi
 
-| Flaga       | Opis                                                                            |
-| ----------- | ------------------------------------------------------------------------------- |
-| `--refresh` | Odśwież pamięć podręczną modeli                                                 |
-| `--verbose` | Bardziej szczegółowe dane wyjściowe modelu (zawiera metadane, takie jak koszty) |
+| Flaga                                   | Opis                                                                            |
+| --------------------------------------- | ------------------------------------------------------------------------------- |
+| <nobr><code>{"--refresh"}</code></nobr> | Odśwież pamięć podręczną modeli                                                 |
+| <nobr><code>{"--verbose"}</code></nobr> | Bardziej szczegółowe dane wyjściowe modelu (zawiera metadane, takie jak koszty) |
 
-Użyj flagi `--refresh`, aby zaktualizować listę modeli w pamięci podręcznej. Jest to przydatne, gdy dostawca dodał nowe modele, które chcesz zobaczyć w LzCode.
+Użyj flagi `--refresh`, aby zaktualizować listę modeli w pamięci podręcznej. Jest to przydatne, gdy dostawca dodał nowe modele, które chcesz zobaczyć w OpenCode.
 
 ```bash
 opencode models --refresh
@@ -311,7 +315,7 @@ opencode models --refresh
 
 ### run
 
-Uruchom LzCode w trybie nieinteraktywnym, przekazując bezpośrednio prompt.
+Uruchom OpenCode w trybie nieinteraktywnym, przekazując bezpośrednio prompt.
 
 ```bash
 opencode run [message..]
@@ -335,47 +339,52 @@ opencode run --attach http://localhost:4096 "Explain async/await in JavaScript"
 
 #### Flagi
 
-| Flaga        | Skrót | Opis                                                                    |
-| ------------ | ----- | ----------------------------------------------------------------------- |
-| `--command`  |       | Polecenie do uruchomienia, reszta to argumenty                          |
-| `--continue` | `-c`  | Kontynuuj ostatnią sesję                                                |
-| `--session`  | `-s`  | Identyfikator sesji do kontynuowania                                    |
-| `--fork`     |       | Sklonuj sesję podczas kontynuacji (użyj z `--continue` lub `--session`) |
-| `--share`    |       | Udostępnij sesję po zakończeniu                                         |
-| `--model`    | `-m`  | Model do użycia w formacie dostawca/model                               |
-| `--agent`    |       | Agent do użycia                                                         |
-| `--file`     | `-f`  | Pliki do załączenia do wiadomości                                       |
-| `--format`   |       | Format wyjściowy: `default` (sformatowany) lub `json` (surowy JSON)     |
-| `--title`    |       | Tytuł sesji (jeśli nie podano, zostanie wygenerowany z promptu)         |
-| `--attach`   |       | Dołącz do działającego serwera LzCode (np. http://localhost:4096)       |
-| `--port`     |       | Port dla serwera lokalnego (domyślnie losowy)                           |
+| Flaga                                    | Skrót | Opis                                                                                                  |
+| ---------------------------------------- | ----- | ----------------------------------------------------------------------------------------------------- |
+| <nobr><code>{"--command"}</code></nobr>  |       | Polecenie do uruchomienia, reszta to argumenty                                                        |
+| <nobr><code>{"--continue"}</code></nobr> | `-c`  | Kontynuuj ostatnią sesję                                                                              |
+| <nobr><code>{"--session"}</code></nobr>  | `-s`  | Identyfikator sesji do kontynuowania                                                                  |
+| <nobr><code>{"--fork"}</code></nobr>     |       | Sklonuj sesję podczas kontynuacji (użyj z `--continue` lub `--session`)                               |
+| <nobr><code>{"--share"}</code></nobr>    |       | Udostępnij sesję po zakończeniu                                                                       |
+| <nobr><code>{"--model"}</code></nobr>    | `-m`  | Model do użycia w formacie dostawca/model                                                             |
+| <nobr><code>{"--agent"}</code></nobr>    |       | Agent do użycia                                                                                       |
+| <nobr><code>{"--file"}</code></nobr>     | `-f`  | Pliki do załączenia do wiadomości                                                                     |
+| <nobr><code>{"--format"}</code></nobr>   |       | Format wyjściowy: `default` (sformatowany) lub `json` (surowy JSON)                                   |
+| <nobr><code>{"--title"}</code></nobr>    |       | Tytuł sesji (jeśli nie podano, zostanie wygenerowany z promptu)                                       |
+| <nobr><code>{"--attach"}</code></nobr>   |       | Dołącz do działającego serwera OpenCode (np. http://localhost:4096)                                   |
+| <nobr><code>{"--password"}</code></nobr> | `-p`  | Hasło uwierzytelniania podstawowego (domyślnie `OPENCODE_SERVER_PASSWORD`)                            |
+| <nobr><code>{"--username"}</code></nobr> | `-u`  | Nazwa użytkownika uwierzytelniania podstawowego (domyślnie `OPENCODE_SERVER_USERNAME` lub `opencode`) |
+| <nobr><code>{"--dir"}</code></nobr>      |       | Katalog do uruchomienia lub ścieżka na zdalnym serwerze podczas dołączania                            |
+| <nobr><code>{"--variant"}</code></nobr>  |       | Wariant modelu (poziom wnioskowania specyficzny dla dostawcy)                                         |
+| <nobr><code>{"--thinking"}</code></nobr> |       | Pokaż bloki myślenia                                                                                  |
+| <nobr><code>{"--port"}</code></nobr>     |       | Port dla serwera lokalnego (domyślnie losowy)                                                         |
 
 ---
 
 ### serve
 
-Uruchom serwer LzCode (bez interfejsu) w celu uzyskania dostępu do API. Pełny opis API HTTP znajduje się w [dokumentacji serwera](/docs/server).
+Uruchom serwer OpenCode (bez interfejsu) w celu uzyskania dostępu do API. Pełny opis API HTTP znajduje się w [dokumentacji serwera](/docs/server).
 
 ```bash
 opencode serve
 ```
 
-Uruchamia to serwer HTTP, który zapewnia dostęp do API LzCode bez interfejsu TUI. Ustaw `OPENCODE_SERVER_PASSWORD`, aby włączyć podstawowe uwierzytelnianie HTTP (domyślna nazwa użytkownika to `opencode`).
+Uruchamia to serwer HTTP, który zapewnia dostęp do API OpenCode bez interfejsu TUI. Ustaw `OPENCODE_SERVER_PASSWORD`, aby włączyć podstawowe uwierzytelnianie HTTP (domyślna nazwa użytkownika to `opencode`).
 
 #### Flagi
 
-| Flaga        | Opis                                       |
-| ------------ | ------------------------------------------ |
-| `--port`     | Port do nasłuchiwania                      |
-| `--hostname` | Nazwa hosta, do której należy się powiązać |
-| `--mdns`     | Włącz wykrywanie mDNS                      |
-| `--cors`     | Dodatkowe dozwolone źródła CORS            |
+| Flaga                                    | Opis                                       |
+| ---------------------------------------- | ------------------------------------------ |
+| <nobr><code>{"--port"}</code></nobr>     | Port do nasłuchiwania                      |
+| <nobr><code>{"--hostname"}</code></nobr> | Nazwa hosta, do której należy się powiązać |
+| <nobr><code>{"--mdns"}</code></nobr>     | Włącz wykrywanie mDNS                      |
+| <nobr><code>{"--cors"}</code></nobr>     | Dodatkowe dozwolone źródła CORS            |
 
 ---
 
 ### session
 
-Zarządzaj sesjami LzCode.
+Zarządzaj sesjami OpenCode.
 
 ```bash
 opencode session [command]
@@ -385,7 +394,7 @@ opencode session [command]
 
 #### list
 
-Lista wszystkich sesji LzCode.
+Lista wszystkich sesji OpenCode.
 
 ```bash
 opencode session list
@@ -393,16 +402,16 @@ opencode session list
 
 ##### Flagi
 
-| Flaga         | Skrót | Opis                                       |
-| ------------- | ----- | ------------------------------------------ |
-| `--max-count` | `-n`  | Ogranicz do ostatnich N sesji              |
-| `--format`    |       | Format wyjściowy: tabela lub json (tabela) |
+| Flaga                                     | Skrót | Opis                                       |
+| ----------------------------------------- | ----- | ------------------------------------------ |
+| <nobr><code>{"--max-count"}</code></nobr> | `-n`  | Ogranicz do ostatnich N sesji              |
+| <nobr><code>{"--format"}</code></nobr>    |       | Format wyjściowy: tabela lub json (tabela) |
 
 ---
 
 ### stats
 
-Pokaż statystyki wykorzystania tokenów i sesji LzCode.
+Pokaż statystyki wykorzystania tokenów i sesji OpenCode.
 
 ```bash
 opencode stats
@@ -410,12 +419,12 @@ opencode stats
 
 #### Flagi
 
-| Flaga       | Opis                                                                                  |
-| ----------- | ------------------------------------------------------------------------------------- |
-| `--days`    | Pokaż statystyki z ostatnich N dni (domyślnie: cały czas)                             |
-| `--tools`   | Pokaż użycie poszczególnych narzędzi (domyślnie: wszystkie)                           |
-| `--models`  | Pokaż podział na modele (domyślnie ukryty). Podaj liczbę, aby pokazać N najczęstszych |
-| `--project` | Filtruj według projektu (domyślnie: wszystkie projekty, pusty ciąg: bieżący projekt)  |
+| Flaga                                   | Opis                                                                                  |
+| --------------------------------------- | ------------------------------------------------------------------------------------- |
+| <nobr><code>{"--days"}</code></nobr>    | Pokaż statystyki z ostatnich N dni (domyślnie: cały czas)                             |
+| <nobr><code>{"--tools"}</code></nobr>   | Pokaż użycie poszczególnych narzędzi (domyślnie: wszystkie)                           |
+| <nobr><code>{"--models"}</code></nobr>  | Pokaż podział na modele (domyślnie ukryty). Podaj liczbę, aby pokazać N najczęstszych |
+| <nobr><code>{"--project"}</code></nobr> | Filtruj według projektu (domyślnie: wszystkie projekty, pusty ciąg: bieżący projekt)  |
 
 ---
 
@@ -433,7 +442,7 @@ Jeśli nie podasz identyfikatora sesji, zostaniesz poproszony o wybranie jednej 
 
 ### import
 
-Importuj dane sesji z pliku JSON lub adresu URL udostępniania LzCode.
+Importuj dane sesji z pliku JSON lub adresu URL udostępniania OpenCode.
 
 ```bash
 opencode import <file>
@@ -450,22 +459,22 @@ opencode import https://opncd.ai/s/abc123
 
 ### web
 
-Uruchom serwer LzCode z interfejsem internetowym.
+Uruchom serwer OpenCode z interfejsem internetowym.
 
 ```bash
 opencode web
 ```
 
-Uruchamia to serwer HTTP i udostępnia LzCode przez interfejs przeglądarkowy. Ustaw `OPENCODE_SERVER_PASSWORD`, aby włączyć podstawowe uwierzytelnianie HTTP (domyślna nazwa użytkownika to `opencode`).
+Uruchamia to serwer HTTP i udostępnia OpenCode przez interfejs przeglądarkowy. Ustaw `OPENCODE_SERVER_PASSWORD`, aby włączyć podstawowe uwierzytelnianie HTTP (domyślna nazwa użytkownika to `opencode`).
 
 #### Flagi
 
-| Flaga        | Opis                                       |
-| ------------ | ------------------------------------------ |
-| `--port`     | Port do nasłuchiwania                      |
-| `--hostname` | Nazwa hosta, do której należy się powiązać |
-| `--mdns`     | Włącz wykrywanie mDNS                      |
-| `--cors`     | Dodatkowe dozwolone źródła CORS            |
+| Flaga                                    | Opis                                       |
+| ---------------------------------------- | ------------------------------------------ |
+| <nobr><code>{"--port"}</code></nobr>     | Port do nasłuchiwania                      |
+| <nobr><code>{"--hostname"}</code></nobr> | Nazwa hosta, do której należy się powiązać |
+| <nobr><code>{"--mdns"}</code></nobr>     | Włącz wykrywanie mDNS                      |
+| <nobr><code>{"--cors"}</code></nobr>     | Dodatkowe dozwolone źródła CORS            |
 
 ---
 
@@ -481,17 +490,17 @@ Uruchamia serwer ACP, który komunikuje się przez stdin/stdout przy użyciu JSO
 
 #### Flagi
 
-| Flaga        | Opis                                       |
-| ------------ | ------------------------------------------ |
-| `--cwd`      | Katalog roboczy                            |
-| `--port`     | Port do nasłuchiwania                      |
-| `--hostname` | Nazwa hosta, do której należy się powiązać |
+| Flaga                                    | Opis                                       |
+| ---------------------------------------- | ------------------------------------------ |
+| <nobr><code>{"--cwd"}</code></nobr>      | Katalog roboczy                            |
+| <nobr><code>{"--port"}</code></nobr>     | Port do nasłuchiwania                      |
+| <nobr><code>{"--hostname"}</code></nobr> | Nazwa hosta, do której należy się powiązać |
 
 ---
 
 ### uninstall
 
-Odinstaluj LzCode i usuń wszystkie powiązane pliki.
+Odinstaluj OpenCode i usuń wszystkie powiązane pliki.
 
 ```bash
 opencode uninstall
@@ -499,18 +508,18 @@ opencode uninstall
 
 #### Flagi
 
-| Flaga           | Skrót | Opis                          |
-| --------------- | ----- | ----------------------------- |
-| `--keep-config` | `-c`  | Zachowaj pliki konfiguracyjne |
-| `--keep-data`   | `-d`  | Zachowaj dane sesji i migawki |
-| `--dry-run`     |       | Pokaż co zostanie usunięte    |
-| `--force`       | `-f`  | Pomiń monity o potwierdzenie  |
+| Flaga                                       | Skrót | Opis                          |
+| ------------------------------------------- | ----- | ----------------------------- |
+| <nobr><code>{"--keep-config"}</code></nobr> | `-c`  | Zachowaj pliki konfiguracyjne |
+| <nobr><code>{"--keep-data"}</code></nobr>   | `-d`  | Zachowaj dane sesji i migawki |
+| <nobr><code>{"--dry-run"}</code></nobr>     |       | Pokaż co zostanie usunięte    |
+| <nobr><code>{"--force"}</code></nobr>       | `-f`  | Pomiń monity o potwierdzenie  |
 
 ---
 
 ### upgrade
 
-Aktualizuj LzCode do najnowszej lub określonej wersji.
+Aktualizuj OpenCode do najnowszej lub określonej wersji.
 
 ```bash
 opencode upgrade [target]
@@ -530,28 +539,28 @@ opencode upgrade v0.1.48
 
 #### Flagi
 
-| Flaga      | Skrót | Opis                                                |
-| ---------- | ----- | --------------------------------------------------- |
-| `--method` | `-m`  | Wymuś metodę instalacji: curl, npm, pnpm, bun, brew |
+| Flaga                                  | Skrót | Opis                                                |
+| -------------------------------------- | ----- | --------------------------------------------------- |
+| <nobr><code>{"--method"}</code></nobr> | `-m`  | Wymuś metodę instalacji: curl, npm, pnpm, bun, brew |
 
 ---
 
 ## Flagi globalne
 
-Interfejs CLI LzCode przyjmuje następujące flagi globalne dla każdego polecenia.
+Interfejs CLI OpenCode przyjmuje następujące flagi globalne dla każdego polecenia.
 
-| Flaga          | Skrót | Opis                                        |
-| -------------- | ----- | ------------------------------------------- |
-| `--help`       | `-h`  | Wyświetl pomoc                              |
-| `--version`    | `-v`  | Wydrukuj numer wersji                       |
-| `--print-logs` |       | Drukuj logi na stderr                       |
-| `--log-level`  |       | Poziom logowania (DEBUG, INFO, WARN, ERROR) |
+| Flaga                                      | Skrót | Opis                                        |
+| ------------------------------------------ | ----- | ------------------------------------------- |
+| <nobr><code>{"--help"}</code></nobr>       | `-h`  | Wyświetl pomoc                              |
+| <nobr><code>{"--version"}</code></nobr>    | `-v`  | Wydrukuj numer wersji                       |
+| <nobr><code>{"--print-logs"}</code></nobr> |       | Drukuj logi na stderr                       |
+| <nobr><code>{"--log-level"}</code></nobr>  |       | Poziom logowania (DEBUG, INFO, WARN, ERROR) |
 
 ---
 
 ## Zmienne środowiskowe
 
-LzCode można skonfigurować za pomocą zmiennych środowiskowych.
+OpenCode można skonfigurować za pomocą zmiennych środowiskowych.
 
 | Zmienna                               | Typ     | Opis                                                       |
 | ------------------------------------- | ------- | ---------------------------------------------------------- |
@@ -599,5 +608,4 @@ Te zmienne włączają funkcje eksperymentalne, które mogą ulec zmianie lub zo
 | `OPENCODE_EXPERIMENTAL_DISABLE_FILEWATCHER`     | boolean | Wyłącz obserwatora plików                    |
 | `OPENCODE_EXPERIMENTAL_EXA`                     | boolean | Włącz funkcje eksperymentalne Exa            |
 | `OPENCODE_EXPERIMENTAL_LSP_TY`                  | boolean | Włącz TY LSP dla plików python               |
-| `OPENCODE_EXPERIMENTAL_MARKDOWN`                | boolean | Włącz funkcje eksperymentalne Markdown       |
 | `OPENCODE_EXPERIMENTAL_PLAN_MODE`               | boolean | Włącz tryb planowania                        |
