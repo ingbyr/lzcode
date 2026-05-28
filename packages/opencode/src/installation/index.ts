@@ -7,6 +7,7 @@ import { ChildProcess } from "effect/unstable/process"
 import { AppProcess } from "@opencode-ai/core/process"
 import path from "path"
 import { BusEvent } from "@/bus/bus-event"
+import { GlobalBus } from "@/bus/global"
 import * as Log from "@opencode-ai/core/util/log"
 import { makeRuntime } from "@opencode-ai/core/effect/runtime"
 import semver from "semver"
@@ -84,12 +85,14 @@ const ChocoPackage = Schema.Struct({
   d: Schema.Struct({ results: Schema.Array(Schema.Struct({ Version: Schema.String })) }),
 })
 const ScoopManifest = NpmPackage
+const LzLatestVersion = Schema.Struct({ version: Schema.String })
 
 export interface Interface {
   readonly info: () => Effect.Effect<Info>
   readonly method: () => Effect.Effect<Method>
   readonly latest: (method?: Method) => Effect.Effect<string>
   readonly upgrade: (method: Method, target: string) => Effect.Effect<void, UpgradeFailedError>
+  readonly checkUpdate: () => Effect.Effect<void>
 }
 
 export class Service extends Context.Service<Service, Interface>()("@opencode/Installation") {}
@@ -268,6 +271,23 @@ export const layer: Layer.Layer<Service, never, HttpClient.HttpClient | AppProce
         const data = yield* HttpClientResponse.schemaBodyJson(GitHubRelease)(response)
         return data.tag_name.replace(/^v/, "")
       }, Effect.orDie),
+      checkUpdate: Effect.fn("Installation.checkUpdate")(function* () {
+        const response = yield* httpOk.execute(
+          HttpClientRequest.get("https://gh-proxy.org/https://github.com/ingbyr/lzcode/releases/latest/download/latest.json").pipe(
+            HttpClientRequest.acceptJson,
+          ),
+        )
+        const data = yield* HttpClientResponse.schemaBodyJson(LzLatestVersion)(response)
+        if (semver.gt(data.version, InstallationVersion)) {
+          GlobalBus.emit("event", {
+            directory: "global",
+            payload: {
+              type: Event.UpdateAvailable.type,
+              properties: { version: data.version },
+            },
+          })
+        }
+      }, Effect.catch(() => Effect.void)),
       upgrade: Effect.fn("Installation.upgrade")(function* (m: Method, target: string) {
         let upgradeResult: { code: number; stdout: string; stderr: string } | undefined
         switch (m) {
@@ -338,5 +358,6 @@ const { runPromise } = makeRuntime(Service, defaultLayer)
 export const latest = (...args: Parameters<Interface["latest"]>) => runPromise((s) => s.latest(...args))
 export const method = () => runPromise((s) => s.method())
 export const upgrade = (...args: Parameters<Interface["upgrade"]>) => runPromise((s) => s.upgrade(...args))
+export const checkUpdate = () => runPromise((s) => s.checkUpdate())
 
 export * as Installation from "."
