@@ -36,6 +36,7 @@ import {
   setDockIcon,
 } from "./windows"
 import { migrate } from "./migrate"
+import { setupLzAssets } from "./resource-setup"
 import { checkUpdate, checkForUpdates, installUpdate, setupAutoUpdater } from "./updater"
 import { Deferred, Effect, Fiber } from "effect"
 
@@ -263,6 +264,7 @@ const main = Effect.gen(function* () {
   yield* Effect.promise(() => app.whenReady())
 
   if (!TEST_ONBOARDING) migrate()
+  if (!TEST_ONBOARDING) setupLzAssets()
   app.setAsDefaultProtocolClient("opencode")
   registerRendererProtocol()
   setDockIcon()
