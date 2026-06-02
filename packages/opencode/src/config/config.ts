@@ -764,9 +764,7 @@ export const layer = Layer.effect(
 
         if (!result.username) result.username = os.userInfo().username
 
-        if (result.autoshare === true && !result.share) {
-          result.share = "auto"
-        }
+        if (result.share === undefined) result.share = "disabled"
 
         if (Flag.OPENCODE_DISABLE_AUTOCOMPACT) {
           result.compaction = { ...result.compaction, auto: false }
