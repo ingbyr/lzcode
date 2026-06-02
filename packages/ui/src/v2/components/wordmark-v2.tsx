@@ -1,4 +1,4 @@
-import { createUniqueId, type ComponentProps } from "solid-js"
+import { type ComponentProps, createUniqueId } from "solid-js"
 
 export function WordmarkV2(props: Pick<ComponentProps<"svg">, "class">) {
   const filter = createUniqueId()
@@ -14,46 +14,24 @@ export function WordmarkV2(props: Pick<ComponentProps<"svg">, "class">) {
       classList={{ [props.class ?? ""]: !!props.class }}
     >
       <g opacity="0.16" filter={`url(#${filter})`} mask={`url(#${mask})`}>
-        <path
-          opacity="0.7"
-          d="M55.3846 36.8583H18.4615V92.144H55.3846V36.8583ZM73.8462 110.573H0V18.4297H73.8462V110.573Z"
-          fill="currentColor"
-        />
-        <path
-          opacity="0.7"
-          d="M110.774 92.144H147.697V36.8583H110.774V92.144ZM166.159 110.573H110.774V129.001H92.3125V18.4297H166.159V110.573Z"
-          fill="currentColor"
-        />
-        <path
-          opacity="0.7"
-          d="M258.463 73.7154H203.079V92.144H258.463V110.573H184.617V18.4297H258.463V73.7154ZM203.079 55.2868H240.002V36.8583H203.079V55.2868Z"
-          fill="currentColor"
-        />
-        <path
-          opacity="0.7"
-          d="M332.306 36.8583H295.383V110.573H276.922V18.4297H332.306V36.8583ZM350.768 110.573H332.306V36.8583H350.768V110.573Z"
-          fill="currentColor"
-        />
-        <path
-          opacity="0.7"
-          d="M443.081 36.8583H387.696V92.144H443.081V110.573H369.234V18.4297H443.081V36.8583Z"
-          fill="currentColor"
-        />
-        <path
-          opacity="0.7"
-          d="M516.924 36.8583H480.001V92.144H516.924V36.8583ZM535.385 110.573H461.539V18.4297H535.385V110.573Z"
-          fill="currentColor"
-        />
-        <path
-          opacity="0.7"
-          d="M609.228 36.8571H572.305V92.1429H609.228V36.8571ZM627.69 110.571H553.844V18.4286H609.228V0H627.69V110.571Z"
-          fill="currentColor"
-        />
-        <path
-          opacity="0.7"
-          d="M664.618 36.8583V55.2868H701.541V36.8583H664.618ZM720.002 73.7154H664.618V92.144H720.002V110.573H646.156V18.4297H720.002V73.7154Z"
-          fill="currentColor"
-        />
+        {/* L */}
+        <path opacity="0.7" d="M0 0H18V90H0V0ZM0 72H55V90H0V72Z"
+              transform="translate(125,30)" fill="currentColor"/>
+        {/* Z */}
+        <path opacity="0.7" d="M0 0H75V18H0V0ZM0 72H75V90H0V72ZM54 18H75V36H54V18ZM27 36H48V54H27V36ZM0 54H21V72H0V54Z"
+              transform="translate(200,30)" fill="currentColor"/>
+        {/* C */}
+        <path opacity="0.7" d="M0 0H75V18H0V0ZM0 72H75V90H0V72ZM0 0H18V90H0V0ZM57 0H75V18H57V0ZM57 72H75V90H57V72Z"
+              transform="translate(300,30)" fill="currentColor"/>
+        {/* O */}
+        <path opacity="0.7" d="M0 0H75V18H0V0ZM0 72H75V90H0V72ZM0 0H18V90H0V0ZM57 0H75V90H57V0Z"
+              transform="translate(400,30)" fill="currentColor"/>
+        {/* D */}
+        <path opacity="0.7" d="M0 0H18V90H0V0ZM0 0H60V18H0V0ZM0 72H60V90H0V72ZM57 18H75V72H57V18Z"
+              transform="translate(500,30)" fill="currentColor"/>
+        {/* E */}
+        <path opacity="0.7" d="M0 0H18V90H0V0ZM0 0H75V18H0V0ZM0 36H57V54H0V36ZM0 72H75V90H0V72Z"
+              transform="translate(600,30)" fill="currentColor"/>
       </g>
       <defs>
         <mask id={mask} maskUnits="userSpaceOnUse" x="0" y="0" width="720" height="129">
