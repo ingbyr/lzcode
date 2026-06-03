@@ -9,9 +9,14 @@ const sha = process.env.GITHUB_SHA ?? (await $`git rev-parse HEAD`.text()).trim(
 if (!Script.preview) {
   await $`bun script/changelog.ts --to ${sha} --noai`.cwd(process.cwd())
   const file = `${process.cwd()}/UPCOMING_CHANGELOG.md`
-  const body = await Bun.file(file)
+  let body = await Bun.file(file)
     .text()
     .catch(() => "No notable changes")
+  // GitHub release body has a 125000 character limit
+  const GH_BODY_LIMIT = 125000
+  if (body.length > GH_BODY_LIMIT) {
+    body = body.slice(0, GH_BODY_LIMIT - 3) + "..."
+  }
   const dir = process.env.RUNNER_TEMP ?? "/tmp"
   const notesFile = `${dir}/opencode-release-notes.txt`
   await Bun.write(notesFile, body)
