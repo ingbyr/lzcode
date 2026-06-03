@@ -9,7 +9,7 @@ import {
   type PluginSource,
 } from "./shared"
 import { ConfigPlugin } from "@/config/plugin"
-import { InstallationVersion } from "@opencode-ai/core/installation/version"
+import { LZ_BASE_OPENCODE_VERSION } from "@opencode-ai/core/installation/version"
 
 export namespace PluginLoader {
   // A normalized plugin declaration derived from config before any filesystem or npm work happens.
@@ -123,7 +123,7 @@ export namespace PluginLoader {
     // as local development code and skip this compatibility gate.
     if (base.source === "npm") {
       try {
-        await checkPluginCompatibility(base.target, InstallationVersion, base.pkg)
+        await checkPluginCompatibility(base.target, LZ_BASE_OPENCODE_VERSION, base.pkg)
       } catch (error) {
         return { ok: false, stage: "compatibility", error }
       }
