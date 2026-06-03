@@ -43,13 +43,19 @@ if (Script.release && !Script.preview) {
 await prepareReleaseFiles()
 
 console.log("\n=== cli ===\n")
-await $`bun ./packages/opencode/script/publish.ts`
+if (!process.env.SKIP_NPM) {
+  await $`bun ./packages/opencode/script/publish.ts`
+}
 
 console.log("\n=== sdk ===\n")
-await $`bun ./packages/sdk/js/script/publish.ts`
+if (!process.env.SKIP_NPM) {
+  await $`bun ./packages/sdk/js/script/publish.ts`
+}
 
 console.log("\n=== plugin ===\n")
-await $`bun ./packages/plugin/script/publish.ts`
+if (!process.env.SKIP_NPM) {
+  await $`bun ./packages/plugin/script/publish.ts`
+}
 
 if (Script.release) {
   await $`bun ./packages/desktop/scripts/finalize-latest-json.ts`
