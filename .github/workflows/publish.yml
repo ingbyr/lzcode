@@ -48,10 +48,6 @@ jobs:
           opencode-app-id: ${{ vars.OPENCODE_APP_ID }}
           opencode-app-secret: ${{ secrets.OPENCODE_APP_SECRET }}
 
-      - name: Install OpenCode
-        if: inputs.bump || inputs.version
-        run: bun i -g opencode-ai
-
       - id: version
         run: |
           ./script/version.ts
@@ -59,7 +55,6 @@ jobs:
           GH_TOKEN: ${{ steps.committer.outputs.token }}
           OPENCODE_BUMP: ${{ inputs.bump }}
           OPENCODE_VERSION: ${{ inputs.version }}
-          OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
           GH_REPO: ${{ github.repository }}
     outputs:
       version: ${{ steps.version.outputs.version }}
@@ -445,10 +440,11 @@ jobs:
           name: opencode-cli-windows
           path: packages/opencode/dist
 
-      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
-        with:
-          name: opencode-cli-signed-windows
-          path: packages/opencode/dist
+      # sign-cli-windows job is commented out, so this artifact doesn't exist
+      # - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+      #   with:
+      #     name: opencode-cli-signed-windows
+      #     path: packages/opencode/dist
 
       - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         if: needs.version.outputs.release
