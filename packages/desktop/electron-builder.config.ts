@@ -39,10 +39,6 @@ const getBase = (): Configuration => ({
       to: "native/",
       filter: ["index.js", "index.d.ts", "build/Release/mac_window.node", "swift-build/**"],
     },
-    {
-      from: "src-tauri/lz-assets/",
-      to: "lz-assets/",
-    },
   ],
   mac: {
     category: "public.app-category.developer-tools",
@@ -58,7 +54,7 @@ const getBase = (): Configuration => ({
     sign: true,
   },
   protocols: {
-    name: "LzCode",
+    name: "OpenCode",
     schemes: ["opencode"],
   },
   win: {
@@ -90,7 +86,7 @@ function getConfig() {
       return {
         ...base,
         appId: "ai.opencode.desktop.dev",
-        productName: "LzCode Dev",
+        productName: "OpenCode Dev",
         rpm: { packageName: "opencode-dev" },
       }
     }
@@ -98,8 +94,8 @@ function getConfig() {
       return {
         ...base,
         appId: "ai.opencode.desktop.beta",
-        productName: "LzCode Beta",
-        protocols: { name: "LzCode Beta", schemes: ["opencode"] },
+        productName: "OpenCode Beta",
+        protocols: { name: "OpenCode Beta", schemes: ["opencode"] },
         publish: { provider: "github", owner: "anomalyco", repo: "opencode-beta", channel: "latest" },
         rpm: { packageName: "opencode-beta" },
       }
@@ -108,8 +104,8 @@ function getConfig() {
       return {
         ...base,
         appId: "ai.opencode.desktop",
-        productName: "LzCode",
-        protocols: { name: "LzCode", schemes: ["opencode"] },
+        productName: "OpenCode",
+        protocols: { name: "OpenCode", schemes: ["opencode"] },
         publish: { provider: "github", owner: "anomalyco", repo: "opencode", channel: "latest" },
         rpm: { packageName: "opencode" },
       }

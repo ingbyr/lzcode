@@ -110,7 +110,7 @@ function link(raw: string) {
   return `https://github.com/${repo}/releases/download/v${version}/${raw}`
 }
 
-async function sign(url: string, key: string) {
+async function sign(url: string, key: string): Promise<string | undefined> {
   const name = decodeURIComponent(new URL(url).pathname.split("/").pop() ?? key)
   const asset = amap.get(name)
   const res = await fetch(asset?.url ?? url, {
@@ -120,6 +120,10 @@ async function sign(url: string, key: string) {
     },
   })
   if (!res.ok) {
+    if (res.status === 404) {
+      console.warn(`Skipping missing file: ${name}`)
+      return undefined
+    }
     throw new Error(`Failed to fetch file ${name}: ${res.status} ${res.statusText} (${asset?.url ?? url})`)
   }
 
@@ -136,7 +140,9 @@ const add = async (data: Record<string, { url: string; signature: string }>, key
   if (!raw) return
   if (data[key]) return
   const url = link(raw)
-  data[key] = { url, signature: await sign(url, key) }
+  const signature = await sign(url, key)
+  if (signature === undefined) return
+  data[key] = { url, signature }
 }
 
 const alias = (data: Record<string, { url: string; signature: string }>, key: string, src: string) => {
