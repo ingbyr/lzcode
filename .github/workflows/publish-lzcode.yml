@@ -148,6 +148,12 @@ jobs:
           OPENCODE_CHANNEL: prod
 
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        if: needs.version.outputs.release
+        with:
+          name: latest-yml-${{ matrix.settings.target }}
+          path: packages/desktop/dist/latest*.yml
+
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: lzcode-desktop-${{ matrix.settings.target }}
           path: packages/desktop/dist/*
@@ -161,6 +167,8 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+
+      - uses: ./.github/actions/setup-bun
 
       - name: Setup git committer
         id: committer
@@ -176,6 +184,12 @@ jobs:
           path: packages/desktop/dist
           merge-multiple: true
 
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        if: needs.version.outputs.release != ''
+        with:
+          pattern: latest-yml-*
+          path: /tmp/latest-yml
+
       - name: Upload desktop release assets
         if: needs.version.outputs.release != ''
         working-directory: packages/desktop/dist
@@ -190,6 +204,31 @@ jobs:
               --clobber \
               --repo "${{ needs.version.outputs.repo }}"
           fi
+
+      - name: Finalize latest.yml
+        if: needs.version.outputs.release != ''
+        working-directory: packages/desktop
+        env:
+          GH_TOKEN: ${{ steps.committer.outputs.token }}
+          GH_REPO: ${{ needs.version.outputs.repo }}
+          OPENCODE_VERSION: ${{ needs.version.outputs.version }}
+          LATEST_YML_DIR: /tmp/latest-yml
+        run: |
+          bun ./scripts/finalize-latest-yml.ts
+
+      - name: Finalize latest.json
+        if: needs.version.outputs.release != ''
+        working-directory: packages/desktop
+        env:
+          GH_TOKEN: ${{ steps.committer.outputs.token }}
+          GH_REPO: ${{ needs.version.outputs.repo }}
+          OPENCODE_VERSION: ${{ needs.version.outputs.version }}
+          OPENCODE_RELEASE: ${{ needs.version.outputs.release }}
+          LATEST_YML_DIR: /tmp/latest-yml
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        run: |
+          bun ./scripts/finalize-latest-json.ts
 
       - name: Publish release
         if: needs.version.outputs.release != ''
